@@ -1,0 +1,130 @@
+/* Color Palette */
+:root {
+    --primary: #73A5CA;
+    --background: #FEFDDF;
+    --accent: #FFC81E;
+    --highlight: #E87F24;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Body */
+body {
+    background-color: var(--background);
+}
+
+/* Container */
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card */
+.login-card {
+    background-color: white;
+    padding: 40px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Title */
+.login-card h2 {
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+/* Subtitle */
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Labels */
+form label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* Inputs */
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+}
+
+form input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+/* Options */
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    margin: 12px 0 18px 0;
+}
+
+.options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.options input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.options a {
+    text-decoration: none;
+    color: var(--highlight);
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--accent);
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: var(--highlight);
+    color: white;
+}
+
+/* Register text */
+.register {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.register a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}

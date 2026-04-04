@@ -1,2 +1,2 @@
 print("Hello")
-print("chaohong")
+print("This is a test file.")
