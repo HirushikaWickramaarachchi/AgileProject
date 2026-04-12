@@ -1,1 +1,184 @@
-<h1>Club List</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSync | Discover Clubs</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body class="clubs-page">
+<header class="clubs-header">
+    <div class="clubs-header-inner">
+        <a class="clubs-brand" href="club_list.html">ClubSync</a>
+
+        <nav class="clubs-nav" aria-label="Primary">
+            <a href="club_list.html" class="active" aria-current="page">Clubs</a>
+            <a href="event.html">Events</a>
+            <a href="club_details.html">My Club</a>
+        </nav>
+
+        <div class="clubs-header-tools">
+            <div class="clubs-search" role="search">
+                <input type="text" aria-label="Search clubs" placeholder="Search clubs, topics, or interests">
+            </div>
+            <span class="clubs-location">UWA Campus</span>
+        </div>
+    </div>
+</header>
+
+<main class="clubs-main">
+    <section class="clubs-hero">
+        <p class="clubs-kicker">Student Club Discovery</p>
+        <h1>Find a club that matches your passion</h1>
+        <p>
+            Explore student communities, connect with peers, and discover activities happening across campus this semester.
+        </p>
+    </section>
+
+    <section class="clubs-filter-row" aria-label="Club categories">
+        <span class="filter-chip active">All</span>
+        <span class="filter-chip">Tech</span>
+        <span class="filter-chip">Arts</span>
+        <span class="filter-chip">Culture</span>
+        <span class="filter-chip">Academic</span>
+        <span class="filter-chip">Leadership</span>
+    </section>
+
+    <section class="clubs-featured">
+        <div class="clubs-featured-content">
+            <p class="clubs-featured-label">Featured This Week</p>
+            <h2>Campus Innovation Showcase</h2>
+            <p>
+                Meet clubs building apps, robots, and startup ideas at our inter-club showcase on Friday, 5:30 PM.
+            </p>
+        </div>
+        <a href="club_details.html" class="clubs-featured-cta">See Featured Clubs</a>
+    </section>
+
+    <section class="clubs-listing" aria-label="Club list">
+        <div class="clubs-section-head">
+            <h2>Browse Clubs</h2>
+            <p>8 active clubs with open membership</p>
+        </div>
+
+        <div class="club-grid">
+            <article class="club-card">
+                <div class="club-visual club-visual--coding"><span>Tech</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Technology</p>
+                    <h3>Coding Club</h3>
+                    <p class="club-card-description">Weekly coding sessions, hack prep, and collaborative projects for all skill levels.</p>
+                    <div class="club-card-meta">
+                        <span>420 members</span>
+                        <span>2 upcoming events</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--ai"><span>Tech</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Artificial Intelligence</p>
+                    <h3>AI Society</h3>
+                    <p class="club-card-description">Discuss machine learning trends, host model-building workshops, and research talks.</p>
+                    <div class="club-card-meta">
+                        <span>310 members</span>
+                        <span>1 event this week</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--robotics"><span>Tech</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Engineering</p>
+                    <h3>Robotics Club</h3>
+                    <p class="club-card-description">Design, build, and test autonomous robots while preparing for inter-university challenges.</p>
+                    <div class="club-card-meta">
+                        <span>260 members</span>
+                        <span>3 upcoming events</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--photo"><span>Arts</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Creative</p>
+                    <h3>Photography Club</h3>
+                    <p class="club-card-description">Photo walks, editing labs, and portfolio nights to grow your visual storytelling skills.</p>
+                    <div class="club-card-meta">
+                        <span>215 members</span>
+                        <span>1 upcoming event</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--debate"><span>Academic</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Communication</p>
+                    <h3>Debate Society</h3>
+                    <p class="club-card-description">Practice critical thinking and public speaking with weekly motions and tournaments.</p>
+                    <div class="club-card-meta">
+                        <span>180 members</span>
+                        <span>2 upcoming events</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--gaming"><span>Community</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Recreation</p>
+                    <h3>Gaming Club</h3>
+                    <p class="club-card-description">Join casual and competitive game nights, esports scrims, and cross-club tournaments.</p>
+                    <div class="club-card-meta">
+                        <span>500 members</span>
+                        <span>4 events this month</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--entre"><span>Leadership</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Business</p>
+                    <h3>Entrepreneurship Club</h3>
+                    <p class="club-card-description">Pitch practice, founder talks, and startup sprint sessions for student innovators.</p>
+                    <div class="club-card-meta">
+                        <span>145 members</span>
+                        <span>2 upcoming events</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+
+            <article class="club-card">
+                <div class="club-visual club-visual--culture"><span>Culture</span></div>
+                <div class="club-card-body">
+                    <p class="club-card-category">Global Community</p>
+                    <h3>Cultural Exchange Club</h3>
+                    <p class="club-card-description">Celebrate global traditions through language circles, festivals, and cultural showcases.</p>
+                    <div class="club-card-meta">
+                        <span>275 members</span>
+                        <span>3 upcoming events</span>
+                    </div>
+                    <a href="club_details.html" class="club-card-cta">View Club</a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer class="clubs-footer">
+    <p>ClubSync | University Student Clubs Platform</p>
+</footer>
+</body>
+</html>
