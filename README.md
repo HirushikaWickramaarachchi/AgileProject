@@ -21,8 +21,8 @@ Users can join clubs, view events, and track their participation, while administ
 | Name | UWA ID | GitHub Username |
 |------|--------|----------------|
 | Atharva Dalvi | 24591632 | atharvadalvii |
-| Farahnaz Abdi | XXXXXXXX | farahnazabdi92 |
-| Chaohong Lin | XXXXXXXX | aub11y |
+| Farahnaz Abdi | 25063505 | farahnazabdi92 |
+| Chaohong Lin | 24575614 | aub11y |
 | Hirushika Wickramaarachchi | XXXXXXXX | HirushikaWickramaarachchi |
 
 ---
