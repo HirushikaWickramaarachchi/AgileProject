@@ -283,6 +283,31 @@
                         <span><i class="bi bi-table me-2 text-primary"></i>Existing Events</span>
                         <span class="small text-muted">Click Edit to load into form above</span>
                     </div>
+                    <div class="card-body py-3 border-bottom">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-12 col-md-6">
+                                <label for="eventSearch" class="form-label fw-semibold small mb-1">
+                                    <i class="bi bi-search me-1 text-primary"></i>Search Events
+                                </label>
+                                <input type="text" class="form-control" id="eventSearch" placeholder="Event name or club...">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label for="eventStatusFilter" class="form-label fw-semibold small mb-1">Status</label>
+                                <select class="form-select" id="eventStatusFilter">
+                                    <option value="all">All Status</option>
+                                    <option value="published">Published</option>
+                                    <option value="pending">Pending Approval</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="archived">Archived</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button class="btn btn-outline-secondary w-100" id="eventResetFilters">
+                                    <i class="bi bi-x-circle me-1"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table admin-table mb-0">
                             <thead>
@@ -295,7 +320,7 @@
                                 <th class="text-end">Actions</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="eventsTableBody">
                             <tr>
                                 <td class="fw-semibold">AI Mini Hackathon</td>
                                 <td>AI Society</td>
@@ -303,20 +328,25 @@
                                 <td><span class="badge text-bg-success">Published</span></td>
                                 <td>120</td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary"
-                                            data-edit-event
-                                            data-event-id="evt-1001"
-                                            data-title="AI Mini Hackathon"
-                                            data-club="AI Society"
-                                            data-category="Competition"
-                                            data-start="2026-05-10T09:00"
-                                            data-end="2026-05-10T16:00"
-                                            data-venue="Engineering Innovation Hub"
-                                            data-capacity="120"
-                                            data-status="Published"
-                                            data-description="Build practical AI solutions with cross-faculty student teams.">
-                                        <i class="bi bi-pencil me-1"></i>Edit
-                                    </button>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" title="Edit event"
+                                                data-edit-event
+                                                data-event-id="evt-1001"
+                                                data-title="AI Mini Hackathon"
+                                                data-club="AI Society"
+                                                data-category="Competition"
+                                                data-start="2026-05-10T09:00"
+                                                data-end="2026-05-10T16:00"
+                                                data-venue="Engineering Innovation Hub"
+                                                data-capacity="120"
+                                                data-status="Published"
+                                                data-description="Build practical AI solutions with cross-faculty student teams.">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger js-delete-event" data-event-id="evt-1001" data-event-title="AI Mini Hackathon">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -326,20 +356,25 @@
                                 <td><span class="badge text-bg-warning">Pending Approval</span></td>
                                 <td>90</td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary"
-                                            data-edit-event
-                                            data-event-id="evt-1022"
-                                            data-title="Startup Pitch Night"
-                                            data-club="Entrepreneurship Club"
-                                            data-category="Networking"
-                                            data-start="2026-05-18T18:00"
-                                            data-end="2026-05-18T20:30"
-                                            data-venue="Business School Auditorium"
-                                            data-capacity="90"
-                                            data-status="Pending Approval"
-                                            data-description="Student founders pitch ideas and receive feedback from alumni mentors.">
-                                        <i class="bi bi-pencil me-1"></i>Edit
-                                    </button>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" title="Edit event"
+                                                data-edit-event
+                                                data-event-id="evt-1022"
+                                                data-title="Startup Pitch Night"
+                                                data-club="Entrepreneurship Club"
+                                                data-category="Networking"
+                                                data-start="2026-05-18T18:00"
+                                                data-end="2026-05-18T20:30"
+                                                data-venue="Business School Auditorium"
+                                                data-capacity="90"
+                                                data-status="Pending Approval"
+                                                data-description="Student founders pitch ideas and receive feedback from alumni mentors.">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger js-delete-event" data-event-id="evt-1022" data-event-title="Startup Pitch Night">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -349,20 +384,25 @@
                                 <td><span class="badge text-bg-secondary">Draft</span></td>
                                 <td>60</td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary"
-                                            data-edit-event
-                                            data-event-id="evt-1045"
-                                            data-title="Portfolio Review Lab"
-                                            data-club="Photography Club"
-                                            data-category="Workshop"
-                                            data-start="2026-05-23T15:00"
-                                            data-end="2026-05-23T17:00"
-                                            data-venue="Media Arts Studio B"
-                                            data-capacity="60"
-                                            data-status="Draft"
-                                            data-description="Peer and mentor-led portfolio feedback for emerging visual storytellers.">
-                                        <i class="bi bi-pencil me-1"></i>Edit
-                                    </button>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" title="Edit event"
+                                                data-edit-event
+                                                data-event-id="evt-1045"
+                                                data-title="Portfolio Review Lab"
+                                                data-club="Photography Club"
+                                                data-category="Workshop"
+                                                data-start="2026-05-23T15:00"
+                                                data-end="2026-05-23T17:00"
+                                                data-venue="Media Arts Studio B"
+                                                data-capacity="60"
+                                                data-status="Draft"
+                                                data-description="Peer and mentor-led portfolio feedback for emerging visual storytellers.">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger js-delete-event" data-event-id="evt-1045" data-event-title="Portfolio Review Lab">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
