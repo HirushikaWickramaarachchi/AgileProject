@@ -165,6 +165,49 @@
         refreshPreview();
     }
 
+    /* ── Event search/filter ────────────────────────────────── */
+    const eventSearch = document.getElementById("eventSearch");
+    const eventStatusFilter = document.getElementById("eventStatusFilter");
+    const eventResetFilters = document.getElementById("eventResetFilters");
+    const eventRows = Array.from(document.querySelectorAll("#eventsTableBody tr"));
+
+    if (eventSearch || eventStatusFilter) {
+        const applyEventFilters = () => {
+            const query = (eventSearch?.value || "").toLowerCase().trim();
+            const status = eventStatusFilter?.value || "all";
+
+            eventRows.forEach((row) => {
+                const text = row.textContent.toLowerCase();
+                const statusBadge = row.querySelector(".badge")?.textContent.toLowerCase() || "";
+                const matchesQuery = !query || text.includes(query);
+                const matchesStatus = status === "all" || statusBadge.includes(status.toLowerCase());
+                row.classList.toggle("d-none", !(matchesQuery && matchesStatus));
+            });
+        };
+
+        eventSearch?.addEventListener("input", applyEventFilters);
+        eventStatusFilter?.addEventListener("change", applyEventFilters);
+
+        eventResetFilters?.addEventListener("click", () => {
+            if (eventSearch) eventSearch.value = "";
+            if (eventStatusFilter) eventStatusFilter.value = "all";
+            applyEventFilters();
+            showToast("Event filters cleared");
+        });
+    }
+
+    /* ── Event delete ───────────────────────────────────────── */
+    document.querySelectorAll(".js-delete-event").forEach((button) => {
+        button.addEventListener("click", () => {
+            const row = button.closest("tr");
+            const title = button.dataset.eventTitle || "this event";
+            if (confirm(`Delete "${title}"? This cannot be undone.`)) {
+                row.remove();
+                showToast(`"${title}" deleted`);
+            }
+        });
+    });
+
     const membersTable = document.getElementById("membersTable");
     if (membersTable) {
         const searchInput = document.getElementById("memberSearch");
@@ -233,6 +276,18 @@
             });
         });
     }
+    /* ── Remove member from club ────────────────────────────── */
+    document.querySelectorAll(".js-remove-member").forEach((button) => {
+        button.addEventListener("click", () => {
+            const row = button.closest("[data-member-row]");
+            const name = row?.querySelector(".fw-semibold.small")?.textContent || "this member";
+            if (confirm(`Remove "${name}" from their club? This cannot be undone.`)) {
+                row.remove();
+                showToast(`"${name}" removed from club`);
+            }
+        });
+    });
+
     /* ── Dark mode ──────────────────────────────────────────── */
     const DARK_KEY = 'adminDarkMode';
     const body     = document.body;
