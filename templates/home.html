@@ -1,78 +1,142 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>ClubSync - Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <header class="clubs-header">
+    <div class="clubs-header-inner">
+      <link href="../static/css/home.css" rel="stylesheet" />
+      <link href="../static/css/navbar.css" rel="stylesheet" />
+      <!-- LEFT SIDE -->
+      <div class="left-nav">
+        <a class="clubs-brand" href="/home">ClubSync</a>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+        <nav class="clubs-nav">
+          <a href="/clubs">Clubs</a>
+          <a href="/events">Events</a>
 
-  <link href="../static/css/home.css" rel="stylesheet">
-  <link href="../static/css/navbar.css" rel="stylesheet">
-</head>
-
-<body>
-
-<header class="clubs-header">
-  <div class="clubs-header-inner">
-
-    <a class="clubs-brand" href="home.html">ClubSync</a>
-
-    <nav class="clubs-nav">
-      <a href="club_list.html" class="active">Clubs</a>
-      <a href="event.html">Events</a>
-      <a href="club_details.html">My Club</a>
-    </nav>
-
-    <div class="clubs-header-tools">
-      <div class="clubs-search">
-        <input type="text" placeholder="Search clubs, topics, or interests">
+          {% if session.get('user_id') %}
+          <a href="/myclubs">My Clubs</a>
+          {% endif %}
+        </nav>
       </div>
-      <span class="clubs-location">UWA Campus</span>
+
+      <!-- RIGHT SIDE -->
+      <div class="clubs-header-tools">
+        <div class="clubs-search">
+          <input type="text" placeholder="Search clubs, topics, or interests" />
+        </div>
+        <nav class="clubs-nav">
+          {% if session.get('user_id') %}
+          <a href="/profile">My Profile</a>
+          <a href="/logout">Logout</a>
+          {% else %}
+          <a href="/login">Login</a>
+          {% endif %}
+        </nav>
+        <span class="clubs-location">UWA Campus</span>
+      </div>
     </div>
+  </header>
 
-  </div>
-</header>
+  <body>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Discover Your Campus Life</h1>
+        <p>Join clubs, attend events, and stay connected with your community</p>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>Discover Your Campus Life</h1>
-    <p>Join clubs, attend events, and stay connected with your community</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="location.href = '/clubs'">
+            Join Now
+          </button>
 
-    <div class="hero-buttons">
-      <button class="btn-primary" onclick="location.href='signup.html'">Join Now</button>
-      <button class="btn-secondary" onclick="location.href='club_list.html'">Explore Clubs</button>
-    </div>
-  </div>
-</section>
+          <button
+            class="btn-secondary"
+            onclick="
+              this.classList.add('clicked-btn');
+              location.href = '/events';
+            "
+          >
+            Explore Events
+          </button>
+        </div>
+      </div>
+    </section>
 
-<section class="overview">
-  <h2>About ClubSync</h2>
-  <p>
-    ClubSync is a centralized platform that helps students discover clubs,
-    participate in events, and track their engagement. It simplifies club
-    management while improving communication between students and administrators.
-  </p>
-</section>
+    <section class="overview">
+      <h2>About ClubSync</h2>
+      <p>
+        ClubSync is a centralized platform that helps students discover clubs,
+        participate in events, and track their engagement. It simplifies club
+        management while improving communication between students and
+        administrators.
+      </p>
+    </section>
+    <section class="moment-section">
+      <div class="overlay">
+        <h2>Create Memories With Us</h2>
+        <p>
+          Meet new people, join exciting clubs, and enjoy campus life together.
+        </p>
 
-<section class="features">
+        <div class="slider-wrapper">
+          <button class="slide-arrow left" onclick="slideCards(-1)">❮</button>
 
-  <div class="feature-card">
-    <h3>Join Clubs</h3>
-    <p>Explore and become a member of clubs that match your interests.</p>
-  </div>
+          <div class="image-track" id="imageTrack">
+            <img
+              src="{{ url_for('static', filename='images/gallery1.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery2.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery3.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery4.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery5.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery6.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery7.jpg') }}"
+              class="moment-image"
+            />
+            <img
+              src="{{ url_for('static', filename='images/gallery8.jpg') }}"
+              class="moment-image"
+            />
+          </div>
 
-  <div class="feature-card">
-    <h3>Attend Events</h3>
-    <p>Stay updated with upcoming events and track your attendance.</p>
-  </div>
+          <button class="slide-arrow right" onclick="slideCards(1)">❯</button>
+        </div>
+      </div>
+    </section>
+    <section class="features">
+      <div class="feature-card" onclick="location.href = '/clubs'">
+        <h3>Join Clubs</h3>
+        <p>Explore and become a member of clubs that match your interests.</p>
+      </div>
 
-  <div class="feature-card">
-    <h3>Track Activity</h3>
-    <p>Monitor your participation and engagement across all clubs.</p>
-  </div>
+      <div class="feature-card" onclick="location.href = '/events'">
+        <h3>Attend Events</h3>
+        <p>Stay updated with upcoming events and track your attendance.</p>
+      </div>
 
-</section>
-
-</body>
+      <div class="feature-card" onclick="location.href = '/profile'">
+        <h3>Track Activity</h3>
+        <p>Monitor your participation and engagement across all clubs.</p>
+      </div>
+    </section>
+    <footer class="clubs-footer">
+      <p>ClubSync | University Student Clubs Platform</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  </body>
 </html>
