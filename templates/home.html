@@ -6,14 +6,14 @@
       <link href="../static/css/navbar.css" rel="stylesheet" />
       <!-- LEFT SIDE -->
       <div class="left-nav">
-        <a class="clubs-brand" href="/home">ClubSync</a>
+        <a class="clubs-brand" href="{{ url_for('dashboard.home') }}">ClubSync</a>
 
         <nav class="clubs-nav">
-          <a href="/clubs">Clubs</a>
-          <a href="/events">Events</a>
+          <a href="{{ url_for('clubs.clubs') }}">Clubs</a>
+          <a href="{{ url_for('clubs.events') }}">Events</a>
 
           {% if session.get('user_id') %}
-          <a href="/myclubs">My Clubs</a>
+          <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
           {% endif %}
         </nav>
       </div>
@@ -25,10 +25,10 @@
         </div>
         <nav class="clubs-nav">
           {% if session.get('user_id') %}
-          <a href="/profile">My Profile</a>
-          <a href="/logout">Logout</a>
+          <a href="{{ url_for('dashboard.profile') }}">My Profile</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
           {% else %}
-          <a href="/login">Login</a>
+          <a href="{{ url_for('auth.login') }}">Login</a>
           {% endif %}
         </nav>
         <span class="clubs-location">UWA Campus</span>
@@ -43,7 +43,7 @@
         <p>Join clubs, attend events, and stay connected with your community</p>
 
         <div class="hero-buttons">
-          <button class="btn-primary" onclick="location.href = '/clubs'">
+          <button class="btn-primary" onclick="location.href='{{ url_for("clubs.clubs") }}'">
             Join Now
           </button>
 
@@ -51,7 +51,7 @@
             class="btn-secondary"
             onclick="
               this.classList.add('clicked-btn');
-              location.href = '/events';
+              location.href = '{{ url_for("clubs.events") }}';
             "
           >
             Explore Events
@@ -119,17 +119,23 @@
       </div>
     </section>
     <section class="features">
-      <div class="feature-card" onclick="location.href = '/clubs'">
+      <div class="feature-card"
+     data-url="{{ url_for('clubs.clubs') }}"
+     onclick="window.location.href=this.dataset.url;">
         <h3>Join Clubs</h3>
         <p>Explore and become a member of clubs that match your interests.</p>
       </div>
 
-      <div class="feature-card" onclick="location.href = '/events'">
+      <div class="feature-card"
+     data-url="{{ url_for('clubs.events') }}"
+     onclick="window.location.href=this.dataset.url;">
         <h3>Attend Events</h3>
         <p>Stay updated with upcoming events and track your attendance.</p>
       </div>
 
-      <div class="feature-card" onclick="location.href = '/profile'">
+      <div class="feature-card"
+     data-url="{{ url_for('dashboard.profile') }}"
+     onclick="window.location.href=this.dataset.url;">
         <h3>Track Activity</h3>
         <p>Monitor your participation and engagement across all clubs.</p>
       </div>

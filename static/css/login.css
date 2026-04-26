@@ -1,21 +1,16 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
   background: #f5f5dc;
 }
 
-.signup-page {
+.login-page {
   display: flex;
   min-height: 100vh;
 }
 
 /* LEFT */
-.signup-left {
+.login-left {
   width: 45%;
   display: flex;
   justify-content: center;
@@ -23,18 +18,18 @@ body {
   background: #f5f5dc;
 }
 
-.signup-card {
+.login-card {
   background: white;
-  width: 400px;
   padding: 40px;
   border-radius: 18px;
+  width: 380px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-.signup-card h2 {
-  text-align: center;
+.login-card h2 {
   color: #5a8cc7;
-  margin-bottom: 8px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .subtitle {
@@ -43,52 +38,65 @@ body {
   margin-bottom: 25px;
 }
 
-.signup-card label {
+.login-card label {
   display: block;
   margin-top: 14px;
   margin-bottom: 6px;
 }
 
-.signup-card input {
+.login-card input[type="email"],
+.login-card input[type="password"] {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
 }
 
-.signup-card button {
+.options {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.options a {
+  color: #f59e0b;
+  text-decoration: none;
+}
+
+button {
   width: 100%;
-  margin-top: 22px;
+  margin-top: 20px;
   padding: 14px;
   border: none;
   background: #f5b800;
   border-radius: 8px;
-  font-weight: bold;
   font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.login-link {
+.register {
   text-align: center;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
-.login-link a {
+.register a {
   color: #5a8cc7;
   text-decoration: none;
 }
 
-/* RIGHT SIDE */
-.signup-right {
+/* RIGHT IMAGE */
+.login-right {
   width: 55%;
-  background: url("../images/signup-bg.jpg") center/cover no-repeat;
+  background: url("../images/login-bg.jpg") center/cover no-repeat;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.signup-right::before {
+.login-right::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -99,8 +107,8 @@ body {
   position: relative;
   color: white;
   text-align: center;
-  max-width: 500px;
   padding: 30px;
+  max-width: 500px;
 }
 
 .overlay-text h2 {
@@ -111,4 +119,28 @@ body {
 .overlay-text p {
   font-size: 20px;
   line-height: 1.6;
+}
+
+.flash-message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.flash-message.danger {
+  background: #ffe5e5;
+  color: #c62828;
+}
+
+.flash-message.success {
+  background: #e6f7e6;
+  color: #2e7d32;
+}
+
+.flash-message.info {
+  background: #e8f1ff;
+  color: #1565c0;
 }
