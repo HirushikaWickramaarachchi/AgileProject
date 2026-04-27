@@ -1,0 +1,671 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    /* ClubSync source palette */
+    --cs-navy:          #184766;
+    --cs-blue:          #73A5CA;
+    --cs-yellow:        #FFC81E;
+    --cs-orange:        #E87F24;
+
+    /* Admin alter-ego tokens */
+    --admin-bg:           #e6f0f8;       /* cool professional version of the warm cream */
+    --admin-sidebar-from: #0c1d2e;       /* deeper version of ClubSync navy */
+    --admin-sidebar-to:   #06111c;
+    --admin-accent:       #184766;       /* ClubSync navy as primary action colour */
+    --admin-accent-mid:   #73A5CA;       /* ClubSync blue for softer accents */
+    --admin-yellow:       #FFC81E;       /* ClubSync yellow — active/highlight */
+    --admin-orange:       #E87F24;       /* ClubSync orange — warnings/actions */
+    --admin-card-radius:  14px;
+    --admin-card-shadow:  0 2px 14px rgba(12, 29, 46, 0.08);
+    --admin-hover-shadow: 0 8px 28px rgba(12, 29, 46, 0.15);
+    --admin-transition:   0.2s ease;
+    --admin-border:       #d9e5ef;
+    --admin-text:         #132535;
+    --admin-text-muted:   #5e7a8e;
+}
+
+/* ── Welcome banner ───────────────────────────────────────── */
+.admin-welcome-banner {
+    background: linear-gradient(120deg, #0c1d2e 0%, var(--cs-navy) 55%, #1e6b9e 100%);
+    border-radius: var(--admin-card-radius);
+    position: relative;
+    overflow: hidden;
+}
+.admin-welcome-banner::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255, 200, 30, 0.09);
+    pointer-events: none;
+}
+.admin-welcome-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -50px; right: 120px;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: rgba(115, 165, 202, 0.12);
+    pointer-events: none;
+}
+
+/* ── Metric card colour-top accents ───────────────────────── */
+.admin-metric-card::before {
+    content: '';
+    display: block;
+    height: 4px;
+    border-radius: var(--admin-card-radius) var(--admin-card-radius) 0 0;
+    background: var(--cs-blue);
+}
+.admin-metric-card.mc-navy::before   { background: var(--cs-navy); }
+.admin-metric-card.mc-blue::before   { background: var(--cs-blue); }
+.admin-metric-card.mc-orange::before { background: var(--cs-orange); }
+.admin-metric-card.mc-yellow::before { background: var(--cs-yellow); }
+
+/* ── Bootstrap primary override (ClubSync navy) ───────────── */
+.admin-body {
+    --bs-primary:         #184766;
+    --bs-primary-rgb:     24, 71, 102;
+    --bs-link-color:      #184766;
+    --bs-link-hover-color:#0d2e44;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+    font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+.admin-sidebar {
+    background: linear-gradient(180deg, #112336 0%, #0a1929 100%);
+    color: rgba(255, 255, 255, 0.88);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.admin-sidebar::-webkit-scrollbar { display: none; }
+
+.admin-brand {
+    padding: 1.4rem 1.25rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.admin-brand a {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    letter-spacing: 0.2px;
+}
+
+/* Brand icon: ClubSync yellow → orange gradient */
+.admin-brand-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--cs-yellow), var(--cs-orange));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1200;
+    font-size: 1.05rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(255, 200, 30, 0.35);
+}
+
+.admin-nav-section { padding: 1rem 0.75rem 0; }
+.admin-nav-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.45);
+    padding: 0 0.6rem;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+/* Target BOTH desktop sidebar AND mobile offcanvas nav links */
+.admin-sidebar .nav-link,
+.admin-offcanvas .nav-link {
+    color: rgba(255, 255, 255, 0.88) !important;
+    border-radius: 0.65rem;
+    padding: 0.62rem 0.8rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border-left: 3px solid transparent;
+    transition: background var(--admin-transition), color var(--admin-transition),
+                border-color var(--admin-transition);
+}
+.admin-sidebar .nav-link i,
+.admin-offcanvas .nav-link i {
+    font-size: 1.05rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+.admin-sidebar .nav-link:hover,
+.admin-offcanvas .nav-link:hover {
+    color: #fff !important;
+    background: rgba(115, 165, 202, 0.2);
+}
+.admin-sidebar .nav-link:hover i,
+.admin-offcanvas .nav-link:hover i { color: #fff !important; }
+
+/* Active: ClubSync yellow */
+.admin-sidebar .nav-link.active,
+.admin-offcanvas .nav-link.active {
+    color: var(--cs-yellow) !important;
+    background: rgba(255, 200, 30, 0.15);
+    border-left-color: var(--cs-yellow);
+    font-weight: 600;
+}
+.admin-sidebar .nav-link.active i,
+.admin-offcanvas .nav-link.active i { color: var(--cs-yellow) !important; }
+
+.admin-sidebar-footer {
+    padding: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+}
+.admin-user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+/* Avatar: ClubSync navy → blue gradient */
+.admin-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cs-navy), var(--cs-blue));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    flex-shrink: 0;
+}
+.admin-user-name { font-size: 0.83rem; font-weight: 600; color: #fff; line-height: 1.2; }
+.admin-user-role { font-size: 0.7rem; color: rgba(255, 255, 255, 0.55); }
+
+/* ── Topbar ───────────────────────────────────────────────── */
+.admin-topbar {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--admin-border) !important;
+}
+.admin-topbar h1 { font-weight: 700; color: var(--admin-text); }
+.admin-topbar .text-uppercase { color: var(--admin-text-muted) !important; }
+
+.admin-menu-toggle {
+    background: none;
+    border: 1.5px solid #cddce8;
+    border-radius: 9px;
+    padding: 0.38rem 0.6rem;
+    color: var(--cs-navy);
+    font-size: 1.3rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: background var(--admin-transition), border-color var(--admin-transition);
+}
+.admin-menu-toggle:hover {
+    background: #f0f7fb;
+    border-color: var(--cs-blue);
+}
+
+/* ── Metric cards ─────────────────────────────────────────── */
+.admin-metric-card {
+    border: none !important;
+    border-radius: var(--admin-card-radius) !important;
+    box-shadow: var(--admin-card-shadow);
+    transition: transform var(--admin-transition), box-shadow var(--admin-transition);
+    overflow: hidden;
+    background: #fff;
+}
+.admin-metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--admin-hover-shadow);
+}
+.admin-metric-card .card-body { padding: 1.35rem; }
+
+/* Icon badge colours — ClubSync family */
+.admin-metric-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+/* blue  → ClubSync navy/blue family */
+.admin-metric-icon.blue   { background: #dceef8; color: var(--cs-navy); }
+/* green → keep emerald — contrasts well */
+.admin-metric-icon.green  { background: #dcf5e9; color: #166534; }
+/* orange → ClubSync orange */
+.admin-metric-icon.orange { background: #fff0e0; color: var(--cs-orange); }
+/* purple → ClubSync yellow-amber family */
+.admin-metric-icon.purple { background: #fef3c7; color: #92600a; }
+
+.admin-metric-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--admin-text);
+    line-height: 1;
+    margin-bottom: 0.2rem;
+}
+.admin-metric-label {
+    font-size: 0.8rem;
+    color: var(--admin-text-muted);
+    font-weight: 500;
+    margin-bottom: 0.65rem;
+}
+.admin-metric-trend {
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* ── Content cards ────────────────────────────────────────── */
+.admin-card {
+    border: none !important;
+    border-radius: var(--admin-card-radius) !important;
+    box-shadow: var(--admin-card-shadow);
+    background: #fff;
+}
+.admin-card .card-header {
+    background: #fff !important;
+    border-bottom: 1px solid var(--admin-border);
+    border-radius: var(--admin-card-radius) var(--admin-card-radius) 0 0 !important;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--admin-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.admin-card .card-body { padding: 1.25rem; }
+
+/* ── Timeline ─────────────────────────────────────────────── */
+.admin-timeline { display: grid; gap: 0.75rem; }
+.admin-timeline-item {
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    background: #f7fbff;
+    padding: 0.85rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: border-color var(--admin-transition), background var(--admin-transition);
+}
+.admin-timeline-item:hover {
+    border-color: var(--cs-blue);
+    background: #f0f7fc;
+}
+
+/* ── Progress bars ────────────────────────────────────────── */
+.progress { height: 7px; border-radius: 99px; background: #deeaf2; }
+.progress-bar { border-radius: 99px; transition: width 0.6s ease; }
+/* Override Bootstrap primary progress to ClubSync blue */
+.progress-bar.bg-primary { background-color: var(--cs-navy) !important; }
+.progress-bar.bg-info    { background-color: var(--cs-blue) !important; }
+.progress-bar.bg-warning { background-color: var(--cs-orange) !important; }
+
+/* ── Tables ───────────────────────────────────────────────── */
+.admin-table thead th {
+    background: #f4f8fb;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--admin-text-muted);
+    font-weight: 700;
+    border-bottom: 1px solid var(--admin-border);
+    padding: 0.85rem 1.1rem;
+    white-space: nowrap;
+}
+.admin-table tbody td {
+    padding: 0.85rem 1.1rem;
+    vertical-align: middle;
+    border-color: #edf3f8;
+    font-size: 0.9rem;
+}
+.admin-table tbody tr:hover { background: #f4f9fc; }
+
+/* ── Preview card ─────────────────────────────────────────── */
+.preview-card {
+    background: linear-gradient(145deg, #f7fbff 0%, #edf4fa 100%);
+    border-color: #cde1ee !important;
+    border-radius: 10px;
+}
+
+/* ── System health card ───────────────────────────────────── */
+.admin-health-card {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    color: #fff;
+    padding: 0.85rem 1rem;
+}
+.admin-health-card .progress { background: rgba(255,255,255,0.15); }
+.admin-health-card .progress .progress-bar { background-color: var(--cs-yellow) !important; }
+
+/* ── Offcanvas (mobile sidebar) ───────────────────────────── */
+.admin-offcanvas {
+    width: 260px !important;
+    background: linear-gradient(180deg, #112336 0%, #0a1929 100%) !important;
+}
+.admin-offcanvas .offcanvas-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.2rem 1.25rem;
+}
+.admin-offcanvas .offcanvas-body {
+    background: linear-gradient(180deg, #112336 0%, #0a1929 100%);
+    color: rgba(255, 255, 255, 0.88);
+}
+
+/* ── Button overrides (ClubSync-flavoured) ────────────────── */
+.btn-primary {
+    background-color: var(--cs-navy);
+    border-color: var(--cs-navy);
+    color: #fff;
+}
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #0d2e44;
+    border-color: #0d2e44;
+    color: #fff;
+}
+.btn-outline-primary {
+    color: var(--cs-navy);
+    border-color: var(--cs-navy);
+}
+.btn-outline-primary:hover {
+    background-color: var(--cs-navy);
+    border-color: var(--cs-navy);
+    color: #fff;
+}
+/* Icon colour in cards */
+.text-primary { color: var(--cs-navy) !important; }
+.badge.text-bg-primary { background-color: var(--cs-navy) !important; }
+
+/* ── Dark mode toggle button ──────────────────────────────── */
+#darkModeToggle {
+    background: none;
+    border: 1.5px solid #cddce8;
+    border-radius: 9px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    color: var(--cs-navy);
+    cursor: pointer;
+    transition: background var(--admin-transition), border-color var(--admin-transition),
+                color var(--admin-transition), transform 0.3s ease;
+    flex-shrink: 0;
+}
+#darkModeToggle:hover {
+    background: #f0f7fb;
+    border-color: var(--cs-blue);
+    transform: rotate(20deg);
+}
+
+/* ── Dark mode ─────────────────────────────────────────────── */
+body.admin-dark {
+    --admin-bg:         #0d1b2a;
+    --admin-card-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+    --admin-hover-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
+    --admin-border:     rgba(255, 255, 255, 0.09);
+    --admin-text:       #d8eaf5;
+    --admin-text-muted: #7eb3d0;
+    background: var(--admin-bg);
+    color: var(--admin-text);
+}
+
+/* Topbar */
+body.admin-dark .admin-topbar {
+    background: #0a1929 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+body.admin-dark .admin-topbar h1 { color: #d8eaf5; }
+body.admin-dark .admin-topbar .text-uppercase { color: var(--admin-text-muted) !important; }
+body.admin-dark #darkModeToggle {
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #FFC81E;
+    background: rgba(255, 200, 30, 0.08);
+}
+body.admin-dark #darkModeToggle:hover {
+    background: rgba(255, 200, 30, 0.16);
+    border-color: #FFC81E;
+}
+body.admin-dark .admin-menu-toggle {
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #d8eaf5;
+    background: rgba(255, 255, 255, 0.05);
+}
+body.admin-dark .admin-menu-toggle:hover {
+    background: rgba(115, 165, 202, 0.15);
+    border-color: var(--cs-blue);
+}
+
+/* Clock badge */
+body.admin-dark .badge.text-bg-light {
+    background: rgba(255, 255, 255, 0.07) !important;
+    color: #d8eaf5 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+body.admin-dark .badge.text-bg-light i { color: var(--cs-yellow) !important; }
+
+/* Cards */
+body.admin-dark .admin-metric-card,
+body.admin-dark .admin-card {
+    background: #112336 !important;
+    box-shadow: var(--admin-card-shadow);
+}
+body.admin-dark .admin-card .card-header {
+    background: #112336 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #d8eaf5;
+}
+body.admin-dark .admin-metric-value { color: #e8f4ff; }
+body.admin-dark .admin-metric-label { color: var(--admin-text-muted); }
+
+/* Icon badges in dark mode */
+body.admin-dark .admin-metric-icon.blue   { background: rgba(24,71,102,0.35);  color: #73A5CA; }
+body.admin-dark .admin-metric-icon.green  { background: rgba(22,101,52,0.3);   color: #4ade80; }
+body.admin-dark .admin-metric-icon.orange { background: rgba(232,127,36,0.25); color: #E87F24; }
+body.admin-dark .admin-metric-icon.purple { background: rgba(255,200,30,0.18); color: #FFC81E; }
+
+/* Tables */
+body.admin-dark .admin-table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255,255,255,0.03);
+    --bs-table-hover-bg: rgba(115,165,202,0.08);
+    --bs-table-border-color: rgba(255,255,255,0.07);
+    color: #cce0f0;
+}
+body.admin-dark .admin-table thead th {
+    background: #0a1929 !important;
+    color: var(--admin-text-muted);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+body.admin-dark .admin-table tbody tr {
+    background: transparent;
+}
+body.admin-dark .admin-table tbody td {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.06);
+    color: #cce0f0;
+}
+body.admin-dark .admin-table tbody tr:hover td {
+    background: rgba(115, 165, 202, 0.08);
+}
+/* Nuke Bootstrap's white --bs-table-bg on every table in dark mode */
+body.admin-dark table {
+    --bs-table-bg: transparent;
+    --bs-table-border-color: rgba(255, 255, 255, 0.07);
+    color: #cce0f0;
+}
+body.admin-dark .table-responsive { border-color: transparent; }
+
+/* Timeline */
+body.admin-dark .admin-timeline-item {
+    background: #0f2135;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+body.admin-dark .admin-timeline-item:hover {
+    background: #132840;
+    border-color: var(--cs-blue);
+}
+
+/* Progress bars */
+body.admin-dark .progress { background: rgba(255,255,255,0.1); }
+
+/* Preview card */
+body.admin-dark .preview-card {
+    background: linear-gradient(145deg, #0f2135 0%, #0a1929 100%);
+    border-color: rgba(255,255,255,0.1) !important;
+}
+
+/* Form controls */
+body.admin-dark .form-control,
+body.admin-dark .form-select {
+    background: #0d2035;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #d8eaf5;
+}
+body.admin-dark .form-control:focus,
+body.admin-dark .form-select:focus {
+    background: #112336;
+    border-color: var(--cs-blue);
+    color: #e8f4ff;
+    box-shadow: 0 0 0 0.2rem rgba(115,165,202,0.2);
+}
+body.admin-dark .form-control::placeholder { color: rgba(255,255,255,0.3); }
+body.admin-dark .form-label { color: #b0cfe0; }
+body.admin-dark .input-group-text {
+    background: #0a1929;
+    border-color: rgba(255,255,255,0.12);
+    color: #7eb3d0;
+}
+
+/* Text helpers */
+body.admin-dark .text-muted    { color: var(--admin-text-muted) !important; }
+body.admin-dark .text-dark     { color: #d8eaf5 !important; }
+body.admin-dark .text-secondary { color: var(--admin-text-muted) !important; }
+body.admin-dark small          { color: var(--admin-text-muted); }
+/* All headings inside dark cards stay light */
+body.admin-dark .admin-card h1,
+body.admin-dark .admin-card h2,
+body.admin-dark .admin-card h3,
+body.admin-dark .admin-card h4,
+body.admin-dark .admin-card h5,
+body.admin-dark .admin-card h6,
+body.admin-dark .admin-card .h1,
+body.admin-dark .admin-card .h2,
+body.admin-dark .admin-card .h3,
+body.admin-dark .admin-card .h4,
+body.admin-dark .admin-card .h5,
+body.admin-dark .admin-card .h6 { color: #d8eaf5 !important; }
+/* fw-semibold labels inside cards */
+body.admin-dark .admin-card .fw-semibold { color: #d8eaf5; }
+
+/* Badges */
+body.admin-dark .badge.bg-light, body.admin-dark .badge.text-bg-secondary {
+    background: rgba(255,255,255,0.1) !important;
+    color: #d8eaf5 !important;
+}
+
+/* Borders */
+body.admin-dark .border,
+body.admin-dark [class*="border-"] { border-color: rgba(255,255,255,0.09) !important; }
+
+/* Any leftover white bg surfaces */
+body.admin-dark .bg-white,
+body.admin-dark .bg-light { background: #112336 !important; color: #cce0f0 !important; }
+
+/* List group items (Recent Admin Activity) */
+body.admin-dark .list-group-item {
+    background: transparent !important;
+    color: #cce0f0 !important;
+    border-color: rgba(255, 255, 255, 0.07) !important;
+}
+body.admin-dark .list-group-item p,
+body.admin-dark .list-group-item strong { color: #d8eaf5 !important; }
+
+/* Event Pipeline timeline text */
+body.admin-dark .admin-timeline-item h3,
+body.admin-dark .admin-timeline-item .h6 { color: #d8eaf5 !important; }
+body.admin-dark .admin-timeline-item small,
+body.admin-dark .admin-timeline-item .text-secondary { color: var(--admin-text-muted) !important; }
+
+/* Dropdown menus */
+body.admin-dark .dropdown-menu {
+    background: #112336;
+    border-color: rgba(255,255,255,0.1);
+}
+body.admin-dark .dropdown-item {
+    color: #cce0f0;
+}
+body.admin-dark .dropdown-item:hover, body.admin-dark .dropdown-item:focus {
+    background: rgba(115,165,202,0.15);
+    color: #fff;
+}
+body.admin-dark .dropdown-divider { border-color: rgba(255,255,255,0.08); }
+
+/* Checkboxes */
+body.admin-dark .form-check-input {
+    background-color: #0d2035;
+    border-color: rgba(255,255,255,0.25);
+}
+body.admin-dark .form-check-input:checked {
+    background-color: var(--cs-blue);
+    border-color: var(--cs-blue);
+}
+
+/* Buttons (outline) */
+body.admin-dark .btn-outline-primary {
+    color: var(--cs-blue);
+    border-color: var(--cs-blue);
+}
+body.admin-dark .btn-outline-primary:hover {
+    background: var(--cs-navy);
+    color: #fff;
+}
+body.admin-dark .btn-outline-secondary {
+    color: #7eb3d0;
+    border-color: rgba(255,255,255,0.18);
+}
+body.admin-dark .btn-outline-secondary:hover {
+    background: rgba(115,165,202,0.15);
+    color: #fff;
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 991.98px) {
+    .admin-sidebar { display: none !important; }
+}
+@media (max-width: 575px) {
+    .admin-metric-value { font-size: 1.7rem; }
+    .admin-topbar { padding: 0.75rem 1rem !important; }
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - ClubSync</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="profile-container">
+
+    <h1 class="page-title">My Profile</h1>
+
+    <!-- ========== Profile Header ========== -->
+    <div class="profile-header">
+        <div class="avatar">JD</div>
+        <div class="user-info">
+            <h2>John Doe</h2>
+            <p>johndoe@student.uwa.edu.au</p>
+            <p>Joined: March 2026</p>
+            <span class="badge">3 Clubs Joined</span>
+        </div>
+        <button class="btn-edit">Edit Profile</button>
+    </div>
+
+    <!-- ========== My Clubs ========== -->
+    <div class="section-card">
+        <h3>My Clubs</h3>
+        <div class="clubs-grid">
+            <div class="club-item">
+                <h4>Photography Club</h4>
+                <p>Weekly meetups every Friday</p>
+                <span class="role-tag admin">Admin</span>
+            </div>
+            <div class="club-item">
+                <h4>Coding Society</h4>
+                <p>Hackathons & workshops</p>
+                <span class="role-tag member">Member</span>
+            </div>
+            <div class="club-item">
+                <h4>Basketball Team</h4>
+                <p>Training on Tue & Thu</p>
+                <span class="role-tag member">Member</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Attendance History ========== -->
+    <div class="section-card">
+        <h3>Attendance History</h3>
+        <table class="attendance-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Club</th>
+                    <th>Event</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-04-10</td>
+                    <td>Photography Club</td>
+                    <td>Spring Photo Walk</td>
+                    <td><span class="status present">Present</span></td>
+                </tr>
+                <tr>
+                    <td>2026-04-08</td>
+                    <td>Coding Society</td>
+                    <td>Flask Workshop</td>
+                    <td><span class="status present">Present</span></td>
+                </tr>
+                <tr>
+                    <td>2026-04-05</td>
+                    <td>Basketball Team</td>
+                    <td>Weekly Training</td>
+                    <td><span class="status absent">Absent</span></td>
+                </tr>
+                <tr>
+                    <td>2026-04-03</td>
+                    <td>Photography Club</td>
+                    <td>Portrait Techniques</td>
+                    <td><span class="status present">Present</span></td>
+                </tr>
+                <tr>
+                    <td>2026-04-01</td>
+                    <td>Coding Society</td>
+                    <td>Git & GitHub Intro</td>
+                    <td><span class="status present">Present</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ========== Account Settings ========== -->
+    <div class="section-card">
+        <h3>Account Settings</h3>
+        <ul class="settings-list">
+            <li>
+                <div>
+                    <span class="label">Username</span><br>
+                    <span class="value">johndoe</span>
+                </div>
+                <button class="btn-link">Change</button>
+            </li>
+            <li>
+                <div>
+                    <span class="label">Email</span><br>
+                    <span class="value">johndoe@student.uwa.edu.au</span>
+                </div>
+                <button class="btn-link">Change</button>
+            </li>
+            <li>
+                <div>
+                    <span class="label">Password</span><br>
+                    <span class="value">********</span>
+                </div>
+                <button class="btn-link">Change</button>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>
