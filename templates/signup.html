@@ -12,64 +12,68 @@
   </head>
 
   <body>
-    <div class="container">
-      <h2>Create Account</h2>
-      <p>Sign up to get started</p>
+    <div class="signup-page">
+      <!-- LEFT SIDE FORM -->
+      <div class="signup-left">
+        <div class="signup-card">
+          <h2>Create Account</h2>
+          <p class="subtitle">Join ClubSync and get started</p>
 
-      <!-- Flash messages -->
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
-      messages %} {% for category, message in messages %}
-      <div class="flash-message {{ category }}">{{ message }}</div>
-      {% endfor %} {% endif %} {% endwith %}
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %} {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %} {% endif %} {% endwith %}
 
-      <form method="POST" action="{{ url_for('register') }}">
-        <div class="input-group">
-          <label>Full Name</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter your name"
-            required
-          />
+          <form method="POST" action="{{ url_for('auth.register') }}">
+            <label>Full Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your name"
+              required
+            />
+
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              required
+            />
+
+            <label>Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm password"
+              required
+            />
+
+            <button type="submit">Sign Up</button>
+          </form>
+
+          <p class="login-link">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}">Login</a>
+          </p>
         </div>
+      </div>
 
-        <div class="input-group">
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-          />
+      <!-- RIGHT SIDE IMAGE -->
+      <div class="signup-right">
+        <div class="overlay-text">
+          <h2>Join ClubSync</h2>
+          <p>Meet new people, join clubs, and create unforgettable memories.</p>
         </div>
-
-        <div class="input-group">
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            required
-          />
-        </div>
-
-        <div class="input-group">
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm password"
-            required
-          />
-        </div>
-
-        <button type="submit" class="btn">Sign Up</button>
-
-        <div class="login-link">
-          Already have an account?
-          <a href="{{ url_for('login') }}">Login</a>
-        </div>
-      </form>
+      </div>
     </div>
   </body>
 </html>
