@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClubSync | AI Mini Hackathon</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <title>ClubSync | {% if event %}{{ event.title }}{% else %}Events{% endif %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="clubs-page event-page">
 <header class="clubs-header">
     <div class="clubs-header-inner">
-        <a class="clubs-brand" href="club_list.html">ClubSync</a>
+        <a class="clubs-brand" href="{{ url_for('dashboard.index') }}">ClubSync</a>
 
         <nav class="clubs-nav" aria-label="Primary">
-            <a href="club_list.html">Clubs</a>
-            <a href="event.html" class="active" aria-current="page">Events</a>
-            <a href="club_details.html">My Club</a>
+            <a href="{{ url_for('clubs.clubs') }}" class="active" aria-current="page">Clubs</a>
+            <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
         </nav>
 
         <div class="clubs-header-tools">
@@ -27,204 +26,228 @@
 </header>
 
 <main class="event-main">
-    <section class="event-hero">
-        <div class="event-hero-main">
-            <p class="event-hero-type">Hackathon Event</p>
-            <h1>AI Mini Hackathon</h1>
-            <p class="event-hero-summary">
-                Build practical AI solutions with students across faculties in a one-day collaborative challenge hosted by AI Society.
-            </p>
+    {% include "_flash_messages.html" %}
 
-            <div class="event-hero-meta">
-                <span>Saturday, May 10, 2026</span>
-                <span>9:00 AM - 4:00 PM</span>
-                <span>Engineering Innovation Hub</span>
-                <a href="club_details.html" class="event-meta-link">Hosted by AI Society</a>
-                <span>120 going</span>
-            </div>
-        </div>
-
-        <div class="event-hero-actions">
-            <a href="#" class="event-primary-action">Register</a>
-            <a href="#" class="event-secondary-action">Save Event</a>
-            <p class="event-action-note">Free for UWA students. Limited places available.</p>
-        </div>
-    </section>
-
-    <section class="event-cover-card" aria-label="Event cover">
-        <div class="event-cover-visual">
-            <div class="event-cover-badge">AI Society Featured</div>
-            <div class="event-cover-tiles">
-                <span>Ideas</span>
-                <span>Build</span>
-                <span>Pitch</span>
-            </div>
-        </div>
-    </section>
-
-    <div class="event-layout">
-        <section class="event-content">
-            <article class="event-section-card">
-                <h2>About This Event</h2>
-                <p>
-                    AI Mini Hackathon is a student-focused innovation day where participants form small teams and build AI-powered prototypes around
-                    real campus challenges. You can join with a team or register individually and get matched on the day.
+    {% if event %}
+        <section class="event-hero">
+            <div class="event-hero-main">
+                <p class="event-hero-type">Club Event</p>
+                <h1>{{ event.title }}</h1>
+                <p class="event-hero-summary">
+                    {{ event.description if event.description else 'This event does not have a description yet.' }}
                 </p>
-                <p>
-                    The session includes guided brainstorming, technical support from mentors, mini-checkpoints, and final pitches. Whether you are
-                    curious about your first AI project or already experienced, the format is designed to help you create something meaningful.
-                </p>
-            </article>
 
-            <article class="event-section-card">
-                <h2>Agenda</h2>
-                <div class="event-agenda-list">
-                    <div class="event-agenda-item">
-                        <span class="event-agenda-time">9:00 AM</span>
-                        <div>
-                            <h3>Welcome & Team Formation</h3>
-                            <p>Opening brief, challenge themes, and team matching.</p>
-                        </div>
-                    </div>
-                    <div class="event-agenda-item">
-                        <span class="event-agenda-time">10:00 AM</span>
-                        <div>
-                            <h3>Build Session 1</h3>
-                            <p>Problem framing, dataset exploration, and prototype setup.</p>
-                        </div>
-                    </div>
-                    <div class="event-agenda-item">
-                        <span class="event-agenda-time">12:30 PM</span>
-                        <div>
-                            <h3>Mentor Checkpoint & Lunch</h3>
-                            <p>Feedback round with student leads and invited mentors.</p>
-                        </div>
-                    </div>
-                    <div class="event-agenda-item">
-                        <span class="event-agenda-time">2:00 PM</span>
-                        <div>
-                            <h3>Final Build Sprint</h3>
-                            <p>Refine features, prepare demos, and finalize pitch slides.</p>
-                        </div>
-                    </div>
-                    <div class="event-agenda-item">
-                        <span class="event-agenda-time">3:30 PM</span>
-                        <div>
-                            <h3>Team Pitches & Networking</h3>
-                            <p>Project showcases, recognition, and community networking.</p>
-                        </div>
-                    </div>
+                <div class="event-hero-meta">
+                    <span>{{ event.date }}</span>
+                    <span>UWA Campus</span>
+                    {% if club %}
+                        <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-meta-link">Hosted by {{ club.name }}</a>
+                    {% endif %}
+                    <span>{{ attendee_count }} attending</span>
                 </div>
-            </article>
+            </div>
 
-            <article class="event-section-card">
-                <h2>Who Should Attend</h2>
-                <div class="event-chip-grid">
-                    <span class="event-chip">Students interested in AI and data</span>
-                    <span class="event-chip">Beginners wanting practical experience</span>
-                    <span class="event-chip">Developers, designers, and problem-solvers</span>
-                    <span class="event-chip">Students preparing for hackathons</span>
-                    <span class="event-chip">Anyone who enjoys team collaboration</span>
-                </div>
-            </article>
+            <div class="event-hero-actions">
+                {% if session.get('user_id') %}
+                    {% if is_attending %}
+                        <form method="POST" action="{{ url_for('clubs.unattend_event', event_id=event.id) }}">
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="submit" class="event-primary-action">Cancel Attendance</button>
+                        </form>
+                        <p class="event-action-note">You are currently marked as attending this event.</p>
+                    {% elif is_club_member %}
+                        <form method="POST" action="{{ url_for('clubs.attend_event', event_id=event.id) }}">
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button type="submit" class="event-primary-action">Attend Event</button>
+                        </form>
+                        <p class="event-action-note">Mark attendance to appear in the attendee list.</p>
+                    {% elif club %}
+                        <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-primary-action">Join Club to Attend</a>
+                        <p class="event-action-note">You need to join {{ club.name }} before attending this event.</p>
+                    {% else %}
+                        <p class="event-action-note">Joining the host club is required before attendance can be marked.</p>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="event-primary-action">Login to Attend</a>
+                    {% if club %}
+                        <p class="event-action-note">Log in, then join {{ club.name }} to attend this event.</p>
+                    {% else %}
+                        <p class="event-action-note">Log in first to mark or cancel attendance.</p>
+                    {% endif %}
+                {% endif %}
 
-            <article class="event-section-card">
-                <h2>What To Bring</h2>
-                <ul class="event-checklist">
-                    <li>Laptop and charger</li>
-                    <li>Student ID for campus room access</li>
-                    <li>Basic familiarity with coding is helpful but not required</li>
-                    <li>Curiosity, teamwork mindset, and willingness to learn</li>
-                </ul>
-            </article>
-
-            <article class="event-section-card">
-                <h2>Community Preview</h2>
-                <p class="event-attendees-count">120 students marked as attending</p>
-                <div class="event-attendee-grid">
-                    <div class="event-attendee-card">
-                        <div class="event-attendee-avatar">AL</div>
-                        <h3>Amara Lim</h3>
-                        <p>Computer Science</p>
-                    </div>
-                    <div class="event-attendee-card">
-                        <div class="event-attendee-avatar">JR</div>
-                        <h3>Jayden Ross</h3>
-                        <p>Engineering</p>
-                    </div>
-                    <div class="event-attendee-card">
-                        <div class="event-attendee-avatar">PK</div>
-                        <h3>Priya Kumar</h3>
-                        <p>Data Science</p>
-                    </div>
-                    <div class="event-attendee-card">
-                        <div class="event-attendee-avatar">SN</div>
-                        <h3>Samuel Ng</h3>
-                        <p>Business Analytics</p>
-                    </div>
-                </div>
-            </article>
+                {% if club %}
+                    <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-secondary-action">View Host Club</a>
+                {% else %}
+                    <a href="{{ url_for('clubs.clubs') }}" class="event-secondary-action">Browse Clubs</a>
+                {% endif %}
+            </div>
         </section>
 
-        <aside class="event-sidebar">
-            <section class="event-side-card">
-                <h2>Event Summary</h2>
-                <ul>
-                    <li><strong>Date:</strong> Saturday, May 10</li>
-                    <li><strong>Time:</strong> 9:00 AM - 4:00 PM</li>
-                    <li><strong>Venue:</strong> Engineering Innovation Hub</li>
-                    <li><strong>Host:</strong> <a href="club_details.html" class="event-inline-link">AI Society</a></li>
-                    <li><strong>Cost:</strong> Free</li>
-                </ul>
+        <section class="event-cover-card" aria-label="Event cover">
+            <div class="event-cover-visual">
+                <div class="event-cover-badge">{% if club %}{{ club.name }}{% else %}ClubSync{% endif %} Featured</div>
+                <div class="event-cover-tiles">
+                    <span>Discover</span>
+                    <span>Connect</span>
+                    <span>Participate</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="event-layout">
+            <section class="event-content">
+                <article class="event-section-card">
+                    <h2>About This Event</h2>
+                    <p>{{ event.description if event.description else 'Event description is currently unavailable.' }}</p>
+                    <p>This page is now rendered from database-backed Flask routes and dynamic Jinja templates.</p>
+                </article>
+
+                <article class="event-section-card">
+                    <h2>Event Snapshot</h2>
+                    <div class="event-agenda-list">
+                        <div class="event-agenda-item">
+                            <span class="event-agenda-time">Title</span>
+                            <div>
+                                <h3>{{ event.title }}</h3>
+                                <p>Loaded from the `events` table.</p>
+                            </div>
+                        </div>
+                        <div class="event-agenda-item">
+                            <span class="event-agenda-time">Date</span>
+                            <div>
+                                <h3>{{ event.date }}</h3>
+                                <p>Date/time formatting can be improved in later phases.</p>
+                            </div>
+                        </div>
+                        {% if club %}
+                            <div class="event-agenda-item">
+                                <span class="event-agenda-time">Host</span>
+                                <div>
+                                    <h3>{{ club.name }}</h3>
+                                    <p><a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-inline-link">Open host club page</a></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
+
+                <article class="event-section-card">
+                    <h2>Community Preview</h2>
+                    <p class="event-attendees-count">{{ attendee_count }} user{% if attendee_count != 1 %}s{% endif %} marked as attending</p>
+                    <div class="event-attendee-grid">
+                        {% if attendees %}
+                            {% for attendee in attendees[:8] %}
+                                {% set name_parts = attendee.name.split() %}
+                                <div class="event-attendee-card">
+                                    <div class="event-attendee-avatar">
+                                        {{ ((name_parts[0][0] if name_parts else '?') ~ (name_parts[1][0] if name_parts|length > 1 else '')) | upper }}
+                                    </div>
+                                    <h3>{{ attendee.name }}</h3>
+                                    <p>ClubSync User</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="event-attendee-card">
+                                <div class="event-attendee-avatar">--</div>
+                                <h3>No Attendees Yet</h3>
+                                <p>Attendance records will appear here once added.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
             </section>
 
-            <section class="event-side-card">
-                <h2>Registration</h2>
-                <p class="event-side-highlight">Status: Open</p>
-                <p>Spots are capped to keep mentor support effective for all teams.</p>
-                <a href="#" class="event-side-link">Reserve Your Spot</a>
-            </section>
+            <aside class="event-sidebar">
+                <section class="event-side-card">
+                    <h2>Event Summary</h2>
+                    <ul>
+                        <li><strong>Title:</strong> {{ event.title }}</li>
+                        <li><strong>Date:</strong> {{ event.date }}</li>
+                        {% if club %}
+                            <li><strong>Host:</strong> <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-inline-link">{{ club.name }}</a></li>
+                        {% endif %}
+                        <li><strong>Attendees:</strong> {{ attendee_count }}</li>
+                    </ul>
+                </section>
 
-            <section class="event-side-card">
-                <h2>Contact</h2>
-                <ul>
-                    <li><strong>Email:</strong> aisociety@clubsync.edu</li>
-                    <li><strong>Campus:</strong> UWA Crawley</li>
-                    <li><strong>Support:</strong> ClubSync Events Desk</li>
-                </ul>
-            </section>
-        </aside>
-    </div>
+                <section class="event-side-card">
+                    <h2>Registration</h2>
+                    {% if session.get('user_id') %}
+                        {% if is_attending %}
+                            <p class="event-side-highlight">Status: Attending</p>
+                            <p>Your attendance is currently recorded for this event.</p>
+                        {% elif is_club_member %}
+                            <p class="event-side-highlight">Status: Not Attending Yet</p>
+                            <p>Use the attend action above to mark attendance.</p>
+                        {% elif club %}
+                            <p class="event-side-highlight">Status: Club Membership Required</p>
+                            <p>Join {{ club.name }} first, then return here to mark attendance.</p>
+                            <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-side-link">Go to Host Club</a>
+                        {% else %}
+                            <p class="event-side-highlight">Status: Club Membership Required</p>
+                            <p>Join the host club first, then return here to mark attendance.</p>
+                        {% endif %}
+                    {% else %}
+                        <p class="event-side-highlight">Status: Login Required</p>
+                        <p>Please log in and join the host club to mark attendance for this event.</p>
+                    {% endif %}
+                    <a href="{{ url_for('clubs.clubs') }}" class="event-side-link">Browse Clubs</a>
+                </section>
 
-    <section class="event-related">
-        <div class="event-related-head">
-            <h2>More Events You May Like</h2>
-            <p>From AI Society and similar student tech communities</p>
+                <section class="event-side-card">
+                    <h2>Contact</h2>
+                    <ul>
+                        <li><strong>Platform:</strong> ClubSync</li>
+                        <li><strong>Campus:</strong> UWA Crawley</li>
+                        <li><strong>Support:</strong> Club Events Desk</li>
+                    </ul>
+                </section>
+            </aside>
         </div>
 
-        <div class="event-related-grid">
-            <article class="event-related-card">
-                <p class="event-related-date">May 15 | 4:00 PM</p>
-                <h3>Intro to Machine Learning Workshop</h3>
-                <p>Hands-on beginner workshop covering core ML concepts and simple models.</p>
-                <a href="event.html">View Event</a>
-            </article>
+        <section class="event-related">
+            <div class="event-related-head">
+                <h2>More Events You May Like</h2>
+                <p>{% if club %}From {{ club.name }} and related communities{% else %}From student clubs{% endif %}</p>
+            </div>
 
-            <article class="event-related-card">
-                <p class="event-related-date">May 21 | 6:00 PM</p>
-                <h3>AI Ethics Roundtable</h3>
-                <p>Open discussion on responsible AI, fairness, and student-led policy ideas.</p>
-                <a href="event.html">View Event</a>
-            </article>
+            <div class="event-related-grid">
+                {% if related_events %}
+                    {% for related_event in related_events %}
+                        <article class="event-related-card">
+                            <p class="event-related-date">{{ related_event.date }}</p>
+                            <h3>{{ related_event.title }}</h3>
+                            <p>{{ related_event.description if related_event.description else 'No description available.' }}</p>
+                            <a href="{{ url_for('clubs.event_details', event_id=related_event.id) }}">View Event</a>
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <article class="event-related-card">
+                        <p class="event-related-date">No Additional Events</p>
+                        <h3>Only One Event Available</h3>
+                        <p>Create more events in the database to populate this section.</p>
+                        <a href="{{ url_for('clubs.events') }}">Refresh</a>
+                    </article>
+                {% endif %}
+            </div>
+        </section>
+    {% else %}
+        <section class="event-hero">
+            <div class="event-hero-main">
+                <p class="event-hero-type">No Event Data</p>
+                <h1>No Events Available Yet</h1>
+                <p class="event-hero-summary">The database currently has no events. Add event records, then revisit this page.</p>
+                <div class="event-hero-meta">
+                    <span>Read-only fallback view</span>
+                </div>
+            </div>
 
-            <article class="event-related-card">
-                <p class="event-related-date">May 28 | 5:30 PM</p>
-                <h3>Robotics x AI Build Night</h3>
-                <p>Collaborative prototyping session with Robotics Club and AI Society mentors.</p>
-                <a href="event.html">View Event</a>
-            </article>
-        </div>
-    </section>
+            <div class="event-hero-actions">
+                <a href="{{ url_for('clubs.clubs') }}" class="event-primary-action">Browse Clubs</a>
+            </div>
+        </section>
+    {% endif %}
 </main>
 
 <footer class="clubs-footer">

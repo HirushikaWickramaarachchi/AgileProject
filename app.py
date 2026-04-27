@@ -1,6 +1,8 @@
 from flask import Flask
 from datetime import timedelta
+from sqlalchemy import inspect, text
 from models import db
+from seeds import seed_demo_data
 
 from routes.auth import auth
 from routes.dashboard import dashboard_bp
@@ -16,8 +18,34 @@ app.permanent_session_lifetime = timedelta(days=7)
 
 db.init_app(app)
 
+
+def ensure_club_schema_columns():
+    inspector = inspect(db.engine)
+
+    if "clubs" not in inspector.get_table_names():
+        return
+
+    existing_columns = {column["name"] for column in inspector.get_columns("clubs")}
+    statements = []
+
+    if "category" not in existing_columns:
+        statements.append("ALTER TABLE clubs ADD COLUMN category VARCHAR(50)")
+
+    if "image_path" not in existing_columns:
+        statements.append("ALTER TABLE clubs ADD COLUMN image_path VARCHAR(255)")
+
+    if not statements:
+        return
+
+    with db.engine.begin() as connection:
+        for statement in statements:
+            connection.execute(text(statement))
+
+
 with app.app_context():
     db.create_all()
+    ensure_club_schema_columns()
+    seed_demo_data()
 
 app.register_blueprint(auth)
 app.register_blueprint(dashboard_bp)

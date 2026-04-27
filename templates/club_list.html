@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClubSync | Discover Clubs</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="clubs-page">
 <header class="clubs-header">
     <div class="clubs-header-inner">
-        <a class="clubs-brand" href="club_list.html">ClubSync</a>
+        <a class="clubs-brand" href="{{ url_for('dashboard.index') }}">ClubSync</a>
 
         <nav class="clubs-nav" aria-label="Primary">
-            <a href="club_list.html" class="active" aria-current="page">Clubs</a>
-            <a href="event.html">Events</a>
-            <a href="club_details.html">My Club</a>
+            <a href="{{ url_for('clubs.clubs') }}" class="active" aria-current="page">Clubs</a>
+            <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
         </nav>
 
         <div class="clubs-header-tools">
@@ -27,6 +26,8 @@
 </header>
 
 <main class="clubs-main">
+    {% include "_flash_messages.html" %}
+
     <section class="clubs-hero">
         <p class="clubs-kicker">Student Club Discovery</p>
         <h1>Find a club that matches your passion</h1>
@@ -36,143 +37,110 @@
     </section>
 
     <section class="clubs-filter-row" aria-label="Club categories">
-        <span class="filter-chip active">All</span>
-        <span class="filter-chip">Tech</span>
-        <span class="filter-chip">Arts</span>
-        <span class="filter-chip">Culture</span>
-        <span class="filter-chip">Academic</span>
-        <span class="filter-chip">Leadership</span>
-    </section>
-
-    <section class="clubs-featured">
-        <div class="clubs-featured-content">
-            <p class="clubs-featured-label">Featured This Week</p>
-            <h2>Campus Innovation Showcase</h2>
-            <p>
-                Meet clubs building apps, robots, and startup ideas at our inter-club showcase on Friday, 5:30 PM.
-            </p>
-        </div>
-        <a href="club_details.html" class="clubs-featured-cta">See Featured Clubs</a>
+        {% for category in categories %}
+            {% if category == 'All' %}
+                {% set category_link = url_for('clubs.clubs') %}
+            {% else %}
+                {% set category_link = url_for('clubs.clubs', category=category) %}
+            {% endif %}
+            <a href="{{ category_link }}" class="filter-chip{% if selected_category == category %} active{% endif %}">
+                {{ category }}
+            </a>
+        {% endfor %}
     </section>
 
     <section class="clubs-listing" aria-label="Club list">
         <div class="clubs-section-head">
             <h2>Browse Clubs</h2>
-            <p>8 active clubs with open membership</p>
+            <p>
+                {{ club_summaries|length }} club{% if club_summaries|length != 1 %}s{% endif %}
+                {% if selected_category != 'All' %}
+                    in {{ selected_category }}
+                {% else %}
+                    available
+                {% endif %}
+            </p>
         </div>
 
         <div class="club-grid">
-            <article class="club-card">
-                <div class="club-visual club-visual--coding"><span>Tech</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Technology</p>
-                    <h3>Coding Club</h3>
-                    <p class="club-card-description">Weekly coding sessions, hack prep, and collaborative projects for all skill levels.</p>
-                    <div class="club-card-meta">
-                        <span>420 members</span>
-                        <span>2 upcoming events</span>
-                    </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
+            {% set return_path = request.full_path if request.query_string else request.path %}
+            {% set category_visual_map = {
+                'Tech': 'club-visual--ai',
+                'Arts': 'club-visual--photo',
+                'Culture': 'club-visual--culture',
+                'Academic': 'club-visual--debate',
+                'Leadership': 'club-visual--entre'
+            } %}
 
-            <article class="club-card">
-                <div class="club-visual club-visual--ai"><span>Tech</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Artificial Intelligence</p>
-                    <h3>AI Society</h3>
-                    <p class="club-card-description">Discuss machine learning trends, host model-building workshops, and research talks.</p>
-                    <div class="club-card-meta">
-                        <span>310 members</span>
-                        <span>1 event this week</span>
+            {% if club_summaries %}
+                {% for summary in club_summaries %}
+                    <article class="club-card">
+                        {% set category_name = summary.club.category if summary.club.category else 'Uncategorized' %}
+                        <div class="club-visual {{ category_visual_map.get(summary.club.category, 'club-visual--coding') }}">
+                            <img
+                                class="club-visual-image"
+                                src="{{ url_for('static', filename=summary.club.image_path if summary.club.image_path else 'images/clubs/default.png') }}"
+                                alt="{{ summary.club.name }} image"
+                                loading="lazy"
+                            >
+                            <span>{{ category_name }}</span>
+                        </div>
+                        <div class="club-card-body">
+                            <p class="club-card-category">{{ category_name }}</p>
+                            <h3>{{ summary.club.name }}</h3>
+                            <p class="club-card-description">{{ summary.club.description }}</p>
+                            <div class="club-card-meta">
+                                <span>{{ summary.member_count }} member{% if summary.member_count != 1 %}s{% endif %}</span>
+                                <span>{{ summary.event_count }} event{% if summary.event_count != 1 %}s{% endif %}</span>
+                            </div>
+                            <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="club-card-cta">View Club</a>
+                            {% if session.get('user_id') %}
+                                {% if summary.is_member %}
+                                    <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
+                                        <input type="hidden" name="next" value="{{ return_path }}">
+                                        <button type="submit" class="club-card-cta">Leave Club</button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{{ url_for('clubs.join_club', club_id=summary.club.id) }}">
+                                        <input type="hidden" name="next" value="{{ return_path }}">
+                                        <button type="submit" class="club-card-cta">Join Club</button>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <a href="{{ url_for('auth.login') }}" class="club-card-cta">Login to Join</a>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            {% else %}
+                <article class="club-card">
+                    <div class="club-visual club-visual--coding">
+                        <img
+                            class="club-visual-image"
+                            src="{{ url_for('static', filename='images/clubs/default.png') }}"
+                            alt="No clubs found"
+                            loading="lazy"
+                        >
+                        <span>Info</span>
                     </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
-
-            <article class="club-card">
-                <div class="club-visual club-visual--robotics"><span>Tech</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Engineering</p>
-                    <h3>Robotics Club</h3>
-                    <p class="club-card-description">Design, build, and test autonomous robots while preparing for inter-university challenges.</p>
-                    <div class="club-card-meta">
-                        <span>260 members</span>
-                        <span>3 upcoming events</span>
+                    <div class="club-card-body">
+                        <p class="club-card-category">No Club Data</p>
+                        <h3>No Clubs Found</h3>
+                        <p class="club-card-description">
+                            {% if selected_category != 'All' %}
+                                No clubs found in {{ selected_category }}. Try another category filter.
+                            {% else %}
+                                The database currently has no clubs. Add club records to view dynamic results here.
+                            {% endif %}
+                        </p>
+                        <div class="club-card-meta">
+                            <span>0 members</span>
+                            <span>0 events</span>
+                        </div>
+                        <a href="{{ url_for('clubs.clubs') }}" class="club-card-cta">Refresh</a>
                     </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
-
-            <article class="club-card">
-                <div class="club-visual club-visual--photo"><span>Arts</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Creative</p>
-                    <h3>Photography Club</h3>
-                    <p class="club-card-description">Photo walks, editing labs, and portfolio nights to grow your visual storytelling skills.</p>
-                    <div class="club-card-meta">
-                        <span>215 members</span>
-                        <span>1 upcoming event</span>
-                    </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
-
-            <article class="club-card">
-                <div class="club-visual club-visual--debate"><span>Academic</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Communication</p>
-                    <h3>Debate Society</h3>
-                    <p class="club-card-description">Practice critical thinking and public speaking with weekly motions and tournaments.</p>
-                    <div class="club-card-meta">
-                        <span>180 members</span>
-                        <span>2 upcoming events</span>
-                    </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
-
-            <article class="club-card">
-                <div class="club-visual club-visual--gaming"><span>Community</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Recreation</p>
-                    <h3>Gaming Club</h3>
-                    <p class="club-card-description">Join casual and competitive game nights, esports scrims, and cross-club tournaments.</p>
-                    <div class="club-card-meta">
-                        <span>500 members</span>
-                        <span>4 events this month</span>
-                    </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
-
-            <article class="club-card">
-                <div class="club-visual club-visual--entre"><span>Leadership</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Business</p>
-                    <h3>Entrepreneurship Club</h3>
-                    <p class="club-card-description">Pitch practice, founder talks, and startup sprint sessions for student innovators.</p>
-                    <div class="club-card-meta">
-                        <span>145 members</span>
-                        <span>2 upcoming events</span>
-                    </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
-
-            <article class="club-card">
-                <div class="club-visual club-visual--culture"><span>Culture</span></div>
-                <div class="club-card-body">
-                    <p class="club-card-category">Global Community</p>
-                    <h3>Cultural Exchange Club</h3>
-                    <p class="club-card-description">Celebrate global traditions through language circles, festivals, and cultural showcases.</p>
-                    <div class="club-card-meta">
-                        <span>275 members</span>
-                        <span>3 upcoming events</span>
-                    </div>
-                    <a href="club_details.html" class="club-card-cta">View Club</a>
-                </div>
-            </article>
+                </article>
+            {% endif %}
         </div>
     </section>
 </main>
