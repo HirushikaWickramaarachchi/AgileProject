@@ -169,6 +169,7 @@ button:hover {
     display: flex;
     align-items: center;
     gap: 18px;
+    flex: 1;
 }
 
 .clubs-nav a {
@@ -187,6 +188,11 @@ button:hover {
     color: #183e57;
     border-color: var(--highlight);
 }
+
+.clubs-nav .nav-admin-link {
+    margin-left: auto;
+}
+
 
 .clubs-header-tools {
     margin-left: auto;

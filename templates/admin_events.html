@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSync Admin | Create/Edit Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script>if(localStorage.getItem('adminDarkMode')==='true')document.documentElement.classList.add('pre-dark');</script>
+    <style>.pre-dark body,.pre-dark .admin-body{background:#0d1b2a!important}</style>
+</head>
+<body class="admin-body">
+
+<!-- ── Mobile Offcanvas Sidebar ─────────────────────────── -->
+<div class="offcanvas offcanvas-start admin-offcanvas" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
+    <div class="offcanvas-header">
+        <div class="d-flex align-items-center gap-2">
+            <span class="admin-brand-icon"><i class="bi bi-shield-check"></i></span>
+            <span class="text-white fw-bold fs-6" id="adminSidebarLabel">ClubSync Admin</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0 d-flex flex-column">
+        <div class="admin-nav-section flex-grow-1">
+            <p class="admin-nav-label">Main Menu</p>
+            <nav class="nav flex-column gap-1">
+                <a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                <a class="nav-link active" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Create/Edit Event</a>
+                <a class="nav-link" href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill"></i>Manage Members</a>
+            </nav>
+            <p class="admin-nav-label mt-3">Site</p>
+            <nav class="nav flex-column gap-1">
+                <a class="nav-link" href="{{ url_for('main.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+            </nav>
+        </div>
+        <div class="admin-sidebar-footer">
+            <div class="admin-user-info">
+                <div class="admin-avatar">AD</div>
+                <div class="flex-grow-1">
+                    <div class="admin-user-name">Admin User</div>
+                    <div class="admin-user-role">Super Admin</div>
+                </div>
+                <a href="{{ url_for('admin.logout') }}" title="Sign out"
+                   style="color:rgba(255,255,255,0.4);font-size:1rem;text-decoration:none;transition:color .2s"
+                   onmouseover="this.style.color='#ef4444'"
+                   onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row min-vh-100">
+
+        <!-- ── Desktop Sidebar ──────────────────────────────── -->
+        <aside class="col-lg-3 col-xl-2 admin-sidebar p-0 d-none d-lg-flex flex-column">
+            <div class="admin-brand">
+                <a href="{{ url_for('admin.members') }}">
+                    <span class="admin-brand-icon"><i class="bi bi-shield-check"></i></span>
+                    ClubSync Admin
+                </a>
+            </div>
+            <div class="admin-nav-section flex-grow-1">
+                <p class="admin-nav-label">Main Menu</p>
+                <nav class="nav flex-column gap-1">
+                    <a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                    <a class="nav-link active" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Create/Edit Event</a>
+                    <a class="nav-link" href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill"></i>Manage Members</a>
+                </nav>
+                <p class="admin-nav-label mt-3">Site</p>
+                <nav class="nav flex-column gap-1">
+                    <a class="nav-link" href="{{ url_for('main.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+                </nav>
+            </div>
+            <div class="admin-sidebar-footer">
+                <div class="admin-user-info">
+                    <div class="admin-avatar">AD</div>
+                    <div class="flex-grow-1">
+                        <div class="admin-user-name">Admin User</div>
+                        <div class="admin-user-role">Super Admin</div>
+                    </div>
+                    <a href="{{ url_for('admin.logout') }}" title="Sign out"
+                       style="color:rgba(255,255,255,0.4);font-size:1rem;text-decoration:none;transition:color .2s"
+                       onmouseover="this.style.color='#ef4444'"
+                       onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ─────────────────────────────────── -->
+        <main class="col-12 col-lg-9 col-xl-10 p-0 d-flex flex-column">
+
+            <!-- Topbar -->
+            <header class="admin-topbar px-3 px-md-4 py-3">
+                <div class="d-flex align-items-center gap-3 justify-content-between flex-wrap">
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="admin-menu-toggle d-lg-none"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#adminSidebar"
+                                aria-controls="adminSidebar"
+                                aria-label="Open menu">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <div>
+                            <p class="text-uppercase fw-semibold mb-0 small" style="color:#7b8db0;letter-spacing:.06em">Event Management</p>
+                            <h1 class="h5 mb-0 fw-bold">Create / Edit Events</h1>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                            <i class="bi bi-moon-stars-fill"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm px-3 js-demo-action" data-action-name="Weekly event digest published">
+                            <i class="bi bi-send me-1"></i>Publish Digest
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <section class="px-3 px-md-4 py-4 flex-grow-1">
+
+                <!-- Stats row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-4">
+                        <article class="card admin-metric-card h-100">
+                            <div class="card-body">
+                                <div class="admin-metric-icon orange"><i class="bi bi-file-earmark-text"></i></div>
+                                <p class="admin-metric-label mb-1">Draft Events</p>
+                                <p class="admin-metric-value mb-0">8</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <article class="card admin-metric-card h-100">
+                            <div class="card-body">
+                                <div class="admin-metric-icon purple"><i class="bi bi-hourglass-split"></i></div>
+                                <p class="admin-metric-label mb-1">Awaiting Approval</p>
+                                <p class="admin-metric-value mb-0">4</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <article class="card admin-metric-card h-100">
+                            <div class="card-body">
+                                <div class="admin-metric-icon green"><i class="bi bi-check-circle-fill"></i></div>
+                                <p class="admin-metric-label mb-1">Published This Week</p>
+                                <p class="admin-metric-value mb-0">11</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Builder + Preview -->
+                <div class="row g-3 mb-3">
+
+                    <!-- Form -->
+                    <div class="col-12 col-xl-7">
+                        <section class="card admin-card">
+                            <div class="card-header">
+                                <span><i class="bi bi-pencil-square me-2 text-primary"></i>Event Builder</span>
+                                <span class="badge text-bg-light border small" id="formModeBadge">New Event</span>
+                            </div>
+                            <div class="card-body">
+                                <form id="eventForm" novalidate>
+                                    <input type="hidden" id="eventId" value="new">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label for="eventTitle" class="form-label fw-semibold">Event Title</label>
+                                            <input type="text" class="form-control" id="eventTitle" placeholder="e.g. Intro to Cloud Workshop" required>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="eventClub" class="form-label fw-semibold">Club</label>
+                                            <select class="form-select" id="eventClub" required>
+                                                <option value="" selected disabled>Select club</option>
+                                                <option>AI Society</option>
+                                                <option>Coding Club</option>
+                                                <option>Robotics Club</option>
+                                                <option>Photography Club</option>
+                                                <option>Debate Society</option>
+                                                <option>Gaming Club</option>
+                                                <option>Entrepreneurship Club</option>
+                                                <option>Cultural Exchange Club</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="eventCategory" class="form-label fw-semibold">Category</label>
+                                            <select class="form-select" id="eventCategory" required>
+                                                <option value="" selected disabled>Select type</option>
+                                                <option>Workshop</option>
+                                                <option>Competition</option>
+                                                <option>Networking</option>
+                                                <option>Seminar</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="eventStart" class="form-label fw-semibold">Start Date &amp; Time</label>
+                                            <input type="datetime-local" class="form-control" id="eventStart" required>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="eventEnd" class="form-label fw-semibold">End Date &amp; Time</label>
+                                            <input type="datetime-local" class="form-control" id="eventEnd" required>
+                                            <div class="invalid-feedback" id="eventTimeError">End must be after start.</div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="eventVenue" class="form-label fw-semibold">Venue</label>
+                                            <input type="text" class="form-control" id="eventVenue" placeholder="Engineering Hub, Room 2.12" required>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="eventCapacity" class="form-label fw-semibold">Capacity</label>
+                                            <input type="number" class="form-control" id="eventCapacity" min="10" max="1000" value="100" required>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="eventStatus" class="form-label fw-semibold">Status</label>
+                                            <select class="form-select" id="eventStatus">
+                                                <option>Draft</option>
+                                                <option>Pending Approval</option>
+                                                <option>Published</option>
+                                                <option>Archived</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="eventSlug" class="form-label fw-semibold">
+                                                URL Slug
+                                                <span class="text-muted fw-normal small ms-1">auto-generated</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text text-muted small">/events/</span>
+                                                <input type="text" class="form-control" id="eventSlug" placeholder="event-slug">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="eventDescription" class="form-label fw-semibold">Description</label>
+                                            <textarea class="form-control" id="eventDescription" rows="4" placeholder="Write a compelling event summary..." required></textarea>
+                                        </div>
+                                        <div class="col-12 d-flex flex-wrap gap-2 justify-content-between align-items-center pt-1">
+                                            <button type="button" class="btn btn-light border" id="clearEventForm">
+                                                <i class="bi bi-x-circle me-1"></i>Clear
+                                            </button>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" class="btn btn-outline-primary js-demo-action" data-action-name="Draft saved successfully">
+                                                    <i class="bi bi-floppy me-1"></i>Save Draft
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="bi bi-send me-1"></i>Publish
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Preview -->
+                    <div class="col-12 col-xl-5">
+                        <section class="card admin-card">
+                            <div class="card-header">
+                                <span><i class="bi bi-eye me-2 text-primary"></i>Live Preview</span>
+                                <span class="small text-muted">Student-facing view</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="preview-card p-3 mb-0">
+                                    <p class="badge text-bg-primary mb-2" id="previewCategory">Category</p>
+                                    <h3 class="h5 fw-bold mb-1" id="previewTitle">Your event title</h3>
+                                    <p class="small mb-2" style="color:#7b8db0" id="previewMeta">Select date, venue, and club to see preview</p>
+                                    <p class="mb-0 small" id="previewDescription">Your event description will appear here as you type.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Existing events table -->
+                <section class="card admin-card">
+                    <div class="card-header">
+                        <span><i class="bi bi-table me-2 text-primary"></i>Existing Events</span>
+                        <span class="small text-muted">Click Edit to load into form above</span>
+                    </div>
+                    <div class="card-body py-3 border-bottom">
+                        <div class="row g-2 align-items-end">
+                            <div class="col-12 col-md-6">
+                                <label for="eventSearch" class="form-label fw-semibold small mb-1">
+                                    <i class="bi bi-search me-1 text-primary"></i>Search Events
+                                </label>
+                                <input type="text" class="form-control" id="eventSearch" placeholder="Event name or club...">
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <label for="eventStatusFilter" class="form-label fw-semibold small mb-1">Status</label>
+                                <select class="form-select" id="eventStatusFilter">
+                                    <option value="all">All Status</option>
+                                    <option value="published">Published</option>
+                                    <option value="pending">Pending Approval</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="archived">Archived</option>
+                                </select>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <button class="btn btn-outline-secondary w-100" id="eventResetFilters">
+                                    <i class="bi bi-x-circle me-1"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table admin-table mb-0">
+                            <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Club</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Capacity</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="eventsTableBody">
+                            <tr>
+                                <td class="fw-semibold">AI Mini Hackathon</td>
+                                <td>AI Society</td>
+                                <td>May 10, 2026</td>
+                                <td><span class="badge text-bg-success">Published</span></td>
+                                <td>120</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" title="Edit event"
+                                                data-edit-event
+                                                data-event-id="evt-1001"
+                                                data-title="AI Mini Hackathon"
+                                                data-club="AI Society"
+                                                data-category="Competition"
+                                                data-start="2026-05-10T09:00"
+                                                data-end="2026-05-10T16:00"
+                                                data-venue="Engineering Innovation Hub"
+                                                data-capacity="120"
+                                                data-status="Published"
+                                                data-description="Build practical AI solutions with cross-faculty student teams.">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger js-delete-event" data-event-id="evt-1001" data-event-title="AI Mini Hackathon">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">Startup Pitch Night</td>
+                                <td>Entrepreneurship Club</td>
+                                <td>May 18, 2026</td>
+                                <td><span class="badge text-bg-warning">Pending Approval</span></td>
+                                <td>90</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" title="Edit event"
+                                                data-edit-event
+                                                data-event-id="evt-1022"
+                                                data-title="Startup Pitch Night"
+                                                data-club="Entrepreneurship Club"
+                                                data-category="Networking"
+                                                data-start="2026-05-18T18:00"
+                                                data-end="2026-05-18T20:30"
+                                                data-venue="Business School Auditorium"
+                                                data-capacity="90"
+                                                data-status="Pending Approval"
+                                                data-description="Student founders pitch ideas and receive feedback from alumni mentors.">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger js-delete-event" data-event-id="evt-1022" data-event-title="Startup Pitch Night">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="fw-semibold">Portfolio Review Lab</td>
+                                <td>Photography Club</td>
+                                <td>May 23, 2026</td>
+                                <td><span class="badge text-bg-secondary">Draft</span></td>
+                                <td>60</td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-primary" title="Edit event"
+                                                data-edit-event
+                                                data-event-id="evt-1045"
+                                                data-title="Portfolio Review Lab"
+                                                data-club="Photography Club"
+                                                data-category="Workshop"
+                                                data-start="2026-05-23T15:00"
+                                                data-end="2026-05-23T17:00"
+                                                data-venue="Media Arts Studio B"
+                                                data-capacity="60"
+                                                data-status="Draft"
+                                                data-description="Peer and mentor-led portfolio feedback for emerging visual storytellers.">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger js-delete-event" data-event-id="evt-1045" data-event-title="Portfolio Review Lab">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
+    <div id="adminActionToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="adminToastMessage">Action executed.</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSync Admin – Sign In</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_login.css') }}">
+</head>
+<body>
+
+<div class="admin-login-card">
+
+    <!-- Brand -->
+    <a href="{{ url_for('admin.members') }}" class="alc-brand">
+        <span class="alc-brand-icon"><i class="bi bi-shield-check"></i></span>
+        <span class="alc-brand-text">
+            ClubSync Admin
+            <span>Restricted Access</span>
+        </span>
+    </a>
+
+    <!-- Access badge -->
+    <div class="alc-badge">
+        <i class="bi bi-lock-fill"></i>
+        Admin Portal
+    </div>
+
+    <h1 class="alc-title">Sign in</h1>
+    <p class="alc-subtitle">Enter your admin credentials to continue.</p>
+
+    <!-- Success -->
+    <div class="alc-success" id="loginSuccess">
+        <i class="bi bi-check-circle-fill"></i>
+        Authenticated. Redirecting to dashboard…
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alc-error" style="display:block">{{ messages[0] }}</div>
+        {% endif %}
+    {% endwith %}
+
+    <form id="adminLoginForm" method="POST" action="/admin/login" novalidate>
+
+        <!-- Email -->
+        <div class="alc-field">
+            <label for="adminEmail">Admin email</label>
+            <div class="alc-input-wrap">
+                <i class="bi bi-envelope fi"></i>
+                <input type="email" id="adminEmail" name="email"
+                       placeholder="admin@clubsync.edu" autocomplete="email">
+            </div>
+            <div class="alc-error" id="emailError"></div>
+        </div>
+
+        <!-- Password -->
+        <div class="alc-field">
+            <label for="adminPassword">Password</label>
+            <div class="alc-input-wrap">
+                <i class="bi bi-lock fi"></i>
+                <input type="password" id="adminPassword" name="password"
+                       placeholder="Enter your password" autocomplete="current-password">
+                <button type="button" class="toggle-pw" aria-label="Show/hide password" data-target="adminPassword">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </div>
+            <div class="alc-error" id="passwordError"></div>
+        </div>
+
+        <!-- Extras -->
+        <div class="alc-extras">
+            <label class="alc-check">
+                <input type="checkbox" name="remember">
+                Keep me signed in
+            </label>
+            <a href="#" class="alc-forgot">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="alc-btn">
+            <i class="bi bi-shield-lock-fill"></i>
+            Sign in to Admin Panel
+        </button>
+
+    </form>
+
+    <div class="alc-footer">
+        <a href="/"><i class="bi bi-arrow-left me-1"></i>Back to ClubSync</a>
+        &nbsp;·&nbsp;
+        <a href="#">Need access?</a>
+    </div>
+
+</div>
+
+<script>
+    /* ── Toggle password ─────────────────────────────────────── */
+    document.querySelectorAll('.toggle-pw').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.target);
+            const icon  = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        });
+    });
+
+    /* ── Helpers ─────────────────────────────────────────────── */
+    function setInvalid(input, errorEl, msg) {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        errorEl.textContent = msg;
+    }
+    function clearErr(input, errorEl) {
+        input.classList.remove('is-invalid');
+        errorEl.textContent = '';
+    }
+
+    const emailInput = document.getElementById('adminEmail');
+    const pwInput    = document.getElementById('adminPassword');
+    const emailErr   = document.getElementById('emailError');
+    const pwErr      = document.getElementById('passwordError');
+
+    emailInput.addEventListener('blur', () => {
+        if (!emailInput.value.trim())
+            setInvalid(emailInput, emailErr, 'Email is required.');
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim()))
+            setInvalid(emailInput, emailErr, 'Enter a valid email address.');
+        else clearErr(emailInput, emailErr);
+    });
+    emailInput.addEventListener('input', () => clearErr(emailInput, emailErr));
+
+    pwInput.addEventListener('blur', () => {
+        if (!pwInput.value)
+            setInvalid(pwInput, pwErr, 'Password is required.');
+        else clearErr(pwInput, pwErr);
+    });
+    pwInput.addEventListener('input', () => clearErr(pwInput, pwErr));
+
+    /* ── Submit ──────────────────────────────────────────────── */
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let valid = true;
+
+        if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+            setInvalid(emailInput, emailErr, 'Enter a valid email address.');
+            valid = false;
+        }
+        if (!pwInput.value) {
+            setInvalid(pwInput, pwErr, 'Password is required.');
+            valid = false;
+        }
+
+        if (valid) {
+            const btn = this.querySelector('.alc-btn');
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Authenticating…';
+            btn.disabled = true;
+            const form = this;
+            setTimeout(() => {
+                document.getElementById('loginSuccess').classList.add('show');
+                setTimeout(() => { form.submit(); }, 500);
+            }, 800);
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -52,7 +52,7 @@ project-root/
 
 ## Technologies Used
 - HTML
-- CSS (Tailwind CSS)
+- CSS (Bootstrap 5 + custom CSS)
 - JavaScript
 - Flask (backend – to be implemented)
 - SQLite (database – to be implemented)
@@ -65,6 +65,14 @@ project-root/
 - **Final Phase:** Testing, refinement, and deployment  
 
 ---
+
+## Checkpoint 2 Planning Document
+For checkpoint planning artifacts (user stories, main pages, CSS framework decision), see:
+
+- `CHECKPOINT2_PLANNING.md`
+
+---
+
 
 ## Collaboration
 - GitHub is used for version control
