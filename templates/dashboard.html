@@ -32,7 +32,7 @@
             </nav>
             <p class="admin-nav-label mt-3">Site</p>
             <nav class="nav flex-column gap-1">
-                <a class="nav-link" href="{{ url_for('main.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+                <a class="nav-link" href="{{ url_for('clubs.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
             </nav>
         </div>
         <div class="admin-sidebar-footer">
@@ -73,7 +73,7 @@
                 </nav>
                 <p class="admin-nav-label mt-3">Site</p>
                 <nav class="nav flex-column gap-1">
-                    <a class="nav-link" href="{{ url_for('main.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+                    <a class="nav-link" href="{{ url_for('clubs.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
                 </nav>
             </div>
             <div class="admin-sidebar-footer">
@@ -147,7 +147,7 @@
                         </div>
                         <div class="d-flex gap-3 flex-wrap">
                             <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
-                                <div class="fw-bold text-white small">8 Clubs</div>
+                                <div class="fw-bold text-white small">{{ total_clubs }} Clubs</div>
                                 <div class="text-white opacity-75" style="font-size:.72rem">Active on campus</div>
                             </div>
                             <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,200,30,0.18);border:1px solid rgba(255,200,30,0.3)">
@@ -165,9 +165,9 @@
                             <div class="card-body">
                                 <div class="admin-metric-icon blue"><i class="bi bi-people-fill"></i></div>
                                 <p class="admin-metric-label mb-1">Total Members</p>
-                                <p class="admin-metric-value mb-1">1,284</p>
+                                <p class="admin-metric-value mb-1">{{ total_users }}</p>
                                 <span class="admin-metric-trend text-success">
-                                    <i class="bi bi-arrow-up-short"></i>+8.2% this month
+                                    <i class="bi bi-people"></i> Registered users
                                 </span>
                             </div>
                         </article>
@@ -176,10 +176,10 @@
                         <article class="card admin-metric-card mc-blue h-100">
                             <div class="card-body">
                                 <div class="admin-metric-icon green"><i class="bi bi-calendar-check-fill"></i></div>
-                                <p class="admin-metric-label mb-1">Upcoming Events</p>
-                                <p class="admin-metric-value mb-1">24</p>
+                                <p class="admin-metric-label mb-1">Total Events</p>
+                                <p class="admin-metric-value mb-1">{{ total_events }}</p>
                                 <span class="admin-metric-trend text-success">
-                                    <i class="bi bi-calendar2-week"></i> 7 this week
+                                    <i class="bi bi-calendar2-week"></i> Across all clubs
                                 </span>
                             </div>
                         </article>
@@ -188,10 +188,10 @@
                         <article class="card admin-metric-card mc-orange h-100">
                             <div class="card-body">
                                 <div class="admin-metric-icon orange"><i class="bi bi-hourglass-split"></i></div>
-                                <p class="admin-metric-label mb-1">Pending Requests</p>
-                                <p class="admin-metric-value mb-1">19</p>
+                                <p class="admin-metric-label mb-1">Total Memberships</p>
+                                <p class="admin-metric-value mb-1">{{ total_memberships }}</p>
                                 <span class="admin-metric-trend" style="color:var(--cs-orange)">
-                                    <i class="bi bi-exclamation-circle"></i> Requires review
+                                    <i class="bi bi-diagram-3"></i> Club enrolments
                                 </span>
                             </div>
                         </article>
@@ -200,10 +200,10 @@
                         <article class="card admin-metric-card mc-yellow h-100">
                             <div class="card-body">
                                 <div class="admin-metric-icon purple"><i class="bi bi-activity"></i></div>
-                                <p class="admin-metric-label mb-1">Engagement Score</p>
-                                <p class="admin-metric-value mb-1">91%</p>
+                                <p class="admin-metric-label mb-1">Total Clubs</p>
+                                <p class="admin-metric-value mb-1">{{ total_clubs }}</p>
                                 <span class="admin-metric-trend text-success">
-                                    <i class="bi bi-arrow-up-short"></i>Healthy activity
+                                    <i class="bi bi-building"></i> Active on campus
                                 </span>
                             </div>
                         </article>
@@ -279,38 +279,21 @@
                     <!-- Club activity -->
                     <div class="col-12 col-lg-7">
                         <section class="card admin-card">
-                            <div class="card-header">Top Clubs by Activity</div>
+                            <div class="card-header">Top Clubs by Members</div>
                             <div class="card-body d-grid gap-3">
+                                {% set max_count = clubs_with_counts[0][1] if clubs_with_counts else 1 %}
+                                {% for club, count in clubs_with_counts %}
+                                {% set pct = ((count / max_count) * 100) | int if max_count > 0 else 0 %}
                                 <div>
                                     <div class="d-flex justify-content-between small fw-semibold mb-1">
-                                        <span>AI Society</span><span class="text-primary">94%</span>
+                                        <span>{{ club.name }}</span>
+                                        <span class="text-primary">{{ count }} member{{ 's' if count != 1 }}</span>
                                     </div>
-                                    <div class="progress"><div class="progress-bar bg-primary" style="width:94%"></div></div>
+                                    <div class="progress"><div class="progress-bar bg-primary" style="width:{{ pct }}%"></div></div>
                                 </div>
-                                <div>
-                                    <div class="d-flex justify-content-between small fw-semibold mb-1">
-                                        <span>Robotics Club</span><span style="color:var(--cs-blue)">87%</span>
-                                    </div>
-                                    <div class="progress"><div class="progress-bar bg-info" style="width:87%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="d-flex justify-content-between small fw-semibold mb-1">
-                                        <span>Debate Society</span><span class="text-warning">81%</span>
-                                    </div>
-                                    <div class="progress"><div class="progress-bar bg-warning" style="width:81%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="d-flex justify-content-between small fw-semibold mb-1">
-                                        <span>Cultural Exchange</span><span class="text-success">76%</span>
-                                    </div>
-                                    <div class="progress"><div class="progress-bar bg-success" style="width:76%"></div></div>
-                                </div>
-                                <div>
-                                    <div class="d-flex justify-content-between small fw-semibold mb-1">
-                                        <span>Gaming Club</span><span style="color:var(--cs-orange)">71%</span>
-                                    </div>
-                                    <div class="progress"><div class="progress-bar" style="width:71%;background:var(--cs-orange)"></div></div>
-                                </div>
+                                {% else %}
+                                <p class="text-muted small mb-0">No clubs yet.</p>
+                                {% endfor %}
                             </div>
                         </section>
                     </div>

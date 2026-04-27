@@ -32,7 +32,7 @@
             </nav>
             <p class="admin-nav-label mt-3">Site</p>
             <nav class="nav flex-column gap-1">
-                <a class="nav-link" href="{{ url_for('main.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+                <a class="nav-link" href="{{ url_for('clubs.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
             </nav>
         </div>
         <div class="admin-sidebar-footer">
@@ -73,7 +73,7 @@
                 </nav>
                 <p class="admin-nav-label mt-3">Site</p>
                 <nav class="nav flex-column gap-1">
-                    <a class="nav-link" href="{{ url_for('main.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+                    <a class="nav-link" href="{{ url_for('clubs.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
                 </nav>
             </div>
             <div class="admin-sidebar-footer">
@@ -125,6 +125,14 @@
 
             <!-- Content -->
             <section class="px-3 px-md-4 py-4 flex-grow-1">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% endwith %}
 
                 <!-- Metric cards -->
                 <div class="row g-3 mb-4">
@@ -133,7 +141,7 @@
                             <div class="card-body">
                                 <div class="admin-metric-icon blue"><i class="bi bi-people-fill"></i></div>
                                 <p class="admin-metric-label mb-1">Active Members</p>
-                                <p class="admin-metric-value mb-1">1,176</p>
+                                <p class="admin-metric-value mb-1">{{ total_users }}</p>
                                 <span class="admin-metric-trend text-success">
                                     <i class="bi bi-arrow-up-short"></i>+43 this week
                                 </span>
@@ -225,147 +233,46 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr data-member-row data-search="priya kumar priya@clubsync.edu ai society" data-role="moderator" data-status="active">
+                            {% for membership, user, club in memberships %}
+                            <tr data-member-row
+                                data-search="{{ user.name|lower }} {{ user.email|lower }} {{ club.name|lower }}"
+                                data-role="member"
+                                data-status="active">
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;font-size:.75rem">PK</div>
+                                        <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;font-size:.75rem">
+                                            {{ user.name[:2]|upper }}
+                                        </div>
                                         <div>
-                                            <div class="fw-semibold small">Priya Kumar</div>
-                                            <div class="text-muted" style="font-size:.75rem">priya@clubsync.edu</div>
+                                            <div class="fw-semibold small">{{ user.name }}</div>
+                                            <div class="text-muted" style="font-size:.75rem">{{ user.email }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="d-none d-md-table-cell small">AI Society</td>
-                                <td><span class="badge text-bg-info member-role-badge">Moderator</span></td>
-                                <td><span class="badge text-bg-success">Active</span></td>
-                                <td class="d-none d-lg-table-cell small text-muted">Jan 08, 2025</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
-                                            <li><button class="dropdown-item small js-role-change" data-target-row-role="admin"><i class="bi bi-arrow-up-circle me-2 text-primary"></i>Promote to Admin</button></li>
-                                            <li><button class="dropdown-item small js-role-change" data-target-row-role="member"><i class="bi bi-person me-2 text-secondary"></i>Set as Member</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small js-demo-action" data-action-name="Notification sent to Priya Kumar"><i class="bi bi-bell me-2 text-warning"></i>Send Notification</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small text-danger js-remove-member"><i class="bi bi-person-x me-2"></i>Remove from Club</button></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr data-member-row data-search="samuel ng samuel@clubsync.edu robotics club" data-role="member" data-status="pending">
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;font-size:.75rem;background:linear-gradient(135deg,#0dcaf0,#0891b2)">SN</div>
-                                        <div>
-                                            <div class="fw-semibold small">Samuel Ng</div>
-                                            <div class="text-muted" style="font-size:.75rem">samuel@clubsync.edu</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="d-none d-md-table-cell small">Robotics Club</td>
+                                <td class="d-none d-md-table-cell small">{{ club.name }}</td>
                                 <td><span class="badge text-bg-secondary member-role-badge">Member</span></td>
-                                <td><span class="badge text-bg-warning">Pending</span></td>
-                                <td class="d-none d-lg-table-cell small text-muted">Mar 17, 2026</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
-                                            <li><button class="dropdown-item small js-role-change" data-target-row-role="moderator"><i class="bi bi-arrow-up-circle me-2 text-primary"></i>Promote to Moderator</button></li>
-                                            <li><button class="dropdown-item small js-demo-action" data-action-name="Invitation resent to Samuel Ng"><i class="bi bi-envelope-arrow-up me-2 text-info"></i>Resend Invitation</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small text-danger js-demo-action" data-action-name="Member suspended"><i class="bi bi-slash-circle me-2"></i>Suspend Member</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small text-danger js-remove-member"><i class="bi bi-person-x me-2"></i>Remove from Club</button></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <tr data-member-row data-search="hana lee hana@clubsync.edu photography club" data-role="admin" data-status="active">
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;font-size:.75rem;background:linear-gradient(135deg,#f97316,#dc2626)">HL</div>
-                                        <div>
-                                            <div class="fw-semibold small">Hana Lee</div>
-                                            <div class="text-muted" style="font-size:.75rem">hana@clubsync.edu</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="d-none d-md-table-cell small">Photography Club</td>
-                                <td><span class="badge text-bg-primary member-role-badge">Admin</span></td>
                                 <td><span class="badge text-bg-success">Active</span></td>
-                                <td class="d-none d-lg-table-cell small text-muted">Sep 23, 2024</td>
+                                <td class="d-none d-lg-table-cell small text-muted">—</td>
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
                                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
-                                            <li><button class="dropdown-item small js-role-change" data-target-row-role="moderator"><i class="bi bi-arrow-down-circle me-2 text-secondary"></i>Set as Moderator</button></li>
-                                            <li><button class="dropdown-item small js-demo-action" data-action-name="2FA reset requested"><i class="bi bi-shield-lock me-2 text-warning"></i>Reset 2FA</button></li>
-                                            <li><button class="dropdown-item small js-demo-action" data-action-name="Access audit generated"><i class="bi bi-clipboard-check me-2 text-primary"></i>Run Access Audit</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small text-danger js-remove-member"><i class="bi bi-person-x me-2"></i>Remove from Club</button></li>
+                                            <li>
+                                                <form method="POST" action="{{ url_for('admin.remove_member', membership_id=membership.id) }}">
+                                                    <button type="submit" class="dropdown-item small text-danger">
+                                                        <i class="bi bi-person-x me-2"></i>Remove from Club
+                                                    </button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
                             </tr>
-
-                            <tr data-member-row data-search="jayden ross jayden@clubsync.edu debate society" data-role="member" data-status="suspended">
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;font-size:.75rem;background:linear-gradient(135deg,#6b7280,#374151)">JR</div>
-                                        <div>
-                                            <div class="fw-semibold small">Jayden Ross</div>
-                                            <div class="text-muted" style="font-size:.75rem">jayden@clubsync.edu</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="d-none d-md-table-cell small">Debate Society</td>
-                                <td><span class="badge text-bg-secondary member-role-badge">Member</span></td>
-                                <td><span class="badge text-bg-danger">Suspended</span></td>
-                                <td class="d-none d-lg-table-cell small text-muted">Nov 02, 2025</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
-                                            <li><button class="dropdown-item small text-success js-demo-action" data-action-name="Member reactivated"><i class="bi bi-check-circle me-2"></i>Reactivate Member</button></li>
-                                            <li><button class="dropdown-item small js-demo-action" data-action-name="Compliance note logged"><i class="bi bi-journal-text me-2 text-secondary"></i>Log Compliance Note</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small text-danger js-remove-member"><i class="bi bi-person-x me-2"></i>Remove from Club</button></li>
-                                        </ul>
-                                    </div>
-                                </td>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">No members found.</td>
                             </tr>
-
-                            <tr data-member-row data-search="kai morgan kai@clubsync.edu ai society" data-role="moderator" data-status="active">
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;font-size:.75rem;background:linear-gradient(135deg,#16a34a,#166534)">KM</div>
-                                        <div>
-                                            <div class="fw-semibold small">Kai Morgan</div>
-                                            <div class="text-muted" style="font-size:.75rem">kai@clubsync.edu</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="d-none d-md-table-cell small">AI Society</td>
-                                <td><span class="badge text-bg-info member-role-badge">Moderator</span></td>
-                                <td><span class="badge text-bg-success">Active</span></td>
-                                <td class="d-none d-lg-table-cell small text-muted">Feb 14, 2025</td>
-                                <td class="text-end">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
-                                            <li><button class="dropdown-item small js-role-change" data-target-row-role="admin"><i class="bi bi-arrow-up-circle me-2 text-primary"></i>Promote to Admin</button></li>
-                                            <li><button class="dropdown-item small js-role-change" data-target-row-role="member"><i class="bi bi-person me-2 text-secondary"></i>Set as Member</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small js-demo-action" data-action-name="Notification sent to Kai Morgan"><i class="bi bi-bell me-2 text-warning"></i>Send Notification</button></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><button class="dropdown-item small text-danger js-remove-member"><i class="bi bi-person-x me-2"></i>Remove from Club</button></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
