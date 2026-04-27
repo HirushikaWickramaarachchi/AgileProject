@@ -77,6 +77,42 @@ def dashboard():
     )
 
 
+@admin_bp.route("/clubs", methods=["GET", "POST"])
+@admin_required
+def clubs():
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        description = request.form.get("description", "").strip()
+        if not name or not description:
+            flash("Name and description are required.", "danger")
+        elif Club.query.filter_by(name=name).first():
+            flash("A club with that name already exists.", "danger")
+        else:
+            db.session.add(Club(name=name, description=description))
+            db.session.commit()
+            flash("Club created successfully.", "success")
+        return redirect(url_for("admin.clubs"))
+
+    all_clubs = (
+        db.session.query(Club, db.func.count(Membership.id).label("member_count"))
+        .outerjoin(Membership, Club.id == Membership.club_id)
+        .group_by(Club.id)
+        .order_by(Club.name)
+        .all()
+    )
+    return render_template("admin_clubs.html", all_clubs=all_clubs)
+
+
+@admin_bp.route("/clubs/<int:club_id>/delete", methods=["POST"])
+@admin_required
+def delete_club(club_id):
+    club = Club.query.get_or_404(club_id)
+    db.session.delete(club)
+    db.session.commit()
+    flash(f'"{club.name}" and all its events and memberships have been deleted.', "success")
+    return redirect(url_for("admin.clubs"))
+
+
 @admin_bp.route("/members")
 @admin_required
 def members():
@@ -101,7 +137,61 @@ def remove_member(membership_id):
     return redirect(url_for("admin.members"))
 
 
-@admin_bp.route("/events")
+@admin_bp.route("/events", methods=["GET", "POST"])
 @admin_required
 def events():
-    return render_template("admin_events.html")
+    if request.method == "POST":
+        title = request.form.get("title", "").strip()
+        club_id = request.form.get("club_id", "").strip()
+        date = request.form.get("date", "").strip()
+        description = request.form.get("description", "").strip()
+
+        if not title or not club_id or not date:
+            flash("Title, club, and date are required.", "danger")
+        else:
+            event = Event(title=title, club_id=int(club_id), date=date, description=description)
+            db.session.add(event)
+            db.session.commit()
+            flash("Event created successfully.", "success")
+        return redirect(url_for("admin.events"))
+
+    all_events = (
+        db.session.query(Event, Club)
+        .join(Club, Event.club_id == Club.id)
+        .order_by(Event.date.desc())
+        .all()
+    )
+    clubs = Club.query.order_by(Club.name).all()
+    total_events = Event.query.count()
+    return render_template("admin_events.html", all_events=all_events, clubs=clubs, total_events=total_events)
+
+
+@admin_bp.route("/events/<int:event_id>/edit", methods=["POST"])
+@admin_required
+def edit_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    title = request.form.get("title", "").strip()
+    club_id = request.form.get("club_id", "").strip()
+    date = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    if not title or not club_id or not date:
+        flash("Title, club, and date are required.", "danger")
+    else:
+        event.title = title
+        event.club_id = int(club_id)
+        event.date = date
+        event.description = description
+        db.session.commit()
+        flash("Event updated successfully.", "success")
+    return redirect(url_for("admin.events"))
+
+
+@admin_bp.route("/events/<int:event_id>/delete", methods=["POST"])
+@admin_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+    db.session.delete(event)
+    db.session.commit()
+    flash("Event deleted.", "success")
+    return redirect(url_for("admin.events"))

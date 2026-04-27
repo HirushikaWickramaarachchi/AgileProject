@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSync Admin | Manage Clubs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script>if(localStorage.getItem('adminDarkMode')==='true')document.documentElement.classList.add('pre-dark');</script>
+    <style>.pre-dark body,.pre-dark .admin-body{background:#0d1b2a!important}</style>
+</head>
+<body class="admin-body">
+
+<!-- ── Mobile Offcanvas Sidebar ─────────────────────────── -->
+<div class="offcanvas offcanvas-start admin-offcanvas" tabindex="-1" id="adminSidebar" aria-labelledby="adminSidebarLabel">
+    <div class="offcanvas-header">
+        <div class="d-flex align-items-center gap-2">
+            <span class="admin-brand-icon"><i class="bi bi-shield-check"></i></span>
+            <span class="text-white fw-bold fs-6" id="adminSidebarLabel">ClubSync Admin</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0 d-flex flex-column">
+        <div class="admin-nav-section flex-grow-1">
+            <p class="admin-nav-label">Main Menu</p>
+            <nav class="nav flex-column gap-1">
+                <a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                <a class="nav-link active" href="{{ url_for('admin.clubs') }}"><i class="bi bi-building"></i>Manage Clubs</a>
+                <a class="nav-link" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Manage Events</a>
+                <a class="nav-link" href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill"></i>Manage Members</a>
+            </nav>
+            <p class="admin-nav-label mt-3">Site</p>
+            <nav class="nav flex-column gap-1">
+                <a class="nav-link" href="{{ url_for('clubs.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+            </nav>
+        </div>
+        <div class="admin-sidebar-footer">
+            <div class="admin-user-info">
+                <div class="admin-avatar">AD</div>
+                <div class="flex-grow-1">
+                    <div class="admin-user-name">Admin User</div>
+                    <div class="admin-user-role">Super Admin</div>
+                </div>
+                <a href="{{ url_for('admin.logout') }}" title="Sign out"
+                   style="color:rgba(255,255,255,0.4);font-size:1rem;text-decoration:none;transition:color .2s"
+                   onmouseover="this.style.color='#ef4444'"
+                   onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row min-vh-100">
+
+        <!-- ── Desktop Sidebar ──────────────────────────────── -->
+        <aside class="col-lg-3 col-xl-2 admin-sidebar p-0 d-none d-lg-flex flex-column">
+            <div class="admin-brand">
+                <a href="{{ url_for('admin.dashboard') }}">
+                    <span class="admin-brand-icon"><i class="bi bi-shield-check"></i></span>
+                    ClubSync Admin
+                </a>
+            </div>
+            <div class="admin-nav-section flex-grow-1">
+                <p class="admin-nav-label">Main Menu</p>
+                <nav class="nav flex-column gap-1">
+                    <a class="nav-link" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
+                    <a class="nav-link active" href="{{ url_for('admin.clubs') }}"><i class="bi bi-building"></i>Manage Clubs</a>
+                    <a class="nav-link" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Manage Events</a>
+                    <a class="nav-link" href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill"></i>Manage Members</a>
+                </nav>
+                <p class="admin-nav-label mt-3">Site</p>
+                <nav class="nav flex-column gap-1">
+                    <a class="nav-link" href="{{ url_for('clubs.clubs') }}"><i class="bi bi-arrow-left-circle"></i>Back to Clubs</a>
+                </nav>
+            </div>
+            <div class="admin-sidebar-footer">
+                <div class="admin-user-info">
+                    <div class="admin-avatar">AD</div>
+                    <div class="flex-grow-1">
+                        <div class="admin-user-name">Admin User</div>
+                        <div class="admin-user-role">Super Admin</div>
+                    </div>
+                    <a href="{{ url_for('admin.logout') }}" title="Sign out"
+                       style="color:rgba(255,255,255,0.4);font-size:1rem;text-decoration:none;transition:color .2s"
+                       onmouseover="this.style.color='#ef4444'"
+                       onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── Main Content ─────────────────────────────────── -->
+        <main class="col-12 col-lg-9 col-xl-10 p-0 d-flex flex-column">
+
+            <!-- Topbar -->
+            <header class="admin-topbar px-3 px-md-4 py-3">
+                <div class="d-flex align-items-center gap-3 justify-content-between flex-wrap">
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="admin-menu-toggle d-lg-none"
+                                data-bs-toggle="offcanvas"
+                                data-bs-target="#adminSidebar"
+                                aria-controls="adminSidebar"
+                                aria-label="Open menu">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <div>
+                            <p class="text-uppercase fw-semibold mb-0 small" style="color:#7b8db0;letter-spacing:.06em">Club Operations</p>
+                            <h1 class="h5 mb-0 fw-bold">Manage Clubs</h1>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                            <i class="bi bi-moon-stars-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <section class="px-3 px-md-4 py-4 flex-grow-1">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% endwith %}
+
+                <!-- Metric card -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <article class="card admin-metric-card h-100">
+                            <div class="card-body">
+                                <div class="admin-metric-icon blue"><i class="bi bi-building"></i></div>
+                                <p class="admin-metric-label mb-1">Total Clubs</p>
+                                <p class="admin-metric-value mb-0">{{ all_clubs|length }}</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- Create club form -->
+                    <div class="col-12 col-xl-4">
+                        <section class="card admin-card">
+                            <div class="card-header">
+                                <span><i class="bi bi-plus-circle me-2 text-primary"></i>Add New Club</span>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="{{ url_for('admin.clubs') }}">
+                                    <div class="mb-3">
+                                        <label for="clubName" class="form-label fw-semibold">Club Name</label>
+                                        <input type="text" class="form-control" id="clubName" name="name" placeholder="e.g. Robotics Club" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="clubDescription" class="form-label fw-semibold">Description</label>
+                                        <textarea class="form-control" id="clubDescription" name="description" rows="3" placeholder="What is this club about?" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-plus-circle me-1"></i>Create Club
+                                    </button>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Clubs table -->
+                    <div class="col-12 col-xl-8">
+                        <section class="card admin-card">
+                            <div class="card-header">
+                                <span><i class="bi bi-building me-2 text-primary"></i>All Clubs</span>
+                                <span class="text-muted small">{{ all_clubs|length }} club{{ 's' if all_clubs|length != 1 }}</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table admin-table mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Club</th>
+                                        <th>Description</th>
+                                        <th>Members</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for club, member_count in all_clubs %}
+                                    <tr>
+                                        <td class="fw-semibold">{{ club.name }}</td>
+                                        <td class="text-muted small">{{ club.description }}</td>
+                                        <td>{{ member_count }}</td>
+                                        <td class="text-end">
+                                            <form method="POST" action="{{ url_for('admin.delete_club', club_id=club.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Delete {{ club.name }}? This will also delete all its events and memberships.')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">No clubs yet. Add one above.</td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
+    <div id="adminActionToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="adminToastMessage">Action executed.</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>
