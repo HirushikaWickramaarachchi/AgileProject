@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClubSync | AI Society</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <title>ClubSync | {% if club %}{{ club.name }}{% else %}My Clubs{% endif %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="clubs-page club-details-page">
 <header class="clubs-header">
     <div class="clubs-header-inner">
-        <a class="clubs-brand" href="club_list.html">ClubSync</a>
+        <a class="clubs-brand" href="{{ url_for('dashboard.index') }}">ClubSync</a>
 
         <nav class="clubs-nav" aria-label="Primary">
-            <a href="club_list.html">Clubs</a>
-            <a href="event.html">Events</a>
-            <a href="club_details.html" class="active" aria-current="page">My Club</a>
+            <a href="{{ url_for('clubs.clubs') }}" class="active" aria-current="page">Clubs</a>
+            <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
             <a href="/admin" class="nav-admin-link">Admin</a>
         </nav>
 
@@ -28,177 +27,182 @@
 </header>
 
 <main class="club-details-main">
-    <section class="club-hero-card">
-        <div class="club-hero-visual">
-            <span>AI & Technology</span>
-        </div>
-        <div class="club-hero-content">
-            <p class="club-hero-category">Technology Club</p>
-            <h1>AI Society</h1>
-            <p class="club-hero-tagline">
-                A student-led community exploring artificial intelligence through hands-on projects, research discussions, and real-world collaboration.
-            </p>
+    {% include "_flash_messages.html" %}
 
-            <div class="club-hero-meta">
-                <span>310 members</span>
-                <span>Crawley Campus, UWA</span>
-                <span>4.8 community rating</span>
+    {% if club %}
+        <section class="club-hero-card">
+            <div class="club-hero-visual">
+                <span>{{ club.name }}</span>
             </div>
+            <div class="club-hero-content">
+                <p class="club-hero-category">Student Club</p>
+                <h1>{{ club.name }}</h1>
+                <p class="club-hero-tagline">{{ club.description }}</p>
 
-            <div class="club-hero-actions">
-                <a href="#" class="club-primary-action">Join Club</a>
-                <a href="event.html" class="club-secondary-action">View Upcoming Events</a>
+                <div class="club-hero-meta">
+                    <span>{{ member_count }} member{% if member_count != 1 %}s{% endif %}</span>
+                    <span>UWA Campus</span>
+                    <span>{{ events|length }} event{% if events|length != 1 %}s{% endif %}</span>
+                </div>
+
+                <div class="club-hero-actions">
+                    {% if session.get('user_id') %}
+                        {% if is_member %}
+                            <form method="POST" action="{{ url_for('clubs.leave_club', club_id=club.id) }}">
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <button type="submit" class="club-primary-action">Leave Club</button>
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{{ url_for('clubs.join_club', club_id=club.id) }}">
+                                <input type="hidden" name="next" value="{{ request.path }}">
+                                <button type="submit" class="club-primary-action">Join Club</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="club-primary-action">Login to Join</a>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    </section>
-
-    <nav class="club-subnav" aria-label="Club sections">
-        <a href="club_details.html" class="active" aria-current="page">About</a>
-        <a href="event.html">Events</a>
-        <a href="#">Members</a>
-        <a href="#">Photos</a>
-        <a href="#">Discussions</a>
-    </nav>
-
-    <div class="club-details-layout">
-        <section class="club-details-content">
-            <article class="club-section-card">
-                <h2>About AI Society</h2>
-                <p>
-                    AI Society is built for students curious about machine learning, data science, and intelligent systems. We provide a welcoming space
-                    where beginners can learn fundamentals and experienced members can deepen their skills through practical challenges.
-                </p>
-                <p>
-                    Members gain portfolio-ready project experience, exposure to current industry tools, and opportunities to collaborate with peers from
-                    computer science, engineering, business, and design disciplines.
-                </p>
-            </article>
-
-            <article class="club-section-card">
-                <h2>Upcoming Events</h2>
-                <div class="club-events-list">
-                    <div class="club-event-item">
-                        <div class="club-event-date">
-                            <span>APR</span>
-                            <strong>16</strong>
-                        </div>
-                        <div class="club-event-details">
-                            <h3>Intro to Machine Learning Workshop</h3>
-                            <p class="club-event-time">Wednesday, 4:00 PM - 6:00 PM</p>
-                            <p>Learn model fundamentals with a guided notebook session and campus mentor support.</p>
-                        </div>
-                        <a href="event.html" class="club-event-cta">View Event</a>
-                    </div>
-
-                    <div class="club-event-item">
-                        <div class="club-event-date">
-                            <span>APR</span>
-                            <strong>20</strong>
-                        </div>
-                        <div class="club-event-details">
-                            <h3>AI Ethics Roundtable</h3>
-                            <p class="club-event-time">Sunday, 2:30 PM - 4:00 PM</p>
-                            <p>Discuss fairness, bias, and responsible deployment of AI in real-world settings.</p>
-                        </div>
-                        <a href="event.html" class="club-event-cta">Attend</a>
-                    </div>
-
-                    <div class="club-event-item">
-                        <div class="club-event-date">
-                            <span>APR</span>
-                            <strong>24</strong>
-                        </div>
-                        <div class="club-event-details">
-                            <h3>Build Night: Campus Chatbot</h3>
-                            <p class="club-event-time">Thursday, 5:00 PM - 7:00 PM</p>
-                            <p>Team up to prototype a student support chatbot and present your approach.</p>
-                        </div>
-                        <a href="event.html" class="club-event-cta">View Event</a>
-                    </div>
-
-                    <div class="club-event-item">
-                        <div class="club-event-date">
-                            <span>MAY</span>
-                            <strong>03</strong>
-                        </div>
-                        <div class="club-event-details">
-                            <h3>Industry Talk: AI Careers for Graduates</h3>
-                            <p class="club-event-time">Saturday, 11:00 AM - 12:30 PM</p>
-                            <p>Hear from alumni and guest professionals on pathways into AI-related careers.</p>
-                        </div>
-                        <a href="event.html" class="club-event-cta">Attend</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="club-section-card">
-                <h2>Why Students Join</h2>
-                <div class="club-benefits-grid">
-                    <div class="club-benefit">Skill-building workshops and coding labs</div>
-                    <div class="club-benefit">Cross-faculty networking opportunities</div>
-                    <div class="club-benefit">Hackathons and competition preparation</div>
-                    <div class="club-benefit">Project-based portfolio development</div>
-                    <div class="club-benefit">Leadership and committee pathways</div>
-                    <div class="club-benefit">Mentoring by senior students and alumni</div>
-                </div>
-            </article>
-
-            <article class="club-section-card">
-                <h2>Community Snapshot</h2>
-                <div class="club-member-grid">
-                    <div class="club-member-card">
-                        <div class="club-member-avatar">HL</div>
-                        <h3>Hana Lee</h3>
-                        <p>President</p>
-                    </div>
-                    <div class="club-member-card">
-                        <div class="club-member-avatar">KM</div>
-                        <h3>Kai Morgan</h3>
-                        <p>Workshops Lead</p>
-                    </div>
-                    <div class="club-member-card">
-                        <div class="club-member-avatar">NS</div>
-                        <h3>Nina Shah</h3>
-                        <p>Projects Coordinator</p>
-                    </div>
-                    <div class="club-member-card">
-                        <div class="club-member-avatar">TR</div>
-                        <h3>Tariq Rahman</h3>
-                        <p>Industry Liaison</p>
-                    </div>
-                </div>
-            </article>
         </section>
 
-        <aside class="club-details-sidebar">
-            <section class="club-side-card">
-                <h2>Club Information</h2>
-                <ul>
-                    <li><strong>Meeting:</strong> Tuesdays, 5:00 PM</li>
-                    <li><strong>Location:</strong> Engineering Hub, Room 2.12</li>
-                    <li><strong>Category:</strong> Tech & Innovation</li>
-                    <li><strong>Membership:</strong> Open to all faculties</li>
-                </ul>
+        <div class="club-details-layout">
+            <section class="club-details-content">
+                <article class="club-section-card">
+                    <h2>About {{ club.name }}</h2>
+                    <p>{{ club.description }}</p>
+                    <p>This club page is now backed by live database data through Flask routes and Jinja rendering.</p>
+                </article>
+
+                <article class="club-section-card">
+                    <h2>Upcoming Events</h2>
+                    <div class="club-events-list">
+                        {% if events %}
+                            {% for event in events %}
+                                <div class="club-event-item">
+                                    <div class="club-event-date">
+                                        <span>Event</span>
+                                        <strong>#{{ loop.index }}</strong>
+                                    </div>
+                                    <div class="club-event-details">
+                                        <h3>{{ event.title }}</h3>
+                                        <p class="club-event-time">{{ event.date }}</p>
+                                        <p>{{ event.description if event.description else 'No event description available yet.' }}</p>
+                                    </div>
+                                    <a href="{{ url_for('clubs.event_details', event_id=event.id) }}" class="club-event-cta">View Event</a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="club-event-item">
+                                <div class="club-event-date">
+                                    <span>Info</span>
+                                    <strong>--</strong>
+                                </div>
+                                <div class="club-event-details">
+                                    <h3>No Events Available</h3>
+                                    <p class="club-event-time">This club has no events in the database yet.</p>
+                                    <p>Add event records to display event details here.</p>
+                                </div>
+                                <a href="{{ url_for('clubs.events') }}" class="club-event-cta">Go to Events</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
+
+                <article class="club-section-card">
+                    <h2>Why Students Join</h2>
+                    <div class="club-benefits-grid">
+                        <div class="club-benefit">Skill-building workshops and practical sessions</div>
+                        <div class="club-benefit">Peer networking and team collaboration</div>
+                        <div class="club-benefit">Leadership and coordination opportunities</div>
+                        <div class="club-benefit">Club-based projects and activity planning</div>
+                    </div>
+                </article>
+
+                <article id="members" class="club-section-card">
+                    <h2>Community Snapshot</h2>
+                    <div class="club-member-grid">
+                        {% if members %}
+                            {% for member in members[:8] %}
+                                {% set name_parts = member.name.split() %}
+                                <div class="club-member-card">
+                                    <div class="club-member-avatar">
+                                        {{ ((name_parts[0][0] if name_parts else '?') ~ (name_parts[1][0] if name_parts|length > 1 else '')) | upper }}
+                                    </div>
+                                    <h3>{{ member.name }}</h3>
+                                    <p>Club Member</p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="club-member-card">
+                                <div class="club-member-avatar">--</div>
+                                <h3>No Members Yet</h3>
+                                <p>Membership data will appear here once available.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
             </section>
 
-            <section class="club-side-card">
-                <h2>Next Major Event</h2>
-                <p class="club-side-highlight">AI Mini Hackathon</p>
-                <p>Saturday, May 10 | 9:00 AM - 4:00 PM</p>
-                <a href="event.html" class="club-side-link">See Event Details</a>
-            </section>
+            <aside class="club-details-sidebar">
+                <section class="club-side-card">
+                    <h2>Club Information</h2>
+                    <ul>
+                        <li><strong>Club Name:</strong> {{ club.name }}</li>
+                        <li><strong>Location:</strong> UWA Campus</li>
+                        <li><strong>Members:</strong> {{ member_count }}</li>
+                        <li><strong>Events:</strong> {{ events|length }}</li>
+                    </ul>
+                </section>
 
-            <section class="club-side-card">
-                <h2>Contact & Community</h2>
-                <ul>
-                    <li><strong>Email:</strong> aisociety@clubsync.edu</li>
-                    <li><strong>Forum:</strong> ClubSync Community Space</li>
-                    <li><strong>Updates:</strong> Weekly student bulletin</li>
-                </ul>
-                <p class="club-side-note">No prior AI experience required. Beginners are welcome.</p>
-            </section>
-        </aside>
-    </div>
+                <section class="club-side-card">
+                    <h2>Next Major Event</h2>
+                    {% if events %}
+                        <p class="club-side-highlight">{{ events[0].title }}</p>
+                        <p>{{ events[0].date }}</p>
+                        <a href="{{ url_for('clubs.event_details', event_id=events[0].id) }}" class="club-side-link">See Event Details</a>
+                    {% else %}
+                        <p class="club-side-highlight">No Upcoming Event</p>
+                        <p>Event details will appear after events are created.</p>
+                        <a href="{{ url_for('clubs.events') }}" class="club-side-link">Check Events</a>
+                    {% endif %}
+                </section>
+
+                <section id="contact" class="club-side-card">
+                    <h2>Contact & Community</h2>
+                    <ul>
+                        <li><strong>Platform:</strong> ClubSync</li>
+                        <li><strong>Club:</strong> {{ club.name }}</li>
+                        <li><strong>Campus:</strong> UWA Crawley</li>
+                    </ul>
+                    {% if session.get('user_id') %}
+                        <p class="club-side-note">
+                            {% if is_member %}
+                                You are currently a member of this club.
+                            {% else %}
+                                You are not currently a member of this club.
+                            {% endif %}
+                        </p>
+                    {% else %}
+                        <p class="club-side-note">Log in to join or leave this club.</p>
+                    {% endif %}
+                </section>
+            </aside>
+        </div>
+    {% else %}
+        <section class="club-hero-card">
+            <div class="club-hero-visual">
+                <span>My Clubs</span>
+            </div>
+            <div class="club-hero-content">
+                <p class="club-hero-category">No Membership Found</p>
+                <h1>No Club Selected</h1>
+                <p class="club-hero-tagline">Club details could not be loaded.</p>
+                <div class="club-hero-actions">
+                    <a href="{{ url_for('clubs.clubs') }}" class="club-primary-action">Browse Clubs</a>
+                </div>
+            </div>
+        </section>
+    {% endif %}
 </main>
 
 <footer class="clubs-footer">

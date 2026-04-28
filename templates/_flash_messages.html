@@ -1,0 +1,20 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% set toast_titles = {"success": "Success", "info": "Info", "warning": "Warning", "danger": "Error"} %}
+        <section class="toast-stack" aria-label="Notifications" aria-live="polite" aria-atomic="true">
+            {% for category, message in messages %}
+                {% set tone = (category or "info")|lower %}
+                {% if tone == "error" %}
+                    {% set tone = "danger" %}
+                {% endif %}
+                {% if tone not in toast_titles %}
+                    {% set tone = "info" %}
+                {% endif %}
+                <article class="toast-message toast-message--{{ tone }}" role="status">
+                    <p class="toast-message__title">{{ toast_titles[tone] }}</p>
+                    <p class="toast-message__text">{{ message }}</p>
+                </article>
+            {% endfor %}
+        </section>
+    {% endif %}
+{% endwith %}

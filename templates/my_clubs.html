@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSync | My Clubs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="clubs-page my-clubs-page">
+<header class="clubs-header">
+    <div class="clubs-header-inner">
+        <a class="clubs-brand" href="{{ url_for('dashboard.index') }}">ClubSync</a>
+
+        <nav class="clubs-nav" aria-label="Primary">
+            <a href="{{ url_for('clubs.clubs') }}">Clubs</a>
+            <a href="{{ url_for('clubs.myclubs') }}" class="active" aria-current="page">My Clubs</a>
+        </nav>
+
+        <div class="clubs-header-tools">
+            <div class="clubs-search" role="search">
+                <input type="text" aria-label="Search my clubs" placeholder="Search your clubs and events">
+            </div>
+            <span class="clubs-location">UWA Campus</span>
+        </div>
+    </div>
+</header>
+
+<main class="my-clubs-main">
+    {% include "_flash_messages.html" %}
+
+    <section class="my-clubs-hero">
+        <p class="clubs-kicker">Personal Dashboard</p>
+        <h1>My Clubs</h1>
+        <p>
+            {% if current_user %}
+                {{ current_user.name }}, here are your joined clubs and the events you are currently attending.
+            {% else %}
+                View your memberships and attendance details in one place.
+            {% endif %}
+        </p>
+    </section>
+
+    {% if my_club_summaries %}
+        <section class="my-clubs-list" aria-label="Joined clubs and attended events">
+            {% for summary in my_club_summaries %}
+                <article class="my-club-card">
+                    <section class="my-club-overview">
+                        <img
+                            class="my-club-image"
+                            src="{{ url_for('static', filename=summary.club.image_path if summary.club.image_path else 'images/clubs/default.png') }}"
+                            alt="{{ summary.club.name }} image"
+                            loading="lazy"
+                        >
+                        <div class="my-club-overview-content">
+                            <p class="club-card-category">{{ summary.club.category if summary.club.category else 'Uncategorized' }}</p>
+                            <h2>
+                                <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-title-link">
+                                    {{ summary.club.name }}
+                                </a>
+                            </h2>
+                            <p class="my-club-description">{{ summary.club.description }}</p>
+                            <div class="my-club-actions">
+                                <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-btn">View Club</a>
+                                <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button type="submit" class="my-club-btn my-club-btn--danger">Leave Club</button>
+                                </form>
+                            </div>
+                        </div>
+                        <ul class="my-club-meta" aria-label="Club summary">
+                                <li>{{ summary.member_count }} member{% if summary.member_count != 1 %}s{% endif %}</li>
+                                <li>{{ summary.event_count }} event{% if summary.event_count != 1 %}s{% endif %}</li>
+                                <li>{{ summary.attended_events|length }} attending</li>
+                        </ul>
+                    </section>
+
+                    <section class="my-club-events">
+                        <h3>Events You&rsquo;re Attending</h3>
+                        {% if summary.attended_events %}
+                            <div class="my-club-event-list">
+                                {% for attended_event in summary.attended_events %}
+                                    <article class="my-club-event-item">
+                                        <div class="my-club-event-content">
+                                            <h4>
+                                                <a href="{{ url_for('clubs.event_details', event_id=attended_event.id) }}" class="my-club-event-title">
+                                                    {{ attended_event.title }}
+                                                </a>
+                                            </h4>
+                                            <p class="club-event-time">{{ attended_event.date }}</p>
+                                            <p>{{ attended_event.description if attended_event.description else 'No event description available yet.' }}</p>
+                                        </div>
+                                        <div class="my-club-event-actions">
+                                            <a href="{{ url_for('clubs.event_details', event_id=attended_event.id) }}" class="my-club-btn">View Event</a>
+                                            <form method="POST" action="{{ url_for('clubs.unattend_event', event_id=attended_event.id) }}">
+                                                <input type="hidden" name="next" value="{{ request.path }}">
+                                                <button type="submit" class="my-club-btn my-club-btn--danger">Cancel Attendance</button>
+                                            </form>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="my-club-empty-note">No attended events yet.</p>
+                        {% endif %}
+                    </section>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="my-clubs-empty">
+            <h2>You have not joined any clubs yet</h2>
+            <p>Browse clubs to join your first community and start attending events.</p>
+            <a href="{{ url_for('clubs.clubs') }}" class="club-primary-action">Browse Clubs</a>
+        </section>
+    {% endif %}
+</main>
+
+<footer class="clubs-footer">
+    <p>ClubSync | University Student Clubs Platform</p>
+</footer>
+</body>
+</html>

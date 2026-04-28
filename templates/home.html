@@ -10,7 +10,6 @@
 
         <nav class="clubs-nav">
           <a href="{{ url_for('clubs.clubs') }}">Clubs</a>
-          <a href="{{ url_for('clubs.events') }}">Events</a>
 
           {% if session.get('user_id') %}
           <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
