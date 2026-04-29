@@ -1,0 +1,370 @@
+.club-details-main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 34px 24px 12px;
+}
+
+.club-hero-card {
+    background: #fff;
+    border: 1px solid #d9e4ec;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px rgba(18, 49, 70, 0.08);
+    display: grid;
+    grid-template-columns: minmax(250px, 340px) 1fr;
+    margin-bottom: 24px;
+}
+
+.club-hero-visual {
+    background:
+        linear-gradient(140deg, rgba(115, 165, 202, 0.95), rgba(24, 71, 102, 0.92)),
+        radial-gradient(circle at 24% 22%, rgba(255, 255, 255, 0.22), transparent 40%);
+    min-height: 250px;
+    padding: 18px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.club-hero-visual span {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #143a54;
+    background: rgba(254, 253, 223, 0.95);
+    border-radius: 999px;
+    padding: 7px 12px;
+}
+
+.club-hero-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.club-hero-category {
+    color: #496172;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.club-hero-content h1 {
+    color: #143a54;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.club-hero-tagline {
+    color: #405969;
+    line-height: 1.65;
+    max-width: 780px;
+}
+
+.club-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.club-hero-meta span {
+    background: #eef6fb;
+    color: #2d4a5c;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.club-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+.club-secondary-action {
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 700;
+    padding: 10px 15px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    background: #f2f8fc;
+    border: 1px solid #cfe0ea;
+    color: #1d445d;
+}
+
+.club-secondary-action:hover {
+    background: #e2eff7;
+    border-color: #abc9dc;
+}
+
+.club-subnav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.club-subnav a {
+    text-decoration: none;
+    color: #2f4759;
+    border: 1px solid #cad8e2;
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.club-subnav a.active,
+.club-subnav a[aria-current="page"] {
+    border-color: transparent;
+    background: #dceef8;
+    color: #17415c;
+}
+
+.club-details-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+    gap: 20px;
+}
+
+.club-details-content {
+    display: grid;
+    gap: 16px;
+}
+
+.club-section-card {
+    background: #fff;
+    border: 1px solid #dbe5ed;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 8px 18px rgba(18, 49, 70, 0.05);
+}
+
+.club-section-card h2 {
+    color: #173f58;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.club-section-card p {
+    color: #485f6f;
+    line-height: 1.62;
+}
+
+.club-section-card p + p {
+    margin-top: 10px;
+}
+
+.club-events-list {
+    display: grid;
+    gap: 10px;
+}
+
+.club-event-item {
+    border: 1px solid #dde6ed;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fbfdff;
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.club-event-date {
+    border-radius: 10px;
+    background: #e8f2fa;
+    color: #17415c;
+    text-align: center;
+    padding: 8px 6px;
+}
+
+.club-event-date span {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.club-event-date strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 1.3rem;
+    line-height: 1.1;
+}
+
+.club-event-details h3 {
+    color: #1a425b;
+    font-size: 1.02rem;
+    margin-bottom: 4px;
+}
+
+.club-event-details p {
+    font-size: 0.92rem;
+}
+
+.club-event-cta {
+    text-decoration: none;
+    color: #173f58;
+    background: #edf6fb;
+    border: 1px solid #cfe0ea;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    align-self: center;
+    white-space: nowrap;
+}
+
+.club-event-cta:hover {
+    background: #dceef8;
+    border-color: #a9c8db;
+}
+
+.club-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+}
+
+.club-benefit {
+    border: 1px solid #d7e2eb;
+    border-radius: 10px;
+    padding: 12px;
+    background: #f9fcff;
+    color: #365062;
+    font-weight: 600;
+    font-size: 0.92rem;
+}
+
+.club-member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.club-member-card {
+    border: 1px solid #dce6ee;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    background: #fbfdff;
+}
+
+.club-member-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-weight: 700;
+    color: #173f58;
+    background: linear-gradient(135deg, #c7e3f5 0%, #e8f4fc 100%);
+}
+
+.club-member-card h3 {
+    color: #1a425b;
+    font-size: 0.98rem;
+    margin-bottom: 2px;
+}
+
+.club-member-card p {
+    color: #567080;
+    font-size: 0.82rem;
+}
+
+.club-details-sidebar {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+}
+
+.club-side-card {
+    background: #fff;
+    border: 1px solid #dbe5ed;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 8px 18px rgba(18, 49, 70, 0.05);
+}
+
+.club-side-card h2 {
+    color: #173f58;
+    font-size: 1.06rem;
+    margin-bottom: 10px;
+}
+
+.club-side-card ul {
+    list-style: none;
+    display: grid;
+    gap: 7px;
+}
+
+.club-side-card li {
+    color: #4e6575;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.club-side-card li strong {
+    color: #2b4a5e;
+}
+
+.club-side-highlight {
+    color: #1b435d;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.club-side-note {
+    margin-top: 10px;
+    color: #3c5565;
+    font-size: 0.87rem;
+    background: #f6fbff;
+    border: 1px solid #d9e6ef;
+    border-radius: 8px;
+    padding: 9px 10px;
+}
+
+@media (max-width: 980px) {
+    .club-details-main {
+        padding: 28px 24px 10px;
+    }
+
+    .club-hero-card {
+        grid-template-columns: 1fr;
+    }
+
+    .club-hero-visual {
+        min-height: 150px;
+    }
+
+    .club-details-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .club-details-main {
+        padding: 22px 16px 8px;
+    }
+
+    .club-hero-content {
+        padding: 16px;
+    }
+
+    .club-event-item {
+        grid-template-columns: 54px 1fr;
+    }
+
+    .club-event-cta {
+        grid-column: 2;
+        justify-self: start;
+    }
+}
