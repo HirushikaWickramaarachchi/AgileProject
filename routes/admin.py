@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import check_password_hash
 from models import db
@@ -5,6 +6,19 @@ from models.user import User
 from models.club import Club
 from models.event import Event
 from models.membership import Membership
+
+
+def _parse_event_date(date_str):
+    for fmt in ("%A, %B %d, %Y", "%A, %B %d, %Y | %I:%M %p"):
+        try:
+            part = date_str.split(" | ")[0].strip()
+            return datetime.strptime(part, "%A, %B %d, %Y")
+        except ValueError:
+            pass
+    try:
+        return datetime.strptime(date_str.strip(), "%Y-%m-%d")
+    except ValueError:
+        return datetime.min
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -158,11 +172,11 @@ def events():
             flash("Event created successfully.", "success")
         return redirect(url_for("admin.events"))
 
-    all_events = (
+    all_events = sorted(
         db.session.query(Event, Club)
         .join(Club, Event.club_id == Club.id)
-        .order_by(Event.date.desc())
-        .all()
+        .all(),
+        key=lambda row: _parse_event_date(row[0].date)
     )
     clubs = Club.query.order_by(Club.name).all()
     total_events = Event.query.count()
