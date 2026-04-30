@@ -1,4 +1,5 @@
 import pytest
+from werkzeug.security import generate_password_hash
 from app import app as flask_app
 from models import db as _db
 from models.user import User
@@ -27,9 +28,25 @@ def client(app):
 
 
 @pytest.fixture
-def admin_client(client):
+def admin_user(app):
+    with app.app_context():
+        user = User(
+            name="Admin",
+            email="admin@clubsync.edu",
+            password_hash=generate_password_hash("admin123"),
+            is_admin=True,
+        )
+        _db.session.add(user)
+        _db.session.commit()
+        return user.id
+
+
+@pytest.fixture
+def admin_client(client, admin_user):
     with client.session_transaction() as sess:
         sess["admin_logged_in"] = True
+        sess["admin_user_id"] = admin_user
+        sess["admin_name"] = "Admin"
     return client
 
 

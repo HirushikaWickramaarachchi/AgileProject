@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from werkzeug.security import check_password_hash
 from models import db
 from models.user import User
 from models.club import Club
@@ -6,9 +7,6 @@ from models.event import Event
 from models.membership import Membership
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
-
-ADMIN_EMAIL = "admin@clubsync.edu"
-ADMIN_PASSWORD = "admin123"
 
 
 def admin_required(f):
@@ -35,8 +33,11 @@ def login():
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
 
-        if email == ADMIN_EMAIL and password == ADMIN_PASSWORD:
+        user = User.query.filter_by(email=email, is_admin=True).first()
+        if user and check_password_hash(user.password_hash, password):
             session["admin_logged_in"] = True
+            session["admin_user_id"] = user.id
+            session["admin_name"] = user.name
             return redirect(url_for("admin.members"))
 
         flash("Invalid email or password.")
@@ -47,6 +48,8 @@ def login():
 @admin_bp.route("/logout")
 def logout():
     session.pop("admin_logged_in", None)
+    session.pop("admin_user_id", None)
+    session.pop("admin_name", None)
     return redirect(url_for("admin.login"))
 
 
@@ -195,3 +198,23 @@ def delete_event(event_id):
     db.session.commit()
     flash("Event deleted.", "success")
     return redirect(url_for("admin.events"))
+
+
+@admin_bp.route("/users")
+@admin_required
+def users():
+    all_users = User.query.filter_by(is_admin=False).order_by(User.name).all()
+    return render_template("admin_users.html", all_users=all_users)
+
+
+@admin_bp.route("/users/<int:user_id>/delete", methods=["POST"])
+@admin_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.is_admin:
+        flash("Cannot delete admin accounts.", "danger")
+        return redirect(url_for("admin.users"))
+    db.session.delete(user)
+    db.session.commit()
+    flash(f'User "{user.name}" has been deleted.', "success")
+    return redirect(url_for("admin.users"))

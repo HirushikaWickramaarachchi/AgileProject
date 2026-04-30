@@ -8,14 +8,14 @@ class TestAdminAuth:
         res = client.get("/admin/login")
         assert res.status_code == 200
 
-    def test_login_success(self, client):
+    def test_login_success(self, client, admin_user):
         res = client.post("/admin/login", data={
             "email": "admin@clubsync.edu",
             "password": "admin123"
         }, follow_redirects=True)
         assert res.status_code == 200
 
-    def test_login_wrong_password(self, client):
+    def test_login_wrong_password(self, client, admin_user):
         res = client.post("/admin/login", data={
             "email": "admin@clubsync.edu",
             "password": "wrongpassword"
@@ -26,6 +26,13 @@ class TestAdminAuth:
         res = client.post("/admin/login", data={
             "email": "wrong@email.com",
             "password": "admin123"
+        }, follow_redirects=True)
+        assert b"Invalid email or password" in res.data
+
+    def test_non_admin_user_cannot_login(self, client, sample_user):
+        res = client.post("/admin/login", data={
+            "email": "test@example.com",
+            "password": "hashed"
         }, follow_redirects=True)
         assert b"Invalid email or password" in res.data
 
@@ -114,4 +121,31 @@ class TestAdminMembers:
 
     def test_remove_nonexistent_member(self, admin_client):
         res = admin_client.post("/admin/members/9999/remove")
+        assert res.status_code == 404
+
+
+class TestAdminUsers:
+    def test_users_page_loads(self, admin_client):
+        res = admin_client.get("/admin/users")
+        assert res.status_code == 200
+
+    def test_users_page_lists_non_admin_users(self, admin_client, sample_user, app):
+        from models.user import User
+        with app.app_context():
+            user = User.query.get(sample_user)
+            name = user.name
+        res = admin_client.get("/admin/users")
+        assert name.encode() in res.data
+
+    def test_delete_user(self, admin_client, sample_user):
+        res = admin_client.post(f"/admin/users/{sample_user}/delete", follow_redirects=True)
+        assert res.status_code == 200
+        assert b"has been deleted" in res.data
+
+    def test_cannot_delete_admin_user(self, admin_client, admin_user):
+        res = admin_client.post(f"/admin/users/{admin_user}/delete", follow_redirects=True)
+        assert b"Cannot delete admin accounts" in res.data
+
+    def test_delete_nonexistent_user(self, admin_client):
+        res = admin_client.post("/admin/users/9999/delete")
         assert res.status_code == 404

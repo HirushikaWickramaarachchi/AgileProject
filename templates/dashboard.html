@@ -27,8 +27,9 @@
             <p class="admin-nav-label">Main Menu</p>
             <nav class="nav flex-column gap-1">
                 <a class="nav-link active" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
-                    <a class="nav-link" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Manage Events</a>
+                <a class="nav-link" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Manage Events</a>
                 <a class="nav-link" href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill"></i>Manage Members</a>
+                <a class="nav-link" href="{{ url_for('admin.users') }}"><i class="bi bi-person-lines-fill"></i>Manage Users</a>
             </nav>
             <p class="admin-nav-label mt-3">Site</p>
             <nav class="nav flex-column gap-1">
@@ -37,9 +38,9 @@
         </div>
         <div class="admin-sidebar-footer">
             <div class="admin-user-info">
-                <div class="admin-avatar">AD</div>
+                <div class="admin-avatar">{{ session.get('admin_name', 'AD')[:2]|upper }}</div>
                 <div class="flex-grow-1">
-                    <div class="admin-user-name">Admin User</div>
+                    <div class="admin-user-name">{{ session.get('admin_name', 'Admin') }}</div>
                     <div class="admin-user-role">Super Admin</div>
                 </div>
                 <a href="{{ url_for('admin.logout') }}" title="Sign out"
@@ -70,6 +71,7 @@
                     <a class="nav-link active" href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill"></i>Dashboard</a>
                     <a class="nav-link" href="{{ url_for('admin.events') }}"><i class="bi bi-calendar2-event-fill"></i>Manage Events</a>
                     <a class="nav-link" href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill"></i>Manage Members</a>
+                    <a class="nav-link" href="{{ url_for('admin.users') }}"><i class="bi bi-person-lines-fill"></i>Manage Users</a>
                 </nav>
                 <p class="admin-nav-label mt-3">Site</p>
                 <nav class="nav flex-column gap-1">
@@ -85,9 +87,9 @@
                     </div>
                 </div>
                 <div class="admin-user-info">
-                    <div class="admin-avatar">AD</div>
+                    <div class="admin-avatar">{{ session.get('admin_name', 'AD')[:2]|upper }}</div>
                     <div class="flex-grow-1">
-                        <div class="admin-user-name">Admin User</div>
+                        <div class="admin-user-name">{{ session.get('admin_name', 'Admin') }}</div>
                         <div class="admin-user-role">Super Admin</div>
                     </div>
                     <a href="{{ url_for('admin.logout') }}" title="Sign out"
