@@ -49,6 +49,7 @@ def login():
 
         user = User.query.filter_by(email=email, is_admin=True).first()
         if user and check_password_hash(user.password_hash, password):
+            session.permanent = bool(request.form.get("remember"))
             session["admin_logged_in"] = True
             session["admin_user_id"] = user.id
             session["admin_name"] = user.name
