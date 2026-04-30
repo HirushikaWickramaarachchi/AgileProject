@@ -124,6 +124,51 @@ class TestAdminMembers:
         assert res.status_code == 404
 
 
+class TestAdminClubs:
+    def test_clubs_page_loads(self, admin_client):
+        res = admin_client.get("/admin/clubs")
+        assert res.status_code == 200
+
+    def test_create_club(self, admin_client, app):
+        from models.club import Club
+        res = admin_client.post("/admin/clubs", data={
+            "name": "New Club",
+            "description": "A brand new club",
+        }, follow_redirects=True)
+        assert res.status_code == 200
+        assert b"Club created successfully" in res.data
+        with app.app_context():
+            assert Club.query.filter_by(name="New Club").first() is not None
+
+    def test_create_club_missing_fields(self, admin_client):
+        res = admin_client.post("/admin/clubs", data={
+            "name": "",
+            "description": "",
+        }, follow_redirects=True)
+        assert b"required" in res.data
+
+    def test_create_club_duplicate_name(self, admin_client, sample_club, app):
+        with app.app_context():
+            from models.club import Club
+            name = Club.query.get(sample_club).name
+        res = admin_client.post("/admin/clubs", data={
+            "name": name,
+            "description": "Duplicate",
+        }, follow_redirects=True)
+        assert b"already exists" in res.data
+
+    def test_delete_club(self, admin_client, sample_club, app):
+        from models.club import Club
+        res = admin_client.post(f"/admin/clubs/{sample_club}/delete", follow_redirects=True)
+        assert res.status_code == 200
+        with app.app_context():
+            assert Club.query.get(sample_club) is None
+
+    def test_delete_nonexistent_club(self, admin_client):
+        res = admin_client.post("/admin/clubs/9999/delete")
+        assert res.status_code == 404
+
+
 class TestAdminUsers:
     def test_users_page_loads(self, admin_client):
         res = admin_client.get("/admin/users")
