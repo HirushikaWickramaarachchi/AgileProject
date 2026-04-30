@@ -41,7 +41,7 @@ def index():
 @admin_bp.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("admin_logged_in"):
-        return redirect(url_for("admin.members"))
+        return redirect(url_for("admin.dashboard"))
 
     if request.method == "POST":
         email = request.form.get("email", "").strip()
@@ -53,7 +53,7 @@ def login():
             session["admin_logged_in"] = True
             session["admin_user_id"] = user.id
             session["admin_name"] = user.name
-            return redirect(url_for("admin.members"))
+            return redirect(url_for("admin.dashboard"))
 
         flash("Invalid email or password.")
 
@@ -85,6 +85,20 @@ def dashboard():
         .all()
     )
 
+    upcoming_events = sorted(
+        db.session.query(Event, Club).join(Club, Event.club_id == Club.id).all(),
+        key=lambda row: _parse_event_date(row[0].date)
+    )[:4]
+
+    recent_memberships = (
+        db.session.query(Membership, User, Club)
+        .join(User, Membership.user_id == User.id)
+        .join(Club, Membership.club_id == Club.id)
+        .order_by(Membership.id.desc())
+        .limit(5)
+        .all()
+    )
+
     return render_template(
         "dashboard.html",
         total_users=total_users,
@@ -92,6 +106,8 @@ def dashboard():
         total_events=total_events,
         total_memberships=total_memberships,
         clubs_with_counts=clubs_with_counts,
+        upcoming_events=upcoming_events,
+        recent_memberships=recent_memberships,
     )
 
 
