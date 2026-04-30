@@ -4,124 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - ClubSync</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
+<header class="clubs-header">
+    <div class="clubs-header-inner">
 
-<div class="profile-container">
+        <div class="left-nav">
+            <a class="clubs-brand" href="/">ClubSync</a>
 
-    <h1 class="page-title">My Profile</h1>
-
-    <!-- ========== Profile Header ========== -->
-    <div class="profile-header">
-        <div class="avatar">JD</div>
-        <div class="user-info">
-            <h2>John Doe</h2>
-            <p>johndoe@student.uwa.edu.au</p>
-            <p>Joined: March 2026</p>
-            <span class="badge">3 Clubs Joined</span>
+            <nav class="clubs-nav">
+                <a href="/clubs">Clubs</a>
+                <a href="/myclubs">My Clubs</a>
+            </nav>
         </div>
-        <button class="btn-edit">Edit Profile</button>
-    </div>
 
-    <!-- ========== My Clubs ========== -->
-    <div class="section-card">
-        <h3>My Clubs</h3>
-        <div class="clubs-grid">
-            <div class="club-item">
-                <h4>Photography Club</h4>
-                <p>Weekly meetups every Friday</p>
-                <span class="role-tag admin">Admin</span>
+        <div class="clubs-header-tools">
+            <div class="clubs-search">
+                <input type="text" placeholder="Search your clubs and events">
             </div>
-            <div class="club-item">
-                <h4>Coding Society</h4>
-                <p>Hackathons & workshops</p>
-                <span class="role-tag member">Member</span>
+
+            <span class="clubs-location">UWA Campus</span>
+        </div>
+
+    </div>
+</header>
+<div class="profile-hero">
+    <span class="clubs-kicker">PROFILE</span>
+    <p>View your contact details, joined clubs, and attendance history.</p>
+</div>
+
+<div class="profile-page">
+
+    <aside class="profile-card">
+        <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+
+<a href="{{ url_for('dashboard.edit_profile') }}" class="edit-link" target="_blank" rel="noopener">
+    Edit profile
+</a>
+        <p>📍 Perth, AU</p>
+        <p>📅 Joined: March 2026</p>
+
+        <div class="profile-stats">
+            <div>
+                <strong>0</strong>
+                <span>Clubs</span>
             </div>
-            <div class="club-item">
-                <h4>Basketball Team</h4>
-                <p>Training on Tue & Thu</p>
-                <span class="role-tag member">Member</span>
+            <div>
+                <strong>0</strong>
+                <span>History</span>
             </div>
         </div>
-    </div>
+    </aside>
 
-    <!-- ========== Attendance History ========== -->
-    <div class="section-card">
-        <h3>Attendance History</h3>
-        <table class="attendance-table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Club</th>
-                    <th>Event</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>2026-04-10</td>
-                    <td>Photography Club</td>
-                    <td>Spring Photo Walk</td>
-                    <td><span class="status present">Present</span></td>
-                </tr>
-                <tr>
-                    <td>2026-04-08</td>
-                    <td>Coding Society</td>
-                    <td>Flask Workshop</td>
-                    <td><span class="status present">Present</span></td>
-                </tr>
-                <tr>
-                    <td>2026-04-05</td>
-                    <td>Basketball Team</td>
-                    <td>Weekly Training</td>
-                    <td><span class="status absent">Absent</span></td>
-                </tr>
-                <tr>
-                    <td>2026-04-03</td>
-                    <td>Photography Club</td>
-                    <td>Portrait Techniques</td>
-                    <td><span class="status present">Present</span></td>
-                </tr>
-                <tr>
-                    <td>2026-04-01</td>
-                    <td>Coding Society</td>
-                    <td>Git & GitHub Intro</td>
-                    <td><span class="status present">Present</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <main class="profile-right">
 
-    <!-- ========== Account Settings ========== -->
-    <div class="section-card">
-        <h3>Account Settings</h3>
-        <ul class="settings-list">
-            <li>
-                <div>
-                    <span class="label">Username</span><br>
-                    <span class="value">johndoe</span>
-                </div>
-                <button class="btn-link">Change</button>
-            </li>
-            <li>
-                <div>
-                    <span class="label">Email</span><br>
-                    <span class="value">johndoe@student.uwa.edu.au</span>
-                </div>
-                <button class="btn-link">Change</button>
-            </li>
-            <li>
-                <div>
-                    <span class="label">Password</span><br>
-                    <span class="value">********</span>
-                </div>
-                <button class="btn-link">Change</button>
-            </li>
-        </ul>
-    </div>
+        <section class="section-card">
+            <h3>My Clubs</h3>
+           
+        </section>
+
+        <section class="section-card">
+            <h3>Attendance History</h3>
+            
+        </section>
+
+    </main>
 
 </div>
 
+</div>
+<footer class="clubs-footer">
+    ClubSync | University Student Clubs Platform
+</footer>
 </body>
 </html>
