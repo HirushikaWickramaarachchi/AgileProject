@@ -22,6 +22,7 @@
         </a>
         <nav class="admin-navbar-nav">
             <a href="{{ url_for('admin.dashboard') }}"><i class="bi bi-grid-1x2-fill me-1"></i>Dashboard</a>
+            <a href="{{ url_for('admin.clubs') }}"><i class="bi bi-building me-1"></i>Clubs</a>
             <a href="{{ url_for('admin.events') }}" class="active"><i class="bi bi-calendar2-event-fill me-1"></i>Events</a>
             <a href="{{ url_for('admin.members') }}"><i class="bi bi-people-fill me-1"></i>Members</a>
             <a href="{{ url_for('admin.users') }}"><i class="bi bi-person-lines-fill me-1"></i>Users</a>
@@ -43,6 +44,7 @@
     </div>
     <nav class="admin-navbar-mobile" id="mobileMenu">
         <a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin.clubs') }}">Clubs</a>
         <a href="{{ url_for('admin.events') }}" class="active">Events</a>
         <a href="{{ url_for('admin.members') }}">Members</a>
         <a href="{{ url_for('admin.users') }}">Users</a>
