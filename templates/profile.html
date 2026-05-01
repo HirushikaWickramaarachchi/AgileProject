@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
-<body>
+<body class="clubs-page">
 <header class="clubs-header">
     <div class="clubs-header-inner">
 
@@ -42,41 +42,108 @@
         <div class="profile-avatar">{{ user.name[0]|upper }}</div>
 
         <h2>{{ user.name }}</h2>
-        <p>{{ user.email }}</p>
+        
+        <p>✉️ {{ user.email }}</p>
+        
+        <p>📞 {{ user.phone if user.phone else 'No phone added' }}</p>
+        
+        <p>📍 {{ user.location if user.location else 'UWA' }}</p>
+        <div class="profile-item">
+            <span class="profile-icon">
+                {% if user.gender == 'Female' %}
+                🌸
+                {% elif user.gender == 'Male' %}
+                🧑
+                {% else %}
+                👤
+                {% endif %}
+            </span>
+        
+            <span class="profile-value">
+                {{ user.gender if user.gender else 'Not specified' }}
+            </span>
+        </div>
 
 <a href="{{ url_for('dashboard.edit_profile') }}" class="edit-link" target="_blank" rel="noopener">
     Edit profile
 </a>
-        <p>📍 Perth, AU</p>
-        <p>📅 Joined: March 2026</p>
 
         <div class="profile-stats">
             <div>
-                <strong>0</strong>
+                <strong>{{ user.memberships|length }}</strong>
                 <span>Clubs</span>
-            </div>
-            <div>
-                <strong>0</strong>
-                <span>History</span>
             </div>
         </div>
     </aside>
 
     <main class="profile-right">
 
-        <section class="section-card">
-            <h3>My Clubs</h3>
-           
+        <section class="profile-block">
+            <h2>My Clubs</h2>
+
+            <div class="profile-clubs-card">
+                {% if user.memberships|length == 0 %}
+                <p class="no-clubs-text">You have not joined any clubs yet.</p>
+                {% else %}
+                <div class="clubs-list">
+                    {% for membership in user.memberships %}
+                    <span class="club-chip">
+                        {{ membership.club.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
         </section>
 
-        <section class="section-card">
-            <h3>Attendance History</h3>
-            
+        <section class="profile-block attendance-block">
+            <h2>Attendance History</h2>
+
+            <div class="history-box">
+
+                {% if user.memberships|length == 0 %}
+                <!-- ❌ did not join any clubs -->
+                <div class="empty-state">
+                    <h3>Looks like you’re not in any clubs yet</h3>
+                    <p>Explore clubs that match your interests and join the fun!</p>
+
+                    <a href="{{ url_for('clubs.clubs') }}" class="explore-link">
+                        Browse Clubs
+                    </a>
+                </div>
+
+                {% else %}
+                <!-- ✅ joined clubs -->
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Club Name</th>
+                            <th>Joined Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for membership in user.memberships %}
+                        <tr>
+                            <td>{{ membership.club.name }}</td>
+
+                            <!-- if no joined time available -->
+                            <td>N/A</td>
+
+                            <td>
+                                <span class="status present">Joined</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+            </div>
         </section>
+</main>
 
-    </main>
-
-</div>
 
 </div>
 <footer class="clubs-footer">
