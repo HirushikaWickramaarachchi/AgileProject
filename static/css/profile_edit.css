@@ -1,0 +1,266 @@
+/* Edit Profile Page */
+.profile-edit-layout {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+}
+
+.profile-sidebar {
+    position: relative;
+    padding: 20px 16px 20px 0;
+}
+
+.profile-sidebar::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 1px;
+    height: calc(100% - 20px);
+    background: linear-gradient(to bottom,
+            transparent,
+            rgba(20, 58, 84, 0.15),
+            rgba(20, 58, 84, 0.15),
+            transparent);
+}
+
+.sidebar-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.sidebar-item {
+    width: 100%;
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    background: #f7f9fb;
+}
+
+.sidebar-item.active {
+    background: #f0f6fb;
+    border-left: 3px solid #73A5CA;
+    color: #143a54;
+}
+
+.profile-edit-main {
+    max-width: 600px;
+    margin-top: 40px;
+}
+
+.profile-edit-main h2 {
+    margin-bottom: 12px;
+}
+
+.profile-edit-main p {
+    margin-bottom: 24px;
+    color: #666;
+}
+
+.avatar-upload {
+    margin-bottom: 32px;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active-section {
+    display: block;
+}
+/*view profile link*/
+.my-profile-link {
+    display: block;
+    text-decoration: none;
+    color: #E87F24;
+    font-weight: 700;
+}
+
+.my-profile-link:hover {
+    background: #fff3cd;
+}
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.edit-form input,
+.edit-form select,
+.edit-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid #d9e4ec;
+    font-size: 14px;
+}
+
+.edit-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.edit-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.edit-actions button {
+    width: auto;
+    background: #FFC81E;
+    color: #2b2105;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.edit-actions button:hover {
+    background: #E87F24;
+    color: white;
+}
+
+.edit-actions a {
+    color: #6c4fd8;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.checkbox-row input {
+    width: auto;
+}
+
+/* Avatar Upload */
+.avatar-upload {
+    margin-bottom: 24px;
+}
+
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #73A5CA;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.2s ease;
+}
+
+.avatar-circle:hover {
+    opacity: 0.85;
+}
+
+.avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 900px) {
+    .profile-edit-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-sidebar::after {
+        display: none;
+    }
+}
+
+/*save button change*/
+.confirm-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.28);
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.confirm-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 26px 30px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+}
+
+.confirm-box p {
+    font-size: 16px;
+    font-weight: 700;
+    color: #143a54;
+}
+
+.confirm-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+#confirmYesBtn,
+#confirmNoBtn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#confirmYesBtn {
+    background: #FFC81E;
+    color: #2b2105;
+}
+
+#confirmYesBtn:hover {
+    background: #E87F24;
+    color: white;
+}
+
+#confirmNoBtn {
+    background: #edf1f4;
+    color: #333;
+}
+
+#confirmNoBtn:hover {
+    background: #dce4ea;
+}
+
+/*update inforation*/
+.success-message {
+    background: #e6f9ed;
+    color: #1a7f37;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
