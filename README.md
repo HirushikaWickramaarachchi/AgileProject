@@ -19,12 +19,12 @@ Users can join clubs, view events, and track their participation, while administ
 ---
 
 ## Team Members
-| Name | UWA ID | GitHub Username |
-|------|--------|----------------|
-| Atharva Dalvi | 24591632 | atharvadalvii |
-| Farahnaz Abdi | 24575614 | farahnazabdi92 |
-| Chaohong Lin | 25063505 | aub11y |
-| Hirushika Wickramaarachchi | 24890015 | HirushikaWickramaarachchi |
+| UWA ID | Name | GitHub Username |
+|--------|------|----------------|
+| 24591632 | Atharva Dalvi | atharvadalvii |
+| 24575614 | Farahnaz Abdi | farahnazabdi92 |
+| 25063505 | Chaohong Lin | aub11y |
+| 24890015 | Hirushika Wickramaarachchi | HirushikaWickramaarachchi |
 
 ---
 
@@ -78,6 +78,13 @@ python app.py
 The app will be available at `http://127.0.0.1:5000`.
 
 Demo data (clubs, events, users) is seeded automatically on first run.
+
+**Demo credentials**
+
+| Role | Email | Password |
+|------|-------|----------|
+| Regular user | alice.demo@clubsync.local | DemoPass123! |
+| Admin | admin@clubsync.edu | admin123 |
 
 ---
 
