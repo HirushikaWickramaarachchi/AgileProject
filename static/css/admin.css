@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
 :root {
     /* ClubSync source palette */
     --cs-navy:          #184766;
@@ -71,7 +69,7 @@
     --bs-link-hover-color:#0d2e44;
     background: var(--admin-bg);
     color: var(--admin-text);
-    font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────── */
