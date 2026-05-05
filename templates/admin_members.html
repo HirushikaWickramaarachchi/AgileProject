@@ -64,6 +64,22 @@
     {% endfor %}
     {% endwith %}
 
+    <!-- Page header -->
+    <div class="admin-page-header mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="admin-page-header-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                <i class="bi bi-people-fill fs-5"></i>
+            </div>
+            <div>
+                <h1>Manage Members</h1>
+                <p>View and remove club memberships across the platform.</p>
+            </div>
+        </div>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-sm btn-outline-light d-none d-md-inline-flex align-items-center gap-1">
+            <i class="bi bi-grid-1x2-fill"></i> Dashboard
+        </a>
+    </div>
+
     <!-- Metric cards -->
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-4">

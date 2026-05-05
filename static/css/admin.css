@@ -48,6 +48,50 @@
     pointer-events: none;
 }
 
+/* ── Page header ──────────────────────────────────────────── */
+.admin-page-header {
+    background: linear-gradient(120deg, #0c1d2e 0%, var(--cs-navy) 60%, #1e6b9e 100%);
+    border-radius: var(--admin-card-radius);
+    padding: 1.1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+.admin-page-header::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 200, 30, 0.08);
+    pointer-events: none;
+}
+.admin-page-header-left { display: flex; align-items: center; gap: 0.75rem; }
+.admin-page-header-icon {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--cs-yellow);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.admin-page-header h1 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+.admin-page-header p {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.6);
+    margin: 0;
+}
+
 /* ── Metric card colour-top accents ───────────────────────── */
 .admin-metric-card::before {
     content: '';
@@ -67,7 +111,8 @@
     --bs-primary-rgb:     24, 71, 102;
     --bs-link-color:      #184766;
     --bs-link-hover-color:#0d2e44;
-    background: var(--admin-bg);
+    background: linear-gradient(160deg, #deeaf5 0%, #e8f2f9 40%, #dfe9f4 100%);
+    min-height: 100vh;
     color: var(--admin-text);
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -348,6 +393,38 @@
     font-size: 0.9rem;
 }
 .admin-table tbody tr:hover { background: #f4f9fc; }
+
+/* Polished table action buttons */
+.admin-table .btn-outline-primary {
+    background: #f0f7ff;
+    border-color: #b8d4ea;
+    color: var(--cs-navy);
+}
+.admin-table .btn-outline-primary:hover {
+    background: var(--cs-navy);
+    border-color: var(--cs-navy);
+    color: #fff;
+}
+.admin-table .btn-outline-secondary {
+    background: #f6f9fb;
+    border-color: #c8d8e4;
+    color: var(--admin-text-muted);
+}
+.admin-table .btn-outline-secondary:hover {
+    background: #deeaf5;
+    border-color: var(--cs-blue);
+    color: var(--cs-navy);
+}
+.admin-table .btn-outline-danger {
+    background: #fff5f5;
+    border-color: #fbc4c4;
+    color: #c0392b;
+}
+.admin-table .btn-outline-danger:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+}
 
 /* ── Preview card ─────────────────────────────────────────── */
 .preview-card {
@@ -658,6 +735,23 @@ html.admin-dark .btn-outline-secondary {
 }
 html.admin-dark .btn-outline-secondary:hover {
     background: rgba(115,165,202,0.15);
+    color: #fff;
+}
+html.admin-dark .btn-outline-danger {
+    color: #f87171;
+    border-color: rgba(248,113,113,0.35);
+}
+html.admin-dark .btn-outline-danger:hover {
+    background: rgba(239,68,68,0.18);
+    border-color: #f87171;
+    color: #fca5a5;
+}
+html.admin-dark .btn-outline-light {
+    color: rgba(255,255,255,0.7);
+    border-color: rgba(255,255,255,0.2);
+}
+html.admin-dark .btn-outline-light:hover {
+    background: rgba(255,255,255,0.1);
     color: #fff;
 }
 
