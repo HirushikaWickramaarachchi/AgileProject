@@ -3,18 +3,19 @@
 ## Overview
 ClubSync is a web application designed to help university students and club administrators manage student clubs in a centralised and efficient way.
 
-Users can join clubs, view events, and track their participation, while administrators can manage members and organise events.
+Users can sign up, browse and join clubs, view events, and track their attendance history. Administrators have a dedicated panel to manage users, clubs, events, and memberships.
 
 ---
 
 ## Key Features
-- User authentication (signup, login, logout)
+- User authentication (signup, login, logout, profile editing)
 - Browse and join clubs
-- View club details and members
-- View and attend events
-- Track attendance history
-- Edit user profile
-- Admin controls for managing members, clubs, and events
+- View club details and current members
+- View events and mark attendance
+- Track personal attendance history
+- Admin panel: manage clubs, events, members, and user accounts
+- AJAX-powered event attendee viewer (admin panel)
+- CSRF protection on all state-changing forms
 
 ---
 
@@ -30,20 +31,30 @@ Users can join clubs, view events, and track their participation, while administ
 
 ## Project Structure
 ```
-project-root/
-├── templates/        # HTML pages (Jinja2 templates)
-├── static/           # CSS, JavaScript, images
-├── models/           # SQLAlchemy database models
-├── routes/           # Flask route blueprints
-├── tests/            # Unit and Selenium tests
-├── app.py            # Application entry point
-├── seeds.py          # Demo data seeder
-└── requirements.txt  # Python dependencies
+AgileProject/
+├── app.py              # Application entry point; creates DB and seeds demo data on first run
+├── seeds.py            # Demo data seeder (called automatically by app.py)
+├── requirements.txt    # Python dependencies
+├── models/             # SQLAlchemy models (User, Club, Event, Membership, Attendance)
+├── routes/             # Flask blueprints (auth, clubs, dashboard, admin)
+├── templates/          # Jinja2 HTML templates
+├── static/             # CSS, JavaScript, images
+│   ├── css/
+│   └── js/
+├── components/         # Reusable HTML partials
+└── tests/              # Unit tests (pytest) and Selenium browser tests
+    ├── conftest.py
+    ├── test_auth.py
+    ├── test_clubs.py
+    ├── test_admin.py
+    └── test_selenium.py
 ```
 
 ---
 
 ## How to Launch the Application
+
+**Requirements:** Python 3.10 or later, Google Chrome (for Selenium tests)
 
 **1. Clone the repository**
 ```bash
@@ -77,7 +88,7 @@ python app.py
 
 The app will be available at `http://127.0.0.1:5000`.
 
-Demo data (clubs, events, users) is seeded automatically on first run.
+On first run, the database is created and populated automatically with demo clubs, events, and users via `seeds.py`. No manual seeding step is needed.
 
 **Demo credentials**
 
@@ -90,28 +101,36 @@ Demo data (clubs, events, users) is seeded automatically on first run.
 
 ## How to Run the Tests
 
-**Unit tests**
+The project includes **72 unit tests** across three files and **10 Selenium browser tests**.
+
+**Unit tests** (no server required)
 ```bash
-pytest tests/test_auth.py tests/test_clubs.py tests/test_admin.py
+pytest tests/test_auth.py tests/test_clubs.py tests/test_admin.py -v
 ```
 
-**Selenium tests** (requires the Flask server to be running)
+**All unit tests at once**
+```bash
+pytest tests/ --ignore=tests/test_selenium.py -v
+```
+
+**Selenium tests** (requires the Flask server to be running and ChromeDriver installed)
 ```bash
 # Terminal 1 — start the server
 python app.py
 
 # Terminal 2 — run Selenium tests
-pytest tests/test_selenium.py
+pytest tests/test_selenium.py -v
 ```
 
-Selenium tests require Google Chrome and ChromeDriver installed.
+> Selenium tests use headless Chrome and connect to `http://127.0.0.1:5000`. Ensure no other process occupies that port.
 
 ---
 
 ## Technologies Used
-- HTML, CSS (custom + Bootstrap 5)
-- JavaScript (DOM manipulation, AJAX)
-- Flask + Jinja2 templates
-- SQLite via SQLAlchemy
+- HTML, CSS (custom + Bootstrap 5), JavaScript
+- Flask 3 + Jinja2 templates
+- SQLite via SQLAlchemy ORM
 - Flask-WTF (CSRF protection)
-- pytest + Selenium (testing)
+- python-dotenv (environment variable management)
+- pytest + Selenium WebDriver (testing)
+- AJAX via `fetch()` for dynamic data loading (admin event attendees)
