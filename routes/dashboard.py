@@ -40,4 +40,4 @@ def edit_profile():
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
-    return render_template("edit_profile.html")
+    return render_template("profile_edit.html")
