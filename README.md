@@ -1,9 +1,9 @@
 # ClubSync – Student Club Management Platform
 
 ## Overview
-ClubSync is a web application designed to help university students and club administrators manage student clubs in a centralized and efficient way. 
+ClubSync is a web application designed to help university students and club administrators manage student clubs in a centralised and efficient way.
 
-Users can join clubs, view events, and track their participation, while administrators can manage members and organize events.
+Users can join clubs, view events, and track their participation, while administrators can manage members and organise events.
 
 ---
 
@@ -13,7 +13,8 @@ Users can join clubs, view events, and track their participation, while administ
 - View club details and members
 - View and attend events
 - Track attendance history
-- Admin controls for managing members and events
+- Edit user profile
+- Admin controls for managing members, clubs, and events
 
 ---
 
@@ -28,58 +29,82 @@ Users can join clubs, view events, and track their participation, while administ
 ---
 
 ## Project Structure
+```
 project-root/
-│
-├── templates/ # HTML pages (UI)
-├── static/ # CSS, JavaScript, images
-├── models/ # Database models
-├── routes/ # Flask route handlers
-├── app.py # Main application file
-└── README.md # Project documentation
+├── templates/        # HTML pages (Jinja2 templates)
+├── static/           # CSS, JavaScript, images
+├── models/           # SQLAlchemy database models
+├── routes/           # Flask route blueprints
+├── tests/            # Unit and Selenium tests
+├── app.py            # Application entry point
+├── seeds.py          # Demo data seeder
+└── requirements.txt  # Python dependencies
+```
 
 ---
 
-## How the Application Works
-1. Users sign up and log in
-2. Users view their dashboard
-3. Users browse and join clubs
-4. Clubs contain events
-5. Users can attend events
-6. Attendance is recorded and shown in the profile
-7. Admins manage clubs, members, and events
+## How to Launch the Application
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/HirushikaWickramaarachchi/AgileProject.git
+cd AgileProject
+```
+
+**2. Create and activate a virtual environment**
+```bash
+python -m venv venv
+source venv/bin/activate        # macOS/Linux
+venv\Scripts\activate           # Windows
+```
+
+**3. Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**4. Set up environment variables**
+
+Create a `.env` file in the project root:
+```
+SECRET_KEY=your-secret-key-here
+```
+
+**5. Run the application**
+```bash
+python app.py
+```
+
+The app will be available at `http://127.0.0.1:5000`.
+
+Demo data (clubs, events, users) is seeded automatically on first run.
+
+---
+
+## How to Run the Tests
+
+**Unit tests**
+```bash
+pytest tests/test_auth.py tests/test_clubs.py tests/test_admin.py
+```
+
+**Selenium tests** (requires the Flask server to be running)
+```bash
+# Terminal 1 — start the server
+python app.py
+
+# Terminal 2 — run Selenium tests
+pytest tests/test_selenium.py
+```
+
+Selenium tests require Google Chrome and ChromeDriver installed.
 
 ---
 
 ## Technologies Used
-- HTML
-- CSS (Bootstrap 5 + custom CSS)
-- JavaScript
-- Flask (backend – to be implemented)
-- SQLite (database – to be implemented)
-
----
-
-## Development Plan
-- **Checkpoint 2:** Application planning and UI design  
-- **Checkpoint 3:** Backend development and database integration  
-- **Final Phase:** Testing, refinement, and deployment  
-
----
-
-## Checkpoint 2 Planning Document
-For checkpoint planning artifacts (user stories, main pages, CSS framework decision), see:
-
-- `CHECKPOINT2_PLANNING.md`
-
----
-
-
-## Collaboration
-- GitHub is used for version control
-- Each team member contributes through commits and pull requests
-- Work is divided based on features (auth, dashboard, clubs, admin)
-
----
-
-## Notes
-This project is being developed as part of a university assignment. The backend functionality will be implemented in later phases.
+- HTML, CSS (custom + Bootstrap 5)
+- JavaScript (DOM manipulation, AJAX)
+- Flask + Jinja2 templates
+- SQLite via SQLAlchemy
+- Flask-WTF (CSRF protection)
+- pytest + Selenium (testing)

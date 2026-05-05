@@ -1,9 +1,13 @@
+import os
 from flask import Flask
 from datetime import timedelta
 from sqlalchemy import inspect, text
 from flask_wtf.csrf import CSRFProtect
+from dotenv import load_dotenv
 from models import db
 from seeds import seed_demo_data
+
+load_dotenv()
 
 from routes.auth import auth
 from routes.dashboard import dashboard_bp
@@ -12,7 +16,7 @@ from routes.admin import admin_bp
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "change_this_secret_key"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-fallback-key")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubsync.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.permanent_session_lifetime = timedelta(days=7)
