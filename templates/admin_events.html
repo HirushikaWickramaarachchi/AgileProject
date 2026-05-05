@@ -97,6 +97,7 @@
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ url_for('admin.events') }}" id="eventForm">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="eventTitle" class="form-label fw-semibold">Event Title</label>
@@ -198,6 +199,7 @@
                                 <i class="bi bi-pencil"></i>
                             </button>
                             <form method="POST" action="{{ url_for('admin.delete_event', event_id=event.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Delete {{ event.title }}?')">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -225,6 +227,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form method="POST" id="editEventForm" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Event Title</label>

@@ -160,10 +160,7 @@
                 return;
             }
 
-            event.preventDefault();
             eventForm.classList.remove("was-validated");
-            const label = eventId.value === "new" ? "Event published successfully" : "Event updates saved";
-            showToast(label);
         });
 
         refreshPreview();

@@ -88,6 +88,7 @@
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ url_for('admin.clubs') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="mb-3">
                             <label for="clubName" class="form-label fw-semibold">Club Name</label>
                             <input type="text" class="form-control" id="clubName" name="name" placeholder="e.g. Robotics Club" required>
@@ -129,6 +130,7 @@
                             <td>{{ member_count }}</td>
                             <td class="text-end">
                                 <form method="POST" action="{{ url_for('admin.delete_club', club_id=club.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <button type="submit" class="btn btn-sm btn-outline-danger"
                                             onclick="return confirm('Delete {{ club.name }}? This will also delete all its events and memberships.')">
                                         <i class="bi bi-trash"></i>

@@ -155,6 +155,7 @@
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
                                 <li>
                                     <form method="POST" action="{{ url_for('admin.remove_member', membership_id=membership.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <button type="submit" class="dropdown-item small text-danger">
                                             <i class="bi bi-person-x me-2"></i>Remove from Club
                                         </button>

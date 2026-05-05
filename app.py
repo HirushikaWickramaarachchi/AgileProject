@@ -1,6 +1,7 @@
 from flask import Flask
 from datetime import timedelta
 from sqlalchemy import inspect, text
+from flask_wtf.csrf import CSRFProtect
 from models import db
 from seeds import seed_demo_data
 
@@ -16,6 +17,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///clubsync.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.permanent_session_lifetime = timedelta(days=7)
 
+csrf = CSRFProtect(app)
 db.init_app(app)
 
 

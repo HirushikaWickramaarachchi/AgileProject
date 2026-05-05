@@ -133,6 +133,7 @@
                     <td class="text-end">
                         <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}"
                               onsubmit="return confirm('Delete {{ user.name }}? This will also remove their memberships and attendance records.');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi bi-trash me-1"></i>Delete
                             </button>
