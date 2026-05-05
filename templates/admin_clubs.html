@@ -128,13 +128,23 @@
                             <td class="d-none d-md-table-cell text-muted small">{{ club.description }}</td>
                             <td>{{ member_count }}</td>
                             <td class="text-end">
-                                <form method="POST" action="{{ url_for('admin.delete_club', club_id=club.id) }}">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('Delete {{ club.name }}? This will also delete all its events and memberships.')">
-                                        <i class="bi bi-trash"></i>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editClubModal"
+                                            data-id="{{ club.id }}"
+                                            data-name="{{ club.name }}"
+                                            data-description="{{ club.description }}">
+                                        <i class="bi bi-pencil"></i>
                                     </button>
-                                </form>
+                                    <form method="POST" action="{{ url_for('admin.delete_club', club_id=club.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="btn btn-outline-danger"
+                                                onclick="return confirm('Delete {{ club.name }}? This will also delete all its events and memberships.')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         {% else %}
@@ -151,6 +161,35 @@
     </div>
 </main>
 
+<!-- Edit Club Modal -->
+<div class="modal fade" id="editClubModal" tabindex="-1" aria-labelledby="editClubModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="editClubModalLabel">Edit Club</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" id="editClubForm" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Club Name</label>
+                        <input type="text" class="form-control" name="name" id="editClubName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description</label>
+                        <textarea class="form-control" name="description" id="editClubDescription" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
     <div id="adminActionToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -166,6 +205,14 @@
 <script>
     document.getElementById('mobileMenuToggle').addEventListener('click', () => {
         document.getElementById('mobileMenu').classList.toggle('open');
+    });
+
+    document.querySelectorAll('[data-bs-target="#editClubModal"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('editClubName').value = btn.dataset.name;
+            document.getElementById('editClubDescription').value = btn.dataset.description;
+            document.getElementById('editClubForm').action = `/admin/clubs/${btn.dataset.id}/edit`;
+        });
     });
 </script>
 </body>

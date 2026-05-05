@@ -123,20 +123,37 @@
                                 {{ user.name[:2]|upper }}
                             </div>
                             <div>
-                                <div class="fw-semibold small">{{ user.name }}</div>
+                                <div class="fw-semibold small">
+                                    {{ user.name }}
+                                    {% if user.is_admin %}
+                                    <span class="badge text-bg-warning ms-1" style="font-size:.65rem">Admin</span>
+                                    {% endif %}
+                                </div>
                                 <div class="text-muted d-md-none" style="font-size:.75rem">{{ user.email }}</div>
                             </div>
                         </div>
                     </td>
                     <td class="d-none d-md-table-cell small text-muted">{{ user.email }}</td>
                     <td class="text-end">
-                        <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}"
-                              onsubmit="return confirm('Delete {{ user.name }}? This will also remove their memberships and attendance records.');">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash me-1"></i>Delete
-                            </button>
-                        </form>
+                        <div class="btn-group btn-group-sm">
+                            {% if user.id != session.get('admin_user_id') %}
+                            <form method="POST" action="{{ url_for('admin.toggle_admin', user_id=user.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary" title="{{ 'Demote from admin' if user.is_admin else 'Promote to admin' }}">
+                                    <i class="bi bi-{{ 'shield-minus' if user.is_admin else 'shield-plus' }}"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                            {% if not user.is_admin %}
+                            <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}"
+                                  onsubmit="return confirm('Delete {{ user.name }}? This will also remove their memberships and attendance records.');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
                     </td>
                 </tr>
                 {% else %}

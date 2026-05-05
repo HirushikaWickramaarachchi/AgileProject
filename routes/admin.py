@@ -1,11 +1,12 @@
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import check_password_hash
 from models import db
 from models.user import User
 from models.club import Club
 from models.event import Event
 from models.membership import Membership
+from models.attendance import Attendance
 
 
 def _parse_event_date(date_str):
@@ -137,6 +138,24 @@ def clubs():
     return render_template("admin_clubs.html", all_clubs=all_clubs)
 
 
+@admin_bp.route("/clubs/<int:club_id>/edit", methods=["POST"])
+@admin_required
+def edit_club(club_id):
+    club = Club.query.get_or_404(club_id)
+    name = request.form.get("name", "").strip()
+    description = request.form.get("description", "").strip()
+    if not name or not description:
+        flash("Name and description are required.", "danger")
+    elif Club.query.filter(Club.name == name, Club.id != club_id).first():
+        flash("A club with that name already exists.", "danger")
+    else:
+        club.name = name
+        club.description = description
+        db.session.commit()
+        flash(f'"{club.name}" updated successfully.', "success")
+    return redirect(url_for("admin.clubs"))
+
+
 @admin_bp.route("/clubs/<int:club_id>/delete", methods=["POST"])
 @admin_required
 def delete_club(club_id):
@@ -200,6 +219,23 @@ def events():
     return render_template("admin_events.html", all_events=all_events, clubs=clubs, total_events=total_events)
 
 
+@admin_bp.route("/events/<int:event_id>/attendees")
+@admin_required
+def event_attendees(event_id):
+    event = Event.query.get_or_404(event_id)
+    attendees = (
+        db.session.query(User)
+        .join(Attendance, Attendance.user_id == User.id)
+        .filter(Attendance.event_id == event_id)
+        .order_by(User.name)
+        .all()
+    )
+    return jsonify({
+        "event": event.title,
+        "attendees": [{"name": u.name, "email": u.email} for u in attendees]
+    })
+
+
 @admin_bp.route("/events/<int:event_id>/edit", methods=["POST"])
 @admin_required
 def edit_event(event_id):
@@ -234,8 +270,22 @@ def delete_event(event_id):
 @admin_bp.route("/users")
 @admin_required
 def users():
-    all_users = User.query.filter_by(is_admin=False).order_by(User.name).all()
+    all_users = User.query.order_by(User.name).all()
     return render_template("admin_users.html", all_users=all_users)
+
+
+@admin_bp.route("/users/<int:user_id>/toggle-admin", methods=["POST"])
+@admin_required
+def toggle_admin(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.id == session.get("admin_user_id"):
+        flash("You cannot change your own admin status.", "danger")
+        return redirect(url_for("admin.users"))
+    user.is_admin = not user.is_admin
+    db.session.commit()
+    status = "promoted to admin" if user.is_admin else "demoted to regular user"
+    flash(f'"{user.name}" has been {status}.', "success")
+    return redirect(url_for("admin.users"))
 
 
 @admin_bp.route("/users/<int:user_id>/delete", methods=["POST"])

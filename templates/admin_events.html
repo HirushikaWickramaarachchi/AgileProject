@@ -187,6 +187,13 @@
                     <td>{{ event.date }}</td>
                     <td class="text-end">
                         <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary js-view-attendees"
+                                    data-event-id="{{ event.id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#attendeesModal"
+                                    title="View attendees">
+                                <i class="bi bi-people"></i>
+                            </button>
                             <button class="btn btn-outline-primary"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editEventModal"
@@ -258,6 +265,21 @@
     </div>
 </div>
 
+<!-- Attendees Modal -->
+<div class="modal fade" id="attendeesModal" tabindex="-1" aria-labelledby="attendeesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="attendeesModalLabel">Event Attendees</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="attendeesModalBody">
+                <div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
     <div id="adminActionToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -284,6 +306,38 @@
         for (let opt of clubSelect.options) {
             opt.selected = opt.value === btn.dataset.club;
         }
+    });
+
+    document.querySelectorAll('.js-view-attendees').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const eventId = btn.dataset.eventId;
+            const body = document.getElementById('attendeesModalBody');
+            body.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>';
+            fetch(`/admin/events/${eventId}/attendees`)
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('attendeesModalLabel').textContent = data.event;
+                    if (data.attendees.length === 0) {
+                        body.innerHTML = '<p class="text-muted text-center py-3">No attendees yet.</p>';
+                        return;
+                    }
+                    body.innerHTML = `
+                        <p class="text-muted small mb-3">${data.attendees.length} attendee${data.attendees.length !== 1 ? 's' : ''}</p>
+                        <ul class="list-group list-group-flush">
+                            ${data.attendees.map(a => `
+                                <li class="list-group-item d-flex align-items-center gap-2 px-0">
+                                    <div class="admin-avatar flex-shrink-0" style="width:30px;height:30px;font-size:.65rem">${a.name.slice(0,2).toUpperCase()}</div>
+                                    <div>
+                                        <div class="fw-semibold small">${a.name}</div>
+                                        <div class="text-muted" style="font-size:.75rem">${a.email}</div>
+                                    </div>
+                                </li>`).join('')}
+                        </ul>`;
+                })
+                .catch(() => {
+                    body.innerHTML = '<p class="text-danger text-center py-3">Failed to load attendees.</p>';
+                });
+        });
     });
 </script>
 </body>
