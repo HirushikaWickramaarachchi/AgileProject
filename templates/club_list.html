@@ -100,11 +100,13 @@
                             {% if session.get('user_id') %}
                                 {% if summary.is_member %}
                                     <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="next" value="{{ return_path }}">
                                         <button type="submit" class="club-card-cta">Leave Club</button>
                                     </form>
                                 {% else %}
                                     <form method="POST" action="{{ url_for('clubs.join_club', club_id=summary.club.id) }}">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="next" value="{{ return_path }}">
                                         <button type="submit" class="club-card-cta">Join Club</button>
                                     </form>
