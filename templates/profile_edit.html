@@ -168,28 +168,7 @@
                 </form>
             </section>
 
-            <!-- Notifications -->
-            <section id="notifications" class="settings-section">
-                <h2>Notifications</h2>
-                <p class="edit-subtitle">Choose how you want to receive updates.</p>
-
-                <form method="POST" action="/profile-edit" class="edit-form">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <label class="checkbox-row">
-                        <input type="checkbox" name="email_notifications">
-                        Email notifications
-                    </label>
-
-                    <label class="checkbox-row">
-                        <input type="checkbox" name="phone_notifications">
-                        Phone notifications
-                    </label>
-
-                    <div class="edit-actions">
-                        <button type="button" class="save-changes-btn">Save Changes</button>
-                    </div>
-                </form>
-            </section>
+            
 
         </main>
     </div>
