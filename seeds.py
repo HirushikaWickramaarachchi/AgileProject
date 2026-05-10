@@ -175,12 +175,27 @@ DEMO_ATTENDANCE = {
 
 
 def seed_demo_data():
+    _seed_admin()
     users_by_email = _seed_users()
     clubs_by_name = _seed_clubs()
     events_by_title = _seed_events(clubs_by_name)
     _seed_memberships(users_by_email, clubs_by_name)
     _seed_attendance(users_by_email, events_by_title)
     db.session.commit()
+
+
+def _seed_admin():
+    admin_email = "admin@clubsync.edu"
+    existing = User.query.filter_by(email=admin_email).first()
+    if not existing:
+        admin = User(
+            name="Admin",
+            email=admin_email,
+            password_hash=generate_password_hash("admin123"),
+            is_admin=True,
+        )
+        db.session.add(admin)
+        db.session.commit()
 
 
 def _seed_users():
