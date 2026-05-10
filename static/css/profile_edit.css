@@ -1,11 +1,16 @@
 /* Edit Profile Page */
 .profile-edit-layout {
-    max-width: 1100px;
-    margin: 60px auto;
-    padding: 0 24px;
+    width: 100%;
+    min-height: calc(100vh - 90px);
+
+    margin: 0;
+    padding: 34px 42px 42px;
+
     display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 48px;
+
+    grid-template-columns: 320px 1fr;
+
+    gap: 42px;
 }
 
 .profile-sidebar {
