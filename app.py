@@ -15,8 +15,6 @@ from routes.clubs import clubs_bp
 from routes.admin import admin_bp
 from routes.profile import profile_bp
 
-from routes.profile import profile_bp
-
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-fallback-key")
@@ -82,7 +80,10 @@ def ensure_profile_schema_columns():
 
 with app.app_context():
     db.create_all()
+
+    ensure_profile_schema_columns()
     ensure_schema_columns()
+
     seed_demo_data()
 
 app.register_blueprint(auth)
