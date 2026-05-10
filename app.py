@@ -80,8 +80,9 @@ def ensure_profile_schema_columns():
 
 with app.app_context():
     db.create_all()
-    ensure_schema_columns()
+
     ensure_profile_schema_columns()
+    ensure_schema_columns()
 
     seed_demo_data()
 

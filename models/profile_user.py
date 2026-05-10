@@ -1,9 +1,11 @@
 from models import db
 
+
 class ProfileUser(db.Model):
     __tablename__ = "profile_users"
 
     id = db.Column(db.Integer, primary_key=True)
+
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("users.id"),
