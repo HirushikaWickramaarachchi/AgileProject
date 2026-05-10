@@ -202,3 +202,49 @@ class TestMyClubs:
         c, _ = _logged_in_client(client, app)
         res = c.get("/myclubs")
         assert res.status_code == 200
+
+
+class TestGlobalSearch:
+    def test_search_page_loads_without_query(self, client):
+        res = client.get("/search")
+        assert res.status_code == 200
+        assert b"Start Searching" in res.data
+
+    def test_search_requires_minimum_two_characters(self, client):
+        res = client.get("/search?q=a")
+        assert res.status_code == 200
+        assert b"at least 2 characters" in res.data
+
+    def test_search_finds_clubs_and_events_case_insensitive(self, client, app):
+        with app.app_context():
+            club = Club(
+                name="Quantum Builders Club",
+                description="Build practical quantum and AI projects.",
+                category="Tech",
+            )
+            _db.session.add(club)
+            _db.session.commit()
+
+            event = Event(
+                title="Quantum Kickoff Session",
+                club_id=club.id,
+                date="2026-08-01",
+                description="Hands-on welcome event for new members.",
+            )
+            _db.session.add(event)
+            _db.session.commit()
+
+            club_id = club.id
+            event_id = event.id
+
+        res = client.get("/search?q=QUANTUM")
+        assert res.status_code == 200
+        assert b"Quantum Builders Club" in res.data
+        assert b"Quantum Kickoff Session" in res.data
+        assert f"/clubs/{club_id}".encode() in res.data
+        assert f"/events/{event_id}".encode() in res.data
+
+    def test_search_handles_no_results(self, client):
+        res = client.get("/search?q=zzzz-no-match")
+        assert res.status_code == 200
+        assert b"No Results Found" in res.data

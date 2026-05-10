@@ -20,9 +20,15 @@
         </nav>
 
         <div class="clubs-header-tools">
-            <div class="clubs-search" role="search">
-                <input type="text" aria-label="Search clubs" placeholder="Search clubs, topics, or interests">
-            </div>
+            <form class="clubs-search" role="search" method="GET" action="{{ url_for('clubs.search') }}">
+                <input
+                    type="search"
+                    name="q"
+                    aria-label="Search clubs and events"
+                    placeholder="Search clubs, events, or topics"
+                    minlength="2"
+                >
+            </form>
             <span class="clubs-location">UWA Campus</span>
         </div>
     </div>
