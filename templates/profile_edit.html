@@ -84,6 +84,7 @@
 
                 </div>
                 <form method="POST" action="/profile-edit" class="edit-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <label>Name</label>
                     <input type="text" name="name" value="{{ user.name }}" required>
 
@@ -107,6 +108,7 @@
                 <p class="edit-subtitle">Manage your personal details.</p>
 
                 <form method="POST" action="/profile-edit" class="edit-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <label>Gender</label>
                     <select name="gender">
                         <option value="">Not specified</option>
@@ -139,6 +141,7 @@
                 <p class="edit-subtitle">Change your account password.</p>
 
                 <form method="POST" class="edit-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <label>Current Password</label>
                     <input type="password" name="current_password">
 
@@ -160,6 +163,7 @@
                 <p class="edit-subtitle">Choose how you want to receive updates.</p>
 
                 <form method="POST" action="/profile-edit" class="edit-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <label class="checkbox-row">
                         <input type="checkbox" name="email_notifications">
                         Email notifications
