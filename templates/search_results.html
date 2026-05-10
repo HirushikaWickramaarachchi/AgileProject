@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSync | Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search_results.css') }}">
+</head>
+<body class="clubs-page">
+<header class="clubs-header">
+    <div class="clubs-header-inner">
+        <a class="clubs-brand" href="{{ url_for('dashboard.index') }}">ClubSync</a>
+
+        <nav class="clubs-nav" aria-label="Primary">
+            <a href="{{ url_for('clubs.clubs') }}" class="active" aria-current="page">Clubs</a>
+            <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
+            <a href="/admin" class="nav-admin-link">Admin</a>
+        </nav>
+
+        <div class="clubs-header-tools">
+            <form class="clubs-search" role="search" method="GET" action="{{ url_for('clubs.search') }}">
+                <input
+                    type="search"
+                    name="q"
+                    aria-label="Search clubs and events"
+                    placeholder="Search clubs, events, or topics"
+                    minlength="{{ search_min_chars }}"
+                    value="{{ query }}"
+                >
+            </form>
+            <span class="clubs-location">UWA Campus</span>
+        </div>
+    </div>
+</header>
+
+<main class="search-main">
+    <section class="search-hero">
+        <p class="clubs-kicker">Global Search</p>
+        <h1>Search Clubs and Events</h1>
+        <p>Use at least {{ search_min_chars }} characters to search across clubs and events.</p>
+    </section>
+
+    {% if validation_error %}
+        <section class="search-state search-state--warning" role="status">
+            <h2>Search Input Too Short</h2>
+            <p>{{ validation_error }}</p>
+        </section>
+    {% elif not query %}
+        <section class="search-state">
+            <h2>Start Searching</h2>
+            <p>Enter a keyword in the search bar above to find matching clubs and events.</p>
+        </section>
+    {% elif total_results == 0 %}
+        <section class="search-state">
+            <h2>No Results Found</h2>
+            <p>No clubs or events matched "{{ query }}". Try a different keyword.</p>
+        </section>
+    {% else %}
+        <section class="search-summary">
+            <h2>{{ total_results }} result{% if total_results != 1 %}s{% endif %} for "{{ query }}"</h2>
+        </section>
+
+        <section class="search-results" aria-label="Search results">
+            {% for result in results %}
+                <article class="search-result-card">
+                    <p class="search-result-type">{{ result.type }}</p>
+                    <h3>
+                        <a href="{{ result.url }}">{{ result.title }}</a>
+                    </h3>
+                    <p class="search-result-meta">{{ result.meta }}</p>
+                    <p class="search-result-description">{{ result.description }}</p>
+                </article>
+            {% endfor %}
+        </section>
+    {% endif %}
+</main>
+
+<footer class="clubs-footer">
+    <p>ClubSync | University Student Clubs Platform</p>
+</footer>
+</body>
+</html>

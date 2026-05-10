@@ -4,6 +4,7 @@ from models import Attendance, Club, Event, Membership, User, db
 
 clubs_bp = Blueprint("clubs", __name__)
 CLUB_CATEGORIES = ["All", "Tech", "Arts", "Culture", "Academic", "Leadership"]
+SEARCH_MIN_CHARS = 2
 
 
 def _get_current_user():
@@ -55,6 +56,87 @@ def _redirect_to_safe_next_or(default_endpoint, **default_values):
         return redirect(next_path)
 
     return redirect(url_for(default_endpoint, **default_values))
+
+
+def _search_snippet(text, max_length=140):
+    if not text:
+        return ""
+    compact_text = " ".join(text.split())
+    if len(compact_text) <= max_length:
+        return compact_text
+    return compact_text[: max_length - 1].rstrip() + "…"
+
+
+@clubs_bp.route("/search")
+def search():
+    raw_query = request.args.get("q", "", type=str)
+    query = " ".join(raw_query.strip().split())
+
+    validation_error = None
+    results = []
+
+    if query and len(query) < SEARCH_MIN_CHARS:
+        validation_error = f"Please enter at least {SEARCH_MIN_CHARS} characters to search."
+    elif query:
+        like_query = f"%{query}%"
+
+        matched_clubs = (
+            Club.query.filter(
+                db.or_(
+                    Club.name.ilike(like_query),
+                    Club.description.ilike(like_query),
+                )
+            )
+            .order_by(Club.name.asc())
+            .all()
+        )
+
+        matched_events = (
+            Event.query.join(Club, Event.club_id == Club.id)
+            .filter(
+                db.or_(
+                    Event.title.ilike(like_query),
+                    Event.description.ilike(like_query),
+                    Club.name.ilike(like_query),
+                )
+            )
+            .order_by(Event.id.asc())
+            .all()
+        )
+
+        for club in matched_clubs:
+            results.append(
+                {
+                    "type": "Club",
+                    "title": club.name,
+                    "description": _search_snippet(club.description),
+                    "url": url_for("clubs.club_details", club_id=club.id),
+                    "meta": club.category if club.category else "Student Club",
+                }
+            )
+
+        for event in matched_events:
+            host_club = event.club.name if event.club else "Club Event"
+            results.append(
+                {
+                    "type": "Event",
+                    "title": event.title,
+                    "description": _search_snippet(
+                        event.description if event.description else "No event description available."
+                    ),
+                    "url": url_for("clubs.event_details", event_id=event.id),
+                    "meta": f"{host_club} | {event.date}",
+                }
+            )
+
+    return render_template(
+        "search_results.html",
+        query=query,
+        search_min_chars=SEARCH_MIN_CHARS,
+        validation_error=validation_error,
+        results=results,
+        total_results=len(results),
+    )
 
 
 @clubs_bp.route("/clubs")

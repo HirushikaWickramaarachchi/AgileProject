@@ -19,9 +19,15 @@
 
       <!-- RIGHT SIDE -->
       <div class="clubs-header-tools">
-        <div class="clubs-search">
-          <input type="text" placeholder="Search clubs, topics, or interests" />
-        </div>
+        <form class="clubs-search" role="search" method="GET" action="{{ url_for('clubs.search') }}">
+          <input
+            type="search"
+            name="q"
+            aria-label="Search clubs and events"
+            placeholder="Search clubs, events, or topics"
+            minlength="2"
+          />
+        </form>
         <nav class="clubs-nav">
           {% if session.get('user_id') %}
           <a href="{{ url_for('dashboard.profile') }}">My Profile</a>
