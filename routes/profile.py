@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+import os
 
 from models import db
 from models.user import User
@@ -51,6 +53,30 @@ def profile_edit():
         db.session.add(profile_data)
 
     if request.method == "POST":
+
+        avatar = request.files.get("avatar")
+
+        if avatar and avatar.filename:
+
+            filename = secure_filename(avatar.filename)
+
+            upload_folder = os.path.join(
+                "static",
+                "uploads"
+            )
+
+            os.makedirs(upload_folder, exist_ok=True)
+
+            avatar_path = os.path.join(
+                upload_folder,
+                filename
+            )
+
+            avatar.save(avatar_path)
+
+            profile_data.avatar = filename
+
+
 
         # Account Management: change password
         if request.form.get("current_password"):
