@@ -40,6 +40,12 @@
     {% if club %}
         <section class="club-hero-card">
             <div class="club-hero-visual">
+                <img
+                    class="club-hero-image"
+                    src="{{ url_for('static', filename=club.image_path if club.image_path else 'images/clubs/default.png') }}"
+                    alt="{{ club.name }} image"
+                    loading="lazy"
+                >
                 <span>{{ club.name }}</span>
             </div>
             <div class="club-hero-content">

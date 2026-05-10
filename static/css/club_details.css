@@ -16,6 +16,8 @@
 }
 
 .club-hero-visual {
+    position: relative;
+    overflow: hidden;
     background:
         linear-gradient(140deg, rgba(115, 165, 202, 0.95), rgba(24, 71, 102, 0.92)),
         radial-gradient(circle at 24% 22%, rgba(255, 255, 255, 0.22), transparent 40%);
@@ -25,7 +27,25 @@
     align-items: flex-start;
 }
 
+.club-hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.club-hero-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(150deg, rgba(24, 71, 102, 0.45), rgba(24, 71, 102, 0.15));
+    z-index: 1;
+}
+
 .club-hero-visual span {
+    position: relative;
+    z-index: 2;
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;

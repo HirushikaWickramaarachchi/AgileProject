@@ -66,6 +66,24 @@ class TestClubDetails:
         res = client.get(f"/clubs/{sample_club}")
         assert title.encode() in res.data
 
+    def test_club_details_shows_club_image_when_present(self, client, app):
+        with app.app_context():
+            club = Club(
+                name="Image Club",
+                description="Club with custom image",
+                image_path="images/clubs/ai-society.png",
+            )
+            _db.session.add(club)
+            _db.session.commit()
+            club_id = club.id
+
+        res = client.get(f"/clubs/{club_id}")
+        assert b"images/clubs/ai-society.png" in res.data
+
+    def test_club_details_uses_default_image_when_missing(self, client, sample_club):
+        res = client.get(f"/clubs/{sample_club}")
+        assert b"images/clubs/default.png" in res.data
+
 
 class TestJoinClub:
     def test_join_requires_login(self, client, sample_club):
