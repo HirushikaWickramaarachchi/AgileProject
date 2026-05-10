@@ -64,6 +64,7 @@
                             <div class="my-club-actions">
                                 <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-btn">View Club</a>
                                 <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <input type="hidden" name="next" value="{{ request.path }}">
                                     <button type="submit" class="my-club-btn my-club-btn--danger">Leave Club</button>
                                 </form>
@@ -94,6 +95,7 @@
                                         <div class="my-club-event-actions">
                                             <a href="{{ url_for('clubs.event_details', event_id=attended_event.id) }}" class="my-club-btn">View Event</a>
                                             <form method="POST" action="{{ url_for('clubs.unattend_event', event_id=attended_event.id) }}">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                                 <input type="hidden" name="next" value="{{ request.path }}">
                                                 <button type="submit" class="my-club-btn my-club-btn--danger">Cancel Attendance</button>
                                             </form>
