@@ -1,108 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - ClubSync</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
+
 <body class="clubs-page">
-<header class="clubs-header">
-    <div class="clubs-header-inner">
 
-        <div class="left-nav">
-            <a class="clubs-brand" href="/">ClubSync</a>
+    <header class="clubs-header">
+        <div class="clubs-header-inner">
 
-            <nav class="clubs-nav">
-                <a href="/clubs">Clubs</a>
-                <a href="/myclubs">My Clubs</a>
-            </nav>
-        </div>
+            <div class="left-nav">
+                <a class="clubs-brand" href="/">ClubSync</a>
 
-        <div class="clubs-header-tools">
-            <div class="clubs-search">
-                <input type="text" placeholder="Search your clubs and events">
+                <nav class="clubs-nav">
+                    <a href="/clubs">Clubs</a>
+                    <a href="/myclubs" class="active">My Clubs</a>
+                </nav>
             </div>
 
-            <span class="clubs-location">UWA Campus</span>
-        </div>
-
-    </div>
-</header>
-<div class="profile-hero">
-    <span class="clubs-kicker">PROFILE</span>
-    <p>View your contact details, joined clubs, and attendance history.</p>
-</div>
-
-<div class="profile-page">
-
-    <aside class="profile-card">
-        <div class="profile-avatar">{{ user.name[0]|upper }}</div>
-
-        <h2>{{ user.name }}</h2>
-        
-        <p>✉️ {{ user.email }}</p>
-        
-        <p>📞 {{ user.phone if user.phone else 'No phone added' }}</p>
-        
-        <p>📍 {{ user.location if user.location else 'UWA' }}</p>
-        <div class="profile-item">
-            <span class="profile-icon">
-                {% if user.gender == 'Female' %}
-                🌸
-                {% elif user.gender == 'Male' %}
-                🧑
-                {% else %}
-                👤
-                {% endif %}
-            </span>
-        
-            <span class="profile-value">
-                {{ user.gender if user.gender else 'Not specified' }}
-            </span>
-        </div>
-
-<a href="{{ url_for('dashboard.edit_profile') }}" class="edit-link" target="_blank" rel="noopener">
-    Edit profile
-</a>
-
-        <div class="profile-stats">
-            <div>
-                <strong>{{ user.memberships|length }}</strong>
-                <span>Clubs</span>
-            </div>
-        </div>
-    </aside>
-
-    <main class="profile-right">
-
-        <section class="profile-block">
-            <h2>My Clubs</h2>
-
-            <div class="profile-clubs-card">
-                {% if user.memberships|length == 0 %}
-                <p class="no-clubs-text">You have not joined any clubs yet.</p>
-                {% else %}
-                <div class="clubs-list">
-                    {% for membership in user.memberships %}
-                    <span class="club-chip">
-                        {{ membership.club.name }}
-                    </span>
-                    {% endfor %}
+            <div class="clubs-header-tools">
+                <div class="clubs-search">
+                    <input type="text" placeholder="Search your clubs and events">
                 </div>
-                {% endif %}
+
+                <span class="clubs-location">UWA Campus</span>
             </div>
-        </section>
 
-        <section class="profile-block attendance-block">
-            <h2>Attendance History</h2>
+        </div>
+    </header>
 
-            <div class="history-box">
+    <div class="profile-page">
+
+        <!-- Left Sidebar -->
+        <aside class="profile-card">
+
+            <div class="profile-avatar">
+            
+                {% if profile and profile.avatar %}
+                <img src="{{ url_for('static', filename='uploads/' + profile.avatar) }}">
+                {% else %}
+                {{ user.name[0]|upper }}
+                {% endif %}
+            
+            </div>
+
+            <h2>{{ user.name }}</h2>
+            <div class="profile-role">Member</div>
+
+            <div class="profile-divider"></div>
+
+            <div class="profile-list">
+
+                <div class="profile-row">
+                    <span class="profile-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.18 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.77.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.28a2 2 0 0 1 2.11-.45c.84.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span class="profile-label">Phone</span>
+                    <span class="profile-value">
+                        {{ profile.phone if profile and profile.phone else 'No phone added' }}
+                    </span>
+                </div>
+
+                <div class="profile-row">
+                    <span class="profile-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 10v6M2 10v6"></path>
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"></path>
+                        </svg>
+                    </span>
+                    <span class="profile-label">Major</span>
+                    <span class="profile-value">
+                        {{ profile.major if profile and profile.major else 'UWA' }}
+                    </span>
+                </div>
+
+                <div class="profile-row">
+                    <span class="profile-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 21a8 8 0 0 0-16 0"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="profile-label">Gender</span>
+                    <span class="profile-value">
+                        {{ profile.gender if profile and profile.gender else 'Not specified' }}
+                    </span>
+                </div>
+
+                <div class="profile-row">
+                    <span class="profile-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="8" y1="13" x2="16" y2="13"></line>
+                            <line x1="8" y1="17" x2="14" y2="17"></line>
+                        </svg>
+                    </span>
+                    <span class="profile-label">Note</span>
+                    <span class="profile-value">
+                        {{ profile.bio if profile and profile.bio else 'No bio added' }}
+                    </span>
+                </div>
+
+            </div>
+            <a href="{{ url_for('profile.profile_edit') }}" class="edit-link">
+                ✎ Edit Profile
+            </a>
+
+
+        </aside>
+
+        <!-- Right Content -->
+        <main class="profile-right">
+
+            <section class="stats-row">
+
+                <!-- Joined Clubs -->
+                <a href="/myclubs" class="stat stat-link">
+
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+
+                    <div class="stat-title">
+                        Joined Clubs
+                    </div>
+
+                    <div class="stat-value">
+                        {{ user.memberships|length }}
+                    </div>
+
+                </a>
+
+                <!-- Upcoming Events -->
+                <a href="{{ url_for('clubs.myclubs') }}" class="stat stat-link">
+
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+
+                    <div class="stat-title">
+                        Upcoming Events
+                    </div>
+
+                    <div class="stat-value">
+                        {{ user.attendances|length }}
+                    </div>
+
+                </a>
+                <!-- Attendance -->
+                <div class="stat">
+
+                    <div class="stat-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </div>
+
+                    <div class="stat-title">
+                        Attendance Rate
+                    </div>
+                    
+                    <div class="stat-value">
+                        {% if user.memberships|length > 0 %}
+                        {{ ((user.attendances|length / user.memberships|length) * 100)|round(0, 'floor')|int }}%
+                        {% else %}
+                        0%
+                        {% endif %}
+                    </div>
+
+                </div>
+
+            <!-- New Events -->
+            <a href="/myclubs" class="stat stat-link">
+
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                        <path d="M10.3 21a2 2 0 0 0 3.4 0"></path>
+                    </svg>
+                </div>
+
+                <div class="stat-title">
+                    New Events
+                </div>
+
+                <div class="stat-value">
+                    {% set ns = namespace(total=0) %}
+                    {% for membership in user.memberships %}
+                    {% set ns.total = ns.total + membership.club.events|length %}
+                    {% endfor %}
+                    {{ ns.total }}
+                </div>
+
+            </a>
+
+            </section>
+            <section class="profile-block">
+                <h2>My Clubs</h2>
+                <div class="title-divider"></div>
 
                 {% if user.memberships|length == 0 %}
-                <!-- ❌ did not join any clubs -->
                 <div class="empty-state">
                     <h3>Looks like you’re not in any clubs yet</h3>
                     <p>Explore clubs that match your interests and join the fun!</p>
@@ -111,43 +231,81 @@
                         Browse Clubs
                     </a>
                 </div>
-
                 {% else %}
-                <!-- ✅ joined clubs -->
-                <table class="attendance-table">
-                    <thead>
-                        <tr>
-                            <th>Club Name</th>
-                            <th>Joined Time</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        {% for membership in user.memberships %}
-                        <tr>
-                            <td>{{ membership.club.name }}</td>
+                <div class="clubs-list">
+                    {% for membership in user.memberships %}
+                    <a href="{{ url_for('clubs.club_details', club_id=membership.club.id) }}" class="profile-club-card">
+                
+                        <div class="profile-club-icon">
+                            {% if 'AI' in membership.club.name %}
+                            <span>✿</span>
+                            {% elif 'Cultural' in membership.club.name %}
+                            <span>🌐</span>
+                            {% else %}
+                            <span>✦</span>
+                            {% endif %}
+                        </div>
+                
+                        <div class="profile-club-info">
+                            <h3>{{ membership.club.name }}</h3>
+                
+                            <p>
+                                {{ membership.club.tagline if membership.club.tagline else 'View club details and activities.' }}
+                            </p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
 
-                            <!-- if no joined time available -->
-                            <td>N/A</td>
-
-                            <td>
-                                <span class="status present">Joined</span>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
                 {% endif %}
+            </section>
 
-            </div>
-        </section>
-</main>
+            <section class="profile-block attendance-block">
+                <h2>Attendance History</h2>
 
+                <div class="history-box">
 
-</div>
-<footer class="clubs-footer">
-    ClubSync | University Student Clubs Platform
-</footer>
+                    {% if user.memberships|length == 0 %}
+
+                    <div class="empty-state">
+                        <h3>No attendance history yet</h3>
+                        <p>Your joined clubs will appear here after you join a club.</p>
+                    </div>
+
+                    {% else %}
+
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Club Name</th>
+                                <th>Joined Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for membership in user.memberships %}
+                            <tr>
+                                <td>{{ membership.club.name }}</td>
+                                <td>N/A</td>
+                                <td>
+                                    <span class="status present">Joined</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {% endif %}
+
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
 </body>
+
 </html>

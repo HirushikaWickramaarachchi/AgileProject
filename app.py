@@ -15,6 +15,8 @@ from routes.clubs import clubs_bp
 from routes.admin import admin_bp
 from routes.profile import profile_bp
 
+from routes.profile import profile_bp
+
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-fallback-key")
@@ -43,6 +45,32 @@ def ensure_schema_columns():
         existing = {col["name"] for col in inspector.get_columns("users")}
         if "is_admin" not in existing:
             statements.append("ALTER TABLE users ADD COLUMN is_admin BOOLEAN NOT NULL DEFAULT 0")
+
+    if not statements:
+        return
+
+    with db.engine.begin() as connection:
+        for statement in statements:
+            connection.execute(text(statement))
+
+def ensure_profile_schema_columns():
+
+    inspector = inspect(db.engine)
+
+    if "profile_users" not in inspector.get_table_names():
+        return
+
+    existing_columns = {
+        column["name"]
+        for column in inspector.get_columns("profile_users")
+    }
+
+    statements = []
+
+    if "avatar" not in existing_columns:
+        statements.append(
+            "ALTER TABLE profile_users ADD COLUMN avatar VARCHAR(255)"
+        )
 
     if not statements:
         return
