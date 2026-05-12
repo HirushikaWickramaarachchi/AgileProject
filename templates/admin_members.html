@@ -165,19 +165,13 @@
                     <td><span class="badge text-bg-secondary">Member</span></td>
                     <td><span class="badge text-bg-success">Active</span></td>
                     <td class="text-end">
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Manage</button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="border-radius:10px">
-                                <li>
-                                    <form method="POST" action="{{ url_for('admin.remove_member', membership_id=membership.id) }}">
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                        <button type="submit" class="dropdown-item small text-danger">
-                                            <i class="bi bi-person-x me-2"></i>Remove from Club
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                        <form method="POST" action="{{ url_for('admin.remove_member', membership_id=membership.id) }}"
+                              onsubmit="return confirm('Remove {{ user.name }} from {{ club.name }}?')">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-person-x me-1"></i>Remove
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 {% else %}

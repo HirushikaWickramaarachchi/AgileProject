@@ -102,7 +102,7 @@
                     <span><i class="bi bi-plus-circle me-2 text-primary"></i>Add New Club</span>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ url_for('admin.clubs') }}">
+                    <form method="POST" action="{{ url_for('admin.clubs') }}" enctype="multipart/form-data">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="mb-3">
                             <label for="clubName" class="form-label fw-semibold">Club Name</label>
@@ -111,6 +111,10 @@
                         <div class="mb-3">
                             <label for="clubDescription" class="form-label fw-semibold">Description</label>
                             <textarea class="form-control" id="clubDescription" name="description" rows="3" placeholder="What is this club about?" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clubImage" class="form-label fw-semibold">Club Image <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="file" class="form-control" id="clubImage" name="image" accept="image/*">
                         </div>
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="bi bi-plus-circle me-1"></i>Create Club
@@ -150,7 +154,8 @@
                                             data-bs-target="#editClubModal"
                                             data-id="{{ club.id }}"
                                             data-name="{{ club.name }}"
-                                            data-description="{{ club.description }}">
+                                            data-description="{{ club.description }}"
+                                            data-image="{{ club.image_path or '' }}">
                                         <i class="bi bi-pencil"></i>
                                     </button>
                                     <form method="POST" action="{{ url_for('admin.delete_club', club_id=club.id) }}">
@@ -185,7 +190,7 @@
                 <h5 class="modal-title fw-bold" id="editClubModalLabel">Edit Club</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" id="editClubForm" action="">
+            <form method="POST" id="editClubForm" action="" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="modal-body">
                     <div class="mb-3">
@@ -195,6 +200,15 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Description</label>
                         <textarea class="form-control" name="description" id="editClubDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Club Image</label>
+                        <div id="editClubCurrentImage" class="mb-2 d-none">
+                            <img id="editClubImagePreview" src="" alt="Current image" class="rounded" style="height:60px;object-fit:cover;">
+                            <span class="text-muted small ms-2">Current image</span>
+                        </div>
+                        <input type="file" class="form-control" name="image" id="editClubImage" accept="image/*">
+                        <div class="form-text">Leave blank to keep the current image.</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -228,6 +242,15 @@
             document.getElementById('editClubName').value = btn.dataset.name;
             document.getElementById('editClubDescription').value = btn.dataset.description;
             document.getElementById('editClubForm').action = `/admin/clubs/${btn.dataset.id}/edit`;
+            document.getElementById('editClubImage').value = '';
+            const imgContainer = document.getElementById('editClubCurrentImage');
+            const imgEl = document.getElementById('editClubImagePreview');
+            if (btn.dataset.image) {
+                imgEl.src = `/static/${btn.dataset.image}`;
+                imgContainer.classList.remove('d-none');
+            } else {
+                imgContainer.classList.add('d-none');
+            }
         });
     });
 </script>

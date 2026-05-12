@@ -1,6 +1,9 @@
+import os
+import uuid
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 from models import db
 from models.user import User
 from models.club import Club
@@ -112,6 +115,19 @@ def dashboard():
     )
 
 
+def _save_club_image(file):
+    if not file or file.filename == "":
+        return None
+    ext = os.path.splitext(secure_filename(file.filename))[1].lower()
+    if ext not in {".png", ".jpg", ".jpeg", ".gif", ".webp"}:
+        return None
+    filename = f"clubs/{uuid.uuid4().hex}{ext}"
+    save_path = os.path.join(current_app.root_path, "static", "images", filename)
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    file.save(save_path)
+    return f"images/{filename}"
+
+
 @admin_bp.route("/clubs", methods=["GET", "POST"])
 @admin_required
 def clubs():
@@ -123,7 +139,8 @@ def clubs():
         elif Club.query.filter_by(name=name).first():
             flash("A club with that name already exists.", "danger")
         else:
-            db.session.add(Club(name=name, description=description))
+            image_path = _save_club_image(request.files.get("image"))
+            db.session.add(Club(name=name, description=description, image_path=image_path))
             db.session.commit()
             flash("Club created successfully.", "success")
         return redirect(url_for("admin.clubs"))
@@ -151,6 +168,9 @@ def edit_club(club_id):
     else:
         club.name = name
         club.description = description
+        new_image = _save_club_image(request.files.get("image"))
+        if new_image:
+            club.image_path = new_image
         db.session.commit()
         flash(f'"{club.name}" updated successfully.', "success")
     return redirect(url_for("admin.clubs"))
