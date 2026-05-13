@@ -17,18 +17,11 @@
       <p>Join clubs, attend events, and stay connected with your community</p>
 
       <div class="hero-buttons">
-        <button class="btn-primary" onclick="location.href='{{ url_for("clubs.clubs") }}'">
-          Join Now
-        </button>
-
         <button
-          class="btn-secondary"
-          onclick="
-            this.classList.add('clicked-btn');
-            location.href = '{{ url_for("clubs.events") }}';
-          "
+          class="btn-primary small-btn"
+          onclick="location.href='{{ url_for("clubs.clubs") }}'"
         >
-          Explore Events
+          Join Now
         </button>
       </div>
     </div>
