@@ -7,37 +7,12 @@
     <title>Edit Profile - ClubSync</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_edit.css') }}">
 </head>
 
 <body class="clubs-page">
-
-    <header class="clubs-header">
-        <div class="clubs-header-inner">
-            <div class="left-nav">
-                <a class="clubs-brand" href="/">ClubSync</a>
-
-                <nav class="clubs-nav">
-                    <a href="/clubs">Clubs</a>
-                    <a href="/myclubs">My Clubs</a>
-                </nav>
-            </div>
-
-            <div class="clubs-header-tools">
-                <form class="clubs-search" role="search" method="GET" action="{{ url_for('clubs.search') }}">
-                    <input
-                        type="search"
-                        name="q"
-                        aria-label="Search clubs and events"
-                        placeholder="Search clubs, events, or topics"
-                        minlength="2"
-                    >
-                </form>
-                <span class="clubs-location">UWA Campus</span>
-            </div>
-        </div>
-    </header>
+    {% set active_page = 'profile_edit' %}
+    {% include "_site_header.html" %}
 
 
     <div class="profile-edit-layout">
