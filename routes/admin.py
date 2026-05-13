@@ -59,7 +59,7 @@ def login():
             session["admin_name"] = user.name
             return redirect(url_for("admin.dashboard"))
 
-        flash("Invalid email or password.")
+        flash("Invalid email or password.", "danger")
 
     return render_template("admin_login.html")
 

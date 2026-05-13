@@ -120,27 +120,3 @@ button {
   font-size: 20px;
   line-height: 1.6;
 }
-
-.flash-message {
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  font-size: 14px;
-  text-align: center;
-  font-weight: 600;
-}
-
-.flash-message.danger {
-  background: #ffe5e5;
-  color: #c62828;
-}
-
-.flash-message.success {
-  background: #e6f7e6;
-  color: #2e7d32;
-}
-
-.flash-message.info {
-  background: #e8f1ff;
-  color: #1565c0;
-}

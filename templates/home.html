@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClubSync</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
 </head>
 <body class="clubs-page">
   {% set active_page = 'home' %}
   {% include "_site_header.html" %}
+  {% include "_flash_messages.html" %}
 
   <section class="hero">
     <div class="hero-content">

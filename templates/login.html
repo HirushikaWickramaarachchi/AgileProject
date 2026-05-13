@@ -9,20 +9,18 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/login.css') }}"
     />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}" />
   </head>
 
   <body>
+    {% include "_flash_messages.html" %}
+
     <div class="login-page">
       <!-- LEFT SIDE -->
       <div class="login-left">
         <div class="login-card">
           <h2>Welcome Back</h2>
           <p class="subtitle">Please login to your account</p>
-
-          {% with messages = get_flashed_messages(with_categories=true) %} {% if
-          messages %} {% for category, message in messages %}
-          <div class="flash-message {{ category }}">{{ message }}</div>
-          {% endfor %} {% endif %} {% endwith %}
 
           <form method="POST" action="{{ url_for('auth.login') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
