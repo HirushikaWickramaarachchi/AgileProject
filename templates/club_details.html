@@ -9,30 +9,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/club_details.css') }}">
 </head>
 <body class="clubs-page club-details-page">
-<header class="clubs-header">
-    <div class="clubs-header-inner">
-        <a class="clubs-brand" href="{{ url_for('dashboard.index') }}">ClubSync</a>
-
-        <nav class="clubs-nav" aria-label="Primary">
-            <a href="{{ url_for('clubs.clubs') }}" class="active" aria-current="page">Clubs</a>
-            <a href="{{ url_for('clubs.myclubs') }}">My Clubs</a>
-            <a href="/admin" class="nav-admin-link">Admin</a>
-        </nav>
-
-        <div class="clubs-header-tools">
-            <form class="clubs-search" role="search" method="GET" action="{{ url_for('clubs.search') }}">
-                <input
-                    type="search"
-                    name="q"
-                    aria-label="Search clubs and events"
-                    placeholder="Search clubs, events, or topics"
-                    minlength="2"
-                >
-            </form>
-            <span class="clubs-location">UWA Campus</span>
-        </div>
-    </div>
-</header>
+{% set active_page = 'club_details' %}
+{% include "_site_header.html" %}
 
 <main class="club-details-main">
     {% include "_flash_messages.html" %}

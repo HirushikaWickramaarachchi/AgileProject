@@ -1,10 +1,10 @@
 import os
-from flask import Flask
+from flask import Flask, session
 from datetime import timedelta
 from sqlalchemy import inspect, text
 from flask_wtf.csrf import CSRFProtect
 from dotenv import load_dotenv
-from models import db
+from models import db, User
 from seeds import seed_demo_data
 
 load_dotenv()
@@ -24,6 +24,22 @@ app.permanent_session_lifetime = timedelta(days=7)
 
 csrf = CSRFProtect(app)
 db.init_app(app)
+
+
+@app.context_processor
+def inject_navbar_access():
+    user_id = session.get("user_id")
+    user_is_admin = False
+
+    if user_id:
+        user = db.session.get(User, user_id)
+        user_is_admin = bool(user and user.is_admin)
+
+    return {
+        "navbar_can_access_admin": bool(
+            session.get("admin_logged_in") or user_is_admin
+        )
+    }
 
 
 def ensure_schema_columns():
