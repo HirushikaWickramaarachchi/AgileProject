@@ -71,14 +71,14 @@ class TestClubDetails:
             club = Club(
                 name="Image Club",
                 description="Club with custom image",
-                image_path="images/clubs/ai-society.png",
+                image_path="images/clubs/ai-society.jpg",
             )
             _db.session.add(club)
             _db.session.commit()
             club_id = club.id
 
         res = client.get(f"/clubs/{club_id}")
-        assert b"images/clubs/ai-society.png" in res.data
+        assert b"images/clubs/ai-society.jpg" in res.data
 
     def test_club_details_uses_default_image_when_missing(self, client, sample_club):
         res = client.get(f"/clubs/{sample_club}")

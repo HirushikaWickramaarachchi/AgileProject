@@ -11,7 +11,7 @@
     overflow: hidden;
     box-shadow: 0 10px 24px rgba(18, 49, 70, 0.08);
     display: grid;
-    grid-template-columns: minmax(250px, 340px) 1fr;
+    grid-template-columns: minmax(340px, 56%) 1fr;
     margin-bottom: 24px;
 }
 
@@ -21,7 +21,8 @@
     background:
         linear-gradient(140deg, rgba(115, 165, 202, 0.95), rgba(24, 71, 102, 0.92)),
         radial-gradient(circle at 24% 22%, rgba(255, 255, 255, 0.22), transparent 40%);
-    min-height: 250px;
+    aspect-ratio: 16 / 9;
+    min-height: 300px;
     padding: 18px;
     display: flex;
     align-items: flex-start;
@@ -33,19 +34,12 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.club-hero-visual::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(150deg, rgba(24, 71, 102, 0.45), rgba(24, 71, 102, 0.15));
-    z-index: 1;
+    object-position: center;
 }
 
 .club-hero-visual span {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     display: inline-block;
     font-size: 0.75rem;
     font-weight: 700;
@@ -53,6 +47,7 @@
     letter-spacing: 0.08em;
     color: #143a54;
     background: rgba(254, 253, 223, 0.95);
+    box-shadow: 0 4px 12px rgba(18, 49, 70, 0.14);
     border-radius: 999px;
     padding: 7px 12px;
 }
@@ -362,7 +357,7 @@
     }
 
     .club-hero-visual {
-        min-height: 150px;
+        min-height: 0;
     }
 
     .club-details-layout {
