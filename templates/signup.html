@@ -9,12 +9,9 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/signup.css') }}"
     />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}" />
   </head>
 
   <body>
-    {% include "_flash_messages.html" %}
-
     <div class="signup-page">
       <!-- LEFT SIDE FORM -->
       <div class="signup-left">
@@ -22,8 +19,14 @@
           <h2>Create Account</h2>
           <p class="subtitle">Join ClubSync and get started</p>
 
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if
+          messages %} {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %} {% endif %} {% endwith %}
+
           <form method="POST" action="{{ url_for('auth.register') }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
             <label>Full Name</label>
             <input
               type="text"
