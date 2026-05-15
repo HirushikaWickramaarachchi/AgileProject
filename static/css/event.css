@@ -21,7 +21,9 @@
 }
 
 .event-hero-type {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: var(--clubs-label-size);
     font-weight: 700;
     text-transform: uppercase;
@@ -54,6 +56,9 @@
 
 .event-hero-meta span,
 .event-hero-meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: var(--clubs-small-size);
     font-weight: 600;
     color: var(--clubs-chip-color);
@@ -87,6 +92,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     text-decoration: none;
     text-align: center;
     border-radius: var(--clubs-action-radius);
@@ -178,6 +184,10 @@
 }
 
 .event-agenda-time {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
     font-size: var(--clubs-small-size);
     font-weight: 700;
     color: #17415c;
@@ -226,6 +236,9 @@
 }
 
 .event-attendees-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-bottom: 10px;
     color: var(--clubs-chip-color);
     font-weight: 600;
@@ -296,6 +309,9 @@
 }
 
 .event-side-card li {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
     color: var(--clubs-text-color);
     font-size: var(--clubs-body-size);
     line-height: 1.5;
@@ -306,6 +322,9 @@
 }
 
 .event-inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     color: #1d445d;
     font-weight: 700;
     text-decoration: none;
@@ -362,6 +381,9 @@
 }
 
 .event-related-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--clubs-muted-color);
     font-size: var(--clubs-small-size);
     font-weight: 700;
@@ -382,6 +404,9 @@
 }
 
 .event-related-card a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     text-decoration: none;
     color: #1d445d;
     font-weight: 700;

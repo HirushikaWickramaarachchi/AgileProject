@@ -91,6 +91,10 @@
 }
 
 .my-club-meta li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
     font-size: var(--clubs-small-size);
     font-weight: 700;
     color: var(--clubs-chip-color);
@@ -116,6 +120,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     width: auto;
     min-height: 40px;
     padding: var(--clubs-action-padding);
@@ -215,6 +220,9 @@
 }
 
 .my-club-empty-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--clubs-muted-color);
     font-size: var(--clubs-body-size);
     background: var(--clubs-card-soft-bg);
@@ -267,6 +275,7 @@
     }
 
     .my-club-meta li {
+        justify-content: center;
         padding: 6px 7px;
         text-align: center;
     }

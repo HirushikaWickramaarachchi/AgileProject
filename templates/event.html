@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClubSync | {% if event %}{{ event.title }}{% else %}Events{% endif %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
 </head>
@@ -18,19 +19,19 @@
     {% if event %}
         <section class="event-hero">
             <div class="event-hero-main">
-                <p class="event-hero-type">Club Event</p>
-                <h1>{{ event.title }}</h1>
+                <p class="event-hero-type"><i class="bi bi-calendar2-event" aria-hidden="true"></i>Club Event</p>
+                <h1><i class="bi bi-calendar2-event" aria-hidden="true"></i>{{ event.title }}</h1>
                 <p class="event-hero-summary">
                     {{ event.description if event.description else 'This event does not have a description yet.' }}
                 </p>
 
                 <div class="event-hero-meta">
-                    <span>{{ event.date }}</span>
-                    <span>UWA Campus</span>
+                    <span><i class="bi bi-clock" aria-hidden="true"></i>{{ event.date }}</span>
+                    <span><i class="bi bi-geo-alt" aria-hidden="true"></i>UWA Campus</span>
                     {% if club %}
-                        <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-meta-link">Hosted by {{ club.name }}</a>
+                        <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-meta-link"><i class="bi bi-building" aria-hidden="true"></i>Hosted by {{ club.name }}</a>
                     {% endif %}
-                    <span>{{ attendee_count }} attending</span>
+                    <span><i class="bi bi-person-check" aria-hidden="true"></i>{{ attendee_count }} attending</span>
                 </div>
             </div>
 
@@ -40,24 +41,24 @@
                         <form method="POST" action="{{ url_for('clubs.unattend_event', event_id=event.id) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="next" value="{{ request.path }}">
-                            <button type="submit" class="event-primary-action">Cancel Attendance</button>
+                            <button type="submit" class="event-primary-action"><i class="bi bi-x-circle" aria-hidden="true"></i>Cancel Attendance</button>
                         </form>
                         <p class="event-action-note">You are currently marked as attending this event.</p>
                     {% elif is_club_member %}
                         <form method="POST" action="{{ url_for('clubs.attend_event', event_id=event.id) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="next" value="{{ request.path }}">
-                            <button type="submit" class="event-primary-action">Attend Event</button>
+                            <button type="submit" class="event-primary-action"><i class="bi bi-calendar-check" aria-hidden="true"></i>Attend Event</button>
                         </form>
                         <p class="event-action-note">Mark attendance to appear in the attendee list.</p>
                     {% elif club %}
-                        <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-primary-action">Join Club to Attend</a>
+                        <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-primary-action"><i class="bi bi-person-plus" aria-hidden="true"></i>Join Club to Attend</a>
                         <p class="event-action-note">You need to join {{ club.name }} before attending this event.</p>
                     {% else %}
                         <p class="event-action-note">Joining the host club is required before attendance can be marked.</p>
                     {% endif %}
                 {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="event-primary-action">Login to Attend</a>
+                    <a href="{{ url_for('auth.login') }}" class="event-primary-action"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Login to Attend</a>
                     {% if club %}
                         <p class="event-action-note">Log in, then join {{ club.name }} to attend this event.</p>
                     {% else %}
@@ -66,9 +67,9 @@
                 {% endif %}
 
                 {% if club %}
-                    <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-secondary-action">View Host Club</a>
+                    <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-secondary-action"><i class="bi bi-building" aria-hidden="true"></i>View Host Club</a>
                 {% else %}
-                    <a href="{{ url_for('clubs.clubs') }}" class="event-secondary-action">Browse Clubs</a>
+                    <a href="{{ url_for('clubs.clubs') }}" class="event-secondary-action"><i class="bi bi-grid-1x2" aria-hidden="true"></i>Browse Clubs</a>
                 {% endif %}
             </div>
         </section>
@@ -76,23 +77,23 @@
         <div class="event-layout">
             <section class="event-content">
                 <article class="event-section-card">
-                    <h2>About This Event</h2>
+                    <h2><i class="bi bi-info-circle" aria-hidden="true"></i>About This Event</h2>
                     <p>{{ event.description if event.description else 'Event description is currently unavailable.' }}</p>
                     <p>This page is now rendered from database-backed Flask routes and dynamic Jinja templates.</p>
                 </article>
 
                 <article class="event-section-card">
-                    <h2>Event Snapshot</h2>
+                    <h2><i class="bi bi-card-checklist" aria-hidden="true"></i>Event Snapshot</h2>
                     <div class="event-agenda-list">
                         <div class="event-agenda-item">
-                            <span class="event-agenda-time">Title</span>
+                            <span class="event-agenda-time"><i class="bi bi-type" aria-hidden="true"></i>Title</span>
                             <div>
                                 <h3>{{ event.title }}</h3>
                                 <p>Loaded from the `events` table.</p>
                             </div>
                         </div>
                         <div class="event-agenda-item">
-                            <span class="event-agenda-time">Date</span>
+                            <span class="event-agenda-time"><i class="bi bi-clock" aria-hidden="true"></i>Date</span>
                             <div>
                                 <h3>{{ event.date }}</h3>
                                 <p>Date/time formatting can be improved in later phases.</p>
@@ -100,10 +101,10 @@
                         </div>
                         {% if club %}
                             <div class="event-agenda-item">
-                                <span class="event-agenda-time">Host</span>
+                                <span class="event-agenda-time"><i class="bi bi-building" aria-hidden="true"></i>Host</span>
                                 <div>
                                     <h3>{{ club.name }}</h3>
-                                    <p><a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-inline-link">Open host club page</a></p>
+                                    <p><a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-inline-link"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>Open host club page</a></p>
                                 </div>
                             </div>
                         {% endif %}
@@ -111,8 +112,8 @@
                 </article>
 
                 <article class="event-section-card">
-                    <h2>Community Preview</h2>
-                    <p class="event-attendees-count">{{ attendee_count }} user{% if attendee_count != 1 %}s{% endif %} marked as attending</p>
+                    <h2><i class="bi bi-people" aria-hidden="true"></i>Community Preview</h2>
+                    <p class="event-attendees-count"><i class="bi bi-person-check" aria-hidden="true"></i>{{ attendee_count }} user{% if attendee_count != 1 %}s{% endif %} marked as attending</p>
                     <div class="event-attendee-grid">
                         {% if attendees %}
                             {% for attendee in attendees[:8] %}
@@ -138,19 +139,19 @@
 
             <aside class="event-sidebar">
                 <section class="event-side-card">
-                    <h2>Event Summary</h2>
+                    <h2><i class="bi bi-card-list" aria-hidden="true"></i>Event Summary</h2>
                     <ul>
-                        <li><strong>Title:</strong> {{ event.title }}</li>
-                        <li><strong>Date:</strong> {{ event.date }}</li>
+                        <li><i class="bi bi-type" aria-hidden="true"></i><strong>Title:</strong> {{ event.title }}</li>
+                        <li><i class="bi bi-clock" aria-hidden="true"></i><strong>Date:</strong> {{ event.date }}</li>
                         {% if club %}
-                            <li><strong>Host:</strong> <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-inline-link">{{ club.name }}</a></li>
+                            <li><i class="bi bi-building" aria-hidden="true"></i><strong>Host:</strong> <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-inline-link">{{ club.name }}</a></li>
                         {% endif %}
-                        <li><strong>Attendees:</strong> {{ attendee_count }}</li>
+                        <li><i class="bi bi-person-check" aria-hidden="true"></i><strong>Attendees:</strong> {{ attendee_count }}</li>
                     </ul>
                 </section>
 
                 <section class="event-side-card">
-                    <h2>Registration</h2>
+                    <h2><i class="bi bi-clipboard-check" aria-hidden="true"></i>Registration</h2>
                     {% if session.get('user_id') %}
                         {% if is_attending %}
                             <p class="event-side-highlight">Status: Attending</p>
@@ -161,7 +162,7 @@
                         {% elif club %}
                             <p class="event-side-highlight">Status: Club Membership Required</p>
                             <p>Join {{ club.name }} first, then return here to mark attendance.</p>
-                            <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-side-link">Go to Host Club</a>
+                            <a href="{{ url_for('clubs.club_details', club_id=club.id) }}" class="event-side-link"><i class="bi bi-building" aria-hidden="true"></i>Go to Host Club</a>
                         {% else %}
                             <p class="event-side-highlight">Status: Club Membership Required</p>
                             <p>Join the host club first, then return here to mark attendance.</p>
@@ -170,15 +171,15 @@
                         <p class="event-side-highlight">Status: Login Required</p>
                         <p>Please log in and join the host club to mark attendance for this event.</p>
                     {% endif %}
-                    <a href="{{ url_for('clubs.clubs') }}" class="event-side-link">Browse Clubs</a>
+                    <a href="{{ url_for('clubs.clubs') }}" class="event-side-link"><i class="bi bi-grid-1x2" aria-hidden="true"></i>Browse Clubs</a>
                 </section>
 
                 <section class="event-side-card">
-                    <h2>Contact</h2>
+                    <h2><i class="bi bi-chat-dots" aria-hidden="true"></i>Contact</h2>
                     <ul>
-                        <li><strong>Platform:</strong> ClubSync</li>
-                        <li><strong>Campus:</strong> UWA Crawley</li>
-                        <li><strong>Support:</strong> Club Events Desk</li>
+                        <li><i class="bi bi-window" aria-hidden="true"></i><strong>Platform:</strong> ClubSync</li>
+                        <li><i class="bi bi-geo-alt" aria-hidden="true"></i><strong>Campus:</strong> UWA Crawley</li>
+                        <li><i class="bi bi-life-preserver" aria-hidden="true"></i><strong>Support:</strong> Club Events Desk</li>
                     </ul>
                 </section>
             </aside>
@@ -186,7 +187,7 @@
 
         <section class="event-related">
             <div class="event-related-head">
-                <h2>More Events You May Like</h2>
+                <h2><i class="bi bi-calendar2-week" aria-hidden="true"></i>More Events You May Like</h2>
                 <p>{% if club %}From {{ club.name }} and related communities{% else %}From student clubs{% endif %}</p>
             </div>
 
@@ -194,18 +195,18 @@
                 {% if related_events %}
                     {% for related_event in related_events %}
                         <article class="event-related-card">
-                            <p class="event-related-date">{{ related_event.date }}</p>
+                        <p class="event-related-date"><i class="bi bi-clock" aria-hidden="true"></i>{{ related_event.date }}</p>
                             <h3>{{ related_event.title }}</h3>
                             <p>{{ related_event.description if related_event.description else 'No description available.' }}</p>
-                            <a href="{{ url_for('clubs.event_details', event_id=related_event.id) }}">View Event</a>
+                            <a href="{{ url_for('clubs.event_details', event_id=related_event.id) }}"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>View Event</a>
                         </article>
                     {% endfor %}
                 {% else %}
                     <article class="event-related-card">
-                        <p class="event-related-date">No Additional Events</p>
+                        <p class="event-related-date"><i class="bi bi-info-circle" aria-hidden="true"></i>No Additional Events</p>
                         <h3>Only One Event Available</h3>
                         <p>Create more events in the database to populate this section.</p>
-                        <a href="{{ url_for('clubs.events') }}">Refresh</a>
+                        <a href="{{ url_for('clubs.events') }}"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i>Refresh</a>
                     </article>
                 {% endif %}
             </div>
@@ -213,16 +214,16 @@
     {% else %}
         <section class="event-hero">
             <div class="event-hero-main">
-                <p class="event-hero-type">No Event Data</p>
-                <h1>No Events Available Yet</h1>
+                <p class="event-hero-type"><i class="bi bi-info-circle" aria-hidden="true"></i>No Event Data</p>
+                <h1><i class="bi bi-calendar2-event" aria-hidden="true"></i>No Events Available Yet</h1>
                 <p class="event-hero-summary">The database currently has no events. Add event records, then revisit this page.</p>
                 <div class="event-hero-meta">
-                    <span>Read-only fallback view</span>
+                    <span><i class="bi bi-info-circle" aria-hidden="true"></i>Read-only fallback view</span>
                 </div>
             </div>
 
             <div class="event-hero-actions">
-                <a href="{{ url_for('clubs.clubs') }}" class="event-primary-action">Browse Clubs</a>
+                <a href="{{ url_for('clubs.clubs') }}" class="event-primary-action"><i class="bi bi-grid-1x2" aria-hidden="true"></i>Browse Clubs</a>
             </div>
         </section>
     {% endif %}
