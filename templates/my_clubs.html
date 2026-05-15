@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClubSync | My Clubs</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/my_clubs.css') }}">
 </head>
@@ -16,8 +17,8 @@
     {% include "_flash_messages.html" %}
 
     <section class="my-clubs-hero">
-        <p class="clubs-kicker">Personal Dashboard</p>
-        <h1>My Clubs</h1>
+        <p class="clubs-kicker"><i class="bi bi-person-check" aria-hidden="true"></i>Personal Dashboard</p>
+        <h1><i class="bi bi-people" aria-hidden="true"></i>My Clubs</h1>
         <p>
             {% if current_user %}
                 {{ current_user.name }}, here are your joined clubs and the events you are currently attending.
@@ -39,7 +40,7 @@
                             loading="lazy"
                         >
                         <div class="my-club-overview-content">
-                            <p class="club-card-category">{{ summary.club.category if summary.club.category else 'Uncategorized' }}</p>
+                            <p class="club-card-category"><i class="bi bi-tag" aria-hidden="true"></i>{{ summary.club.category if summary.club.category else 'Uncategorized' }}</p>
                             <h2>
                                 <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-title-link">
                                     {{ summary.club.name }}
@@ -47,23 +48,23 @@
                             </h2>
                             <p class="my-club-description">{{ summary.club.description }}</p>
                             <div class="my-club-actions">
-                                <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-btn">View Club</a>
+                                <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-btn"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>View Club</a>
                                 <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <input type="hidden" name="next" value="{{ request.path }}">
-                                    <button type="submit" class="my-club-btn my-club-btn--danger">Leave Club</button>
+                                    <button type="submit" class="my-club-btn my-club-btn--danger"><i class="bi bi-dash-circle" aria-hidden="true"></i>Leave Club</button>
                                 </form>
                             </div>
                         </div>
                         <ul class="my-club-meta" aria-label="Club summary">
-                                <li>{{ summary.member_count }} member{% if summary.member_count != 1 %}s{% endif %}</li>
-                                <li>{{ summary.event_count }} event{% if summary.event_count != 1 %}s{% endif %}</li>
-                                <li>{{ summary.attended_events|length }} attending</li>
+                                <li><i class="bi bi-people" aria-hidden="true"></i>{{ summary.member_count }} member{% if summary.member_count != 1 %}s{% endif %}</li>
+                                <li><i class="bi bi-calendar2-event" aria-hidden="true"></i>{{ summary.event_count }} event{% if summary.event_count != 1 %}s{% endif %}</li>
+                                <li><i class="bi bi-person-check" aria-hidden="true"></i>{{ summary.attended_events|length }} attending</li>
                         </ul>
                     </section>
 
                     <section class="my-club-events">
-                        <h3>Events You&rsquo;re Attending</h3>
+                        <h3><i class="bi bi-calendar-check" aria-hidden="true"></i>Events You&rsquo;re Attending</h3>
                         {% if summary.attended_events %}
                             <div class="my-club-event-list">
                                 {% for attended_event in summary.attended_events %}
@@ -74,22 +75,22 @@
                                                     {{ attended_event.title }}
                                                 </a>
                                             </h4>
-                                            <p class="club-event-time">{{ attended_event.date }}</p>
+                                            <p class="club-event-time"><i class="bi bi-clock" aria-hidden="true"></i>{{ attended_event.date }}</p>
                                             <p>{{ attended_event.description if attended_event.description else 'No event description available yet.' }}</p>
                                         </div>
                                         <div class="my-club-event-actions">
-                                            <a href="{{ url_for('clubs.event_details', event_id=attended_event.id) }}" class="my-club-btn">View Event</a>
+                                            <a href="{{ url_for('clubs.event_details', event_id=attended_event.id) }}" class="my-club-btn"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>View Event</a>
                                             <form method="POST" action="{{ url_for('clubs.unattend_event', event_id=attended_event.id) }}">
                                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                                 <input type="hidden" name="next" value="{{ request.path }}">
-                                                <button type="submit" class="my-club-btn my-club-btn--danger">Cancel Attendance</button>
+                                                <button type="submit" class="my-club-btn my-club-btn--danger"><i class="bi bi-x-circle" aria-hidden="true"></i>Cancel Attendance</button>
                                             </form>
                                         </div>
                                     </article>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <p class="my-club-empty-note">No attended events yet.</p>
+                            <p class="my-club-empty-note"><i class="bi bi-info-circle" aria-hidden="true"></i>No attended events yet.</p>
                         {% endif %}
                     </section>
                 </article>
@@ -97,9 +98,9 @@
         </section>
     {% else %}
         <section class="my-clubs-empty">
-            <h2>You have not joined any clubs yet</h2>
+            <h2><i class="bi bi-info-circle" aria-hidden="true"></i>You have not joined any clubs yet</h2>
             <p>Browse clubs to join your first community and start attending events.</p>
-            <a href="{{ url_for('clubs.clubs') }}" class="club-primary-action">Browse Clubs</a>
+            <a href="{{ url_for('clubs.clubs') }}" class="club-primary-action"><i class="bi bi-grid-1x2" aria-hidden="true"></i>Browse Clubs</a>
         </section>
     {% endif %}
 </main>

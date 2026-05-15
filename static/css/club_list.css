@@ -28,7 +28,9 @@
 }
 
 .filter-chip {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     border: var(--clubs-chip-border);
     background: var(--clubs-card-bg);
     color: var(--clubs-chip-color);
@@ -190,11 +192,18 @@
     font-weight: 600;
 }
 
+.club-card-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .club-card-cta {
     margin-top: 3px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     text-decoration: none;
     text-align: center;
     color: var(--clubs-action-color);

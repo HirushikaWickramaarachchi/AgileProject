@@ -357,10 +357,43 @@ button:hover {
     border-radius: 6px;
 }
 
+.clubs-page .bi {
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.clubs-page h1 .bi,
+.clubs-page h2 .bi,
+.clubs-page h3 .bi {
+    color: var(--primary);
+    font-size: 0.9em;
+}
+
+.clubs-page h1,
+.clubs-section-head h2,
+.club-section-card h2,
+.club-side-card h2,
+.event-section-card h2,
+.event-side-card h2,
+.event-related-head h2,
+.my-clubs-hero h1,
+.my-club-events h3,
+.my-clubs-empty h2,
+.search-hero h1,
+.search-summary h2,
+.search-state h2 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
 .clubs-kicker {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-bottom: 12px;
     background: rgba(255, 200, 30, 0.24);
+    color: #5b3f08;
     font-size: var(--clubs-label-size);
     font-weight: 700;
     text-transform: uppercase;
@@ -370,6 +403,9 @@ button:hover {
 }
 
 .club-card-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: var(--clubs-label-size);
     color: #496172;
     text-transform: uppercase;
@@ -381,6 +417,7 @@ button:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     text-decoration: none;
     border-radius: var(--clubs-action-radius);
     font-weight: 700;
@@ -403,6 +440,9 @@ button:hover {
 }
 
 .club-event-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: #4d6474;
     font-size: 0.86rem;
     font-weight: 600;
@@ -411,7 +451,9 @@ button:hover {
 
 .club-side-link,
 .event-side-link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-top: 10px;
     text-decoration: none;
     color: #1d445d;

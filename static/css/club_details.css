@@ -60,6 +60,9 @@
 }
 
 .club-hero-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: #496172;
     font-size: var(--clubs-label-size);
     font-weight: 700;
@@ -85,6 +88,9 @@
 }
 
 .club-hero-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     background: var(--clubs-chip-bg);
     color: var(--clubs-chip-color);
     border-radius: var(--clubs-chip-radius);
@@ -104,6 +110,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     text-decoration: none;
     border-radius: var(--clubs-action-radius);
     font-weight: 700;
@@ -130,6 +137,9 @@
 }
 
 .club-subnav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     text-decoration: none;
     color: var(--clubs-chip-color);
     border: var(--clubs-chip-border);
@@ -234,6 +244,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     text-decoration: none;
     color: var(--clubs-action-color);
     background: var(--clubs-action-bg);
@@ -259,6 +270,9 @@
 }
 
 .club-benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
     border: var(--clubs-card-border);
     border-radius: var(--clubs-inner-radius);
     padding: 12px;
@@ -333,6 +347,9 @@
 }
 
 .club-side-card li {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
     color: var(--clubs-text-color);
     font-size: var(--clubs-body-size);
     line-height: 1.5;
