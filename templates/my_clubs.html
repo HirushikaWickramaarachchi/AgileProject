@@ -52,7 +52,22 @@
                                 <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <input type="hidden" name="next" value="{{ request.path }}">
-                                    <button type="submit" class="my-club-btn my-club-btn--danger"><i class="bi bi-dash-circle" aria-hidden="true"></i>Leave Club</button>
+                                    <ul class="leave-club-form-events" data-leave-club-events hidden>
+                                        {% for attended_event in summary.attended_events %}
+                                            <li>
+                                                <span>{{ attended_event.title }}</span>
+                                                <small>{{ attended_event.date }}</small>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <button
+                                        type="button"
+                                        class="my-club-btn my-club-btn--danger"
+                                        data-leave-club-trigger
+                                        data-club-name="{{ summary.club.name }}"
+                                    >
+                                        <i class="bi bi-dash-circle" aria-hidden="true"></i>Leave Club
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -104,6 +119,8 @@
         </section>
     {% endif %}
 </main>
+
+{% include "_leave_club_modal.html" %}
 
 <footer class="clubs-footer">
     <p>ClubSync | University Student Clubs Platform</p>

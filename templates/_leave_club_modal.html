@@ -1,0 +1,37 @@
+<dialog class="leave-club-dialog" aria-labelledby="leave-club-dialog-title" data-leave-club-dialog>
+    <div class="leave-club-dialog__panel">
+        <div class="leave-club-dialog__head">
+            <div class="leave-club-dialog__icon" aria-hidden="true">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div>
+                <p class="leave-club-dialog__eyebrow">Confirm Membership Change</p>
+                <h2 id="leave-club-dialog-title">Leave this club?</h2>
+            </div>
+        </div>
+
+        <div class="leave-club-dialog__body">
+            <p data-leave-club-message>
+                You will no longer be a member of this club.
+            </p>
+            <div class="leave-club-dialog__events" data-leave-club-events-panel hidden>
+                <p class="leave-club-dialog__events-title">
+                    <i class="bi bi-calendar-x" aria-hidden="true"></i>
+                    Attendance that will be cancelled
+                </p>
+                <ul data-leave-club-events-list></ul>
+            </div>
+        </div>
+
+        <div class="leave-club-dialog__actions">
+            <button type="button" class="leave-club-dialog__cancel" data-leave-club-cancel>
+                Cancel
+            </button>
+            <button type="button" class="leave-club-dialog__confirm" data-leave-club-confirm>
+                <i class="bi bi-dash-circle" aria-hidden="true"></i>
+                Leave Club
+            </button>
+        </div>
+    </div>
+</dialog>
+<script src="{{ url_for('static', filename='js/leave_club_modal.js') }}"></script>
