@@ -153,6 +153,10 @@ def clubs():
     clubs_list = clubs_query.order_by(Club.name.asc()).all()
     current_user = _get_current_user()
     member_club_ids = _member_club_ids_for_user(current_user.id if current_user else None)
+    attended_events_by_club = _attended_events_by_club_for_user(
+        current_user.id if current_user else None,
+        [club.id for club in clubs_list],
+    )
     club_summaries = []
 
     for club in clubs_list:
@@ -163,6 +167,7 @@ def clubs():
                 "member_count": len(club.memberships),
                 "event_count": len(events),
                 "is_member": club.id in member_club_ids,
+                "attended_events": attended_events_by_club.get(club.id, []),
             }
         )
 
@@ -180,6 +185,10 @@ def club_details(club_id):
     events = Event.query.filter_by(club_id=club.id).order_by(Event.id.asc()).all()
     current_user = _get_current_user()
     member_club_ids = _member_club_ids_for_user(current_user.id if current_user else None)
+    attended_events_by_club = _attended_events_by_club_for_user(
+        current_user.id if current_user else None,
+        [club.id],
+    )
     members = sorted(
         (membership.user for membership in club.memberships if membership.user is not None),
         key=lambda user: user.name.lower(),
@@ -192,6 +201,7 @@ def club_details(club_id):
         members=members,
         member_count=len(club.memberships),
         is_member=club.id in member_club_ids,
+        attended_events=attended_events_by_club.get(club.id, []),
     )
 
 
@@ -239,10 +249,32 @@ def leave_club(club_id):
         flash(f"You are not currently a member of {club.name}.", "info")
         return _redirect_to_safe_next_or("clubs.club_details", club_id=club.id)
 
+    related_attendances = (
+        Attendance.query.join(Event, Attendance.event_id == Event.id)
+        .filter(
+            Attendance.user_id == current_user.id,
+            Event.club_id == club.id,
+        )
+        .all()
+    )
+    cancelled_attendance_count = len(related_attendances)
+
+    for attendance in related_attendances:
+        db.session.delete(attendance)
+
     db.session.delete(membership)
     db.session.commit()
 
-    flash(f"You left {club.name}.", "success")
+    if cancelled_attendance_count:
+        event_label = "event" if cancelled_attendance_count == 1 else "events"
+        flash(
+            f"You left {club.name} and your attendance for "
+            f"{cancelled_attendance_count} related {event_label} was cancelled.",
+            "success",
+        )
+    else:
+        flash(f"You left {club.name}.", "success")
+
     return _redirect_to_safe_next_or("clubs.club_details", club_id=club.id)
 
 

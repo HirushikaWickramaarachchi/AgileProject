@@ -87,7 +87,22 @@
                                     <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="next" value="{{ return_path }}">
-                                        <button type="submit" class="club-card-cta"><i class="bi bi-dash-circle" aria-hidden="true"></i>Leave Club</button>
+                                        <ul class="leave-club-form-events" data-leave-club-events hidden>
+                                            {% for attended_event in summary.attended_events %}
+                                                <li>
+                                                    <span>{{ attended_event.title }}</span>
+                                                    <small>{{ attended_event.date }}</small>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <button
+                                            type="button"
+                                            class="club-card-cta"
+                                            data-leave-club-trigger
+                                            data-club-name="{{ summary.club.name }}"
+                                        >
+                                            <i class="bi bi-dash-circle" aria-hidden="true"></i>Leave Club
+                                        </button>
                                     </form>
                                 {% else %}
                                     <form method="POST" action="{{ url_for('clubs.join_club', club_id=summary.club.id) }}">
@@ -134,6 +149,8 @@
         </div>
     </section>
 </main>
+
+{% include "_leave_club_modal.html" %}
 
 <footer class="clubs-footer">
     <p>ClubSync | University Student Clubs Platform</p>

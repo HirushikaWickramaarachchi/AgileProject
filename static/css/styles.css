@@ -462,6 +462,166 @@ button:hover {
     padding-bottom: 1px;
 }
 
+.leave-club-form-events {
+    display: none;
+}
+
+.leave-club-dialog {
+    width: min(520px, calc(100vw - 32px));
+    padding: 0;
+    border: 0;
+    border-radius: var(--clubs-hero-card-radius);
+    background: transparent;
+    color: #22303d;
+    margin: auto;
+}
+
+.leave-club-dialog::backdrop {
+    background: rgba(18, 49, 70, 0.38);
+    backdrop-filter: blur(2px);
+}
+
+.leave-club-dialog__panel {
+    background: var(--clubs-card-bg);
+    border: var(--clubs-card-border-strong);
+    border-radius: var(--clubs-hero-card-radius);
+    box-shadow: 0 22px 56px rgba(18, 49, 70, 0.22);
+    padding: 22px;
+    display: grid;
+    gap: 18px;
+}
+
+.leave-club-dialog__head {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+.leave-club-dialog__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #8b2e20;
+    background: var(--clubs-danger-bg);
+    border: 1px solid var(--clubs-danger-border);
+}
+
+.leave-club-dialog__eyebrow {
+    margin-bottom: 4px;
+    color: var(--clubs-muted-color);
+    font-size: var(--clubs-label-size);
+    font-weight: 700;
+    letter-spacing: var(--clubs-label-letter-spacing);
+    text-transform: uppercase;
+}
+
+.leave-club-dialog h2 {
+    color: var(--clubs-heading-color);
+    font-size: 1.35rem;
+    line-height: 1.2;
+}
+
+.leave-club-dialog__body {
+    display: grid;
+    gap: 12px;
+    color: var(--clubs-text-color);
+    line-height: var(--clubs-body-line-height);
+    font-size: var(--clubs-body-size);
+}
+
+.leave-club-dialog__events {
+    border: var(--clubs-card-border);
+    border-radius: var(--clubs-inner-radius);
+    background: var(--clubs-card-soft-bg);
+    padding: 12px;
+}
+
+.leave-club-dialog__events-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 10px;
+    color: var(--clubs-section-heading-color);
+    font-weight: 700;
+}
+
+.leave-club-dialog__events ul {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+}
+
+.leave-club-dialog__events li {
+    display: grid;
+    gap: 2px;
+    padding: 9px 10px;
+    border-radius: var(--clubs-action-radius);
+    background: #fff;
+    border: 1px solid #e1eaf0;
+}
+
+.leave-club-dialog__events li span {
+    color: var(--clubs-card-title-color);
+    font-weight: 700;
+}
+
+.leave-club-dialog__events li small {
+    color: var(--clubs-muted-color);
+    font-size: var(--clubs-small-size);
+}
+
+.leave-club-dialog__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.leave-club-dialog__cancel,
+.leave-club-dialog__confirm {
+    width: auto;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: var(--clubs-action-radius);
+    padding: var(--clubs-action-padding);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.leave-club-dialog__cancel {
+    color: var(--clubs-action-color);
+    background: var(--clubs-action-bg);
+    border: 1px solid var(--clubs-action-border);
+}
+
+.leave-club-dialog__confirm {
+    color: var(--clubs-danger-color);
+    background: var(--clubs-danger-bg);
+    border: 1px solid var(--clubs-danger-border);
+}
+
+.leave-club-dialog__cancel:hover {
+    background: var(--clubs-action-hover-bg);
+}
+
+.leave-club-dialog__confirm:hover {
+    background: #ffeae6;
+    border-color: #d9a79e;
+}
+
+.leave-club-dialog__confirm:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
 .clubs-footer {
     margin-top: 38px;
     text-align: center;
@@ -599,5 +759,22 @@ button:hover {
     .navbar-actions a {
         font-size: 0.84rem;
         padding: 8px 10px;
+    }
+
+    .leave-club-dialog__panel {
+        padding: 18px;
+    }
+
+    .leave-club-dialog__head {
+        grid-template-columns: 1fr;
+    }
+
+    .leave-club-dialog__actions {
+        justify-content: stretch;
+    }
+
+    .leave-club-dialog__cancel,
+    .leave-club-dialog__confirm {
+        flex: 1 1 150px;
     }
 }

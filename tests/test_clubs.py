@@ -123,6 +123,82 @@ class TestLeaveClub:
             m = Membership.query.filter_by(user_id=uid, club_id=sample_club).first()
             assert m is None
 
+    def test_leave_removes_related_attendance_only_and_keeps_events(self, client, app, sample_club, sample_event):
+        c, uid = _logged_in_client(client, app)
+        with app.app_context():
+            other_club = Club(name="Other Club", description="Another club")
+            other_user = User(
+                name="Other User",
+                email="other@example.com",
+                password_hash=generate_password_hash("pass"),
+            )
+            _db.session.add_all([other_club, other_user])
+            _db.session.commit()
+
+            other_event = Event(
+                title="Other Club Event",
+                club_id=other_club.id,
+                date="2026-07-01",
+                description="Different club event",
+            )
+            _db.session.add(other_event)
+            _db.session.commit()
+
+            _db.session.add(Membership(user_id=uid, club_id=sample_club))
+            _db.session.add(Attendance(user_id=uid, event_id=sample_event))
+            _db.session.add(Attendance(user_id=uid, event_id=other_event.id))
+            _db.session.add(Attendance(user_id=other_user.id, event_id=sample_event))
+            _db.session.commit()
+
+            other_event_id = other_event.id
+            other_user_id = other_user.id
+
+        res = c.post(f"/clubs/{sample_club}/leave", follow_redirects=True)
+        assert res.status_code == 200
+        assert b"attendance for 1 related event was cancelled" in res.data
+
+        with app.app_context():
+            membership = Membership.query.filter_by(user_id=uid, club_id=sample_club).first()
+            related_attendance = Attendance.query.filter_by(user_id=uid, event_id=sample_event).first()
+            other_club_attendance = Attendance.query.filter_by(user_id=uid, event_id=other_event_id).first()
+            other_user_attendance = Attendance.query.filter_by(user_id=other_user_id, event_id=sample_event).first()
+
+            assert membership is None
+            assert related_attendance is None
+            assert other_club_attendance is not None
+            assert other_user_attendance is not None
+            assert _db.session.get(Event, sample_event) is not None
+            assert _db.session.get(Event, other_event_id) is not None
+
+    def test_leave_removes_multiple_related_attendances(self, client, app, sample_club, sample_event):
+        c, uid = _logged_in_client(client, app)
+        with app.app_context():
+            second_event = Event(
+                title="Second Club Event",
+                club_id=sample_club,
+                date="2026-07-15",
+                description="Another event from the same club",
+            )
+            _db.session.add(second_event)
+            _db.session.commit()
+
+            _db.session.add(Membership(user_id=uid, club_id=sample_club))
+            _db.session.add(Attendance(user_id=uid, event_id=sample_event))
+            _db.session.add(Attendance(user_id=uid, event_id=second_event.id))
+            _db.session.commit()
+
+            second_event_id = second_event.id
+
+        res = c.post(f"/clubs/{sample_club}/leave", follow_redirects=True)
+        assert res.status_code == 200
+        assert b"attendance for 2 related events was cancelled" in res.data
+
+        with app.app_context():
+            assert Attendance.query.filter_by(user_id=uid, event_id=sample_event).first() is None
+            assert Attendance.query.filter_by(user_id=uid, event_id=second_event_id).first() is None
+            assert _db.session.get(Event, sample_event) is not None
+            assert _db.session.get(Event, second_event_id) is not None
+
     def test_leave_not_member_shows_flash(self, client, app, sample_club):
         c, _ = _logged_in_client(client, app)
         res = c.post(f"/clubs/{sample_club}/leave", follow_redirects=True)
