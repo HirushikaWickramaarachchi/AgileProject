@@ -37,7 +37,7 @@
 
 .my-club-overview {
     display: grid;
-    grid-template-columns: minmax(220px, 24%) minmax(0, 1fr) 160px;
+    grid-template-columns: minmax(220px, 27%) minmax(0, 1fr) 160px;
     gap: var(--clubs-card-gap);
     align-items: start;
 }
@@ -81,26 +81,22 @@
     border-bottom-color: #b8d2e3;
 }
 
-.my-club-meta {
-    list-style: none;
-    display: grid;
+.club-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    margin: 0;
-    padding: 0;
-    justify-items: stretch;
 }
 
-.my-club-meta li {
+.club-hero-meta span {
     display: inline-flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 6px;
-    font-size: var(--clubs-small-size);
-    font-weight: 700;
+    background: var(--clubs-chip-bg);
     color: var(--clubs-chip-color);
-    border-radius: var(--clubs-action-radius);
+    border-radius: var(--clubs-chip-radius);
     padding: var(--clubs-chip-padding);
-    text-align: right;
+    font-size: var(--clubs-small-size);
+    font-weight: 600;
 }
 
 .my-club-actions {
@@ -150,9 +146,14 @@
 }
 
 .my-club-btn--danger:hover {
-    background: #ffeae6;
-    border-color: #d9a79e;
-    color: #72281d;
+    background: var(--clubs-danger-hover-bg);
+    border-color: var(--clubs-danger-hover-border);
+    color: var(--clubs-danger-hover-color);
+}
+
+.my-club-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(115, 165, 202, 0.26);
 }
 
 .my-club-events {
@@ -268,17 +269,6 @@
     .my-club-overview-content {
         grid-column: 1 / -1;
     }
-
-    .my-club-meta {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 6px;
-    }
-
-    .my-club-meta li {
-        justify-content: center;
-        padding: 6px 7px;
-        text-align: center;
-    }
 }
 
 @media (max-width: 700px) {
@@ -295,10 +285,24 @@
         grid-template-columns: 1fr;
     }
 
+    .my-club-actions,
     .my-club-event-actions {
-        justify-items: start;
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+        justify-items: stretch;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .my-club-actions form,
+    .my-club-event-actions form,
+    .my-club-btn,
+    .my-clubs-empty .club-primary-action {
+        width: 100%;
+    }
+
+    .my-club-event-actions {
         min-width: 0;
-        grid-auto-flow: column;
-        justify-content: start;
     }
 }

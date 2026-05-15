@@ -88,7 +88,8 @@
 }
 
 .event-primary-action,
-.event-secondary-action {
+.event-secondary-action,
+.event-danger-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -124,6 +125,25 @@
 .event-secondary-action:hover {
     background: rgba(255, 255, 255, 0.18);
     border-color: rgba(255, 255, 255, 0.85);
+}
+
+.event-danger-action {
+    background: var(--clubs-danger-bg);
+    color: var(--clubs-danger-color);
+    border: 1px solid var(--clubs-danger-border);
+}
+
+.event-danger-action:hover {
+    background: var(--clubs-danger-hover-bg);
+    border-color: var(--clubs-danger-hover-border);
+    color: var(--clubs-danger-hover-color);
+}
+
+.event-primary-action:focus-visible,
+.event-secondary-action:focus-visible,
+.event-danger-action:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 200, 30, 0.28);
 }
 
 .event-action-note {

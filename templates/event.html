@@ -41,7 +41,7 @@
                         <form method="POST" action="{{ url_for('clubs.unattend_event', event_id=event.id) }}">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="next" value="{{ request.path }}">
-                            <button type="submit" class="event-primary-action"><i class="bi bi-x-circle" aria-hidden="true"></i>Cancel Attendance</button>
+                            <button type="submit" class="event-danger-action"><i class="bi bi-x-circle" aria-hidden="true"></i>Cancel Attendance</button>
                         </form>
                         <p class="event-action-note">You are currently marked as attending this event.</p>
                     {% elif is_club_member %}
