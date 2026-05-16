@@ -117,20 +117,6 @@
     object-position: center;
 }
 
-.club-visual span {
-    position: relative;
-    z-index: 1;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: #1c3445;
-    background: rgba(255, 255, 255, 0.82);
-    box-shadow: 0 4px 12px rgba(18, 49, 70, 0.12);
-    border-radius: 999px;
-    padding: 5px 10px;
-}
-
 .club-visual--coding {
     background: linear-gradient(135deg, #73A5CA 0%, #c6e2f5 100%);
 }
@@ -220,6 +206,35 @@
 .club-card-cta:hover {
     background: var(--clubs-action-hover-bg);
     border-color: #9ec7df;
+}
+
+.club-card-cta--primary {
+    color: var(--clubs-primary-action-color);
+    background: var(--clubs-primary-action-bg);
+    border-color: var(--clubs-primary-action-border);
+}
+
+.club-card-cta--primary:hover {
+    color: var(--clubs-primary-action-hover-color);
+    background: var(--clubs-primary-action-hover-bg);
+    border-color: var(--clubs-primary-action-hover-bg);
+}
+
+.club-card-cta--danger {
+    color: var(--clubs-danger-color);
+    background: var(--clubs-danger-bg);
+    border-color: var(--clubs-danger-border);
+}
+
+.club-card-cta--danger:hover {
+    color: var(--clubs-danger-hover-color);
+    background: var(--clubs-danger-hover-bg);
+    border-color: var(--clubs-danger-hover-border);
+}
+
+.club-card-cta:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(115, 165, 202, 0.26);
 }
 
 @media (max-width: 1200px) {

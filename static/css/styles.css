@@ -48,9 +48,17 @@
     --clubs-action-border: #cfe0ea;
     --clubs-action-color: #1d445d;
     --clubs-action-hover-bg: #dceef8;
+    --clubs-primary-action-bg: var(--accent);
+    --clubs-primary-action-border: transparent;
+    --clubs-primary-action-color: #2b2004;
+    --clubs-primary-action-hover-bg: var(--highlight);
+    --clubs-primary-action-hover-color: #fff;
     --clubs-danger-bg: #fff4f2;
     --clubs-danger-border: #e5c3bc;
     --clubs-danger-color: #8b2e20;
+    --clubs-danger-hover-bg: #ffeae6;
+    --clubs-danger-hover-border: #d9a79e;
+    --clubs-danger-hover-color: #72281d;
 }
 
 /* Reset */
@@ -413,7 +421,9 @@ button:hover {
     font-weight: 700;
 }
 
-.club-primary-action {
+.club-primary-action,
+.club-secondary-action,
+.club-danger-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -429,14 +439,44 @@ button:hover {
 }
 
 .club-primary-action {
-    background: var(--accent);
-    border: 1px solid transparent;
-    color: #2b2004;
+    background: var(--clubs-primary-action-bg);
+    border: 1px solid var(--clubs-primary-action-border);
+    color: var(--clubs-primary-action-color);
 }
 
 .club-primary-action:hover {
-    background: var(--highlight);
-    color: #fff;
+    background: var(--clubs-primary-action-hover-bg);
+    color: var(--clubs-primary-action-hover-color);
+}
+
+.club-secondary-action {
+    background: var(--clubs-action-bg);
+    border: 1px solid var(--clubs-action-border);
+    color: var(--clubs-action-color);
+}
+
+.club-secondary-action:hover {
+    background: var(--clubs-action-hover-bg);
+    border-color: #abc9dc;
+}
+
+.club-danger-action {
+    background: var(--clubs-danger-bg);
+    border: 1px solid var(--clubs-danger-border);
+    color: var(--clubs-danger-color);
+}
+
+.club-danger-action:hover {
+    background: var(--clubs-danger-hover-bg);
+    border-color: var(--clubs-danger-hover-border);
+    color: var(--clubs-danger-hover-color);
+}
+
+.club-primary-action:focus-visible,
+.club-secondary-action:focus-visible,
+.club-danger-action:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(115, 165, 202, 0.26);
 }
 
 .club-event-time {

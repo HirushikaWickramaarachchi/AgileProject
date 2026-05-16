@@ -71,7 +71,6 @@
                                 alt="{{ summary.club.name }} image"
                                 loading="lazy"
                             >
-                            <span>{{ category_name }}</span>
                         </div>
                         <div class="club-card-body">
                             <p class="club-card-category"><i class="bi bi-tag" aria-hidden="true"></i>{{ category_name }}</p>
@@ -97,7 +96,7 @@
                                         </ul>
                                         <button
                                             type="button"
-                                            class="club-card-cta"
+                                            class="club-card-cta club-card-cta--danger"
                                             data-leave-club-trigger
                                             data-club-name="{{ summary.club.name }}"
                                         >
@@ -108,11 +107,11 @@
                                     <form method="POST" action="{{ url_for('clubs.join_club', club_id=summary.club.id) }}">
                                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="next" value="{{ return_path }}">
-                                        <button type="submit" class="club-card-cta"><i class="bi bi-person-plus" aria-hidden="true"></i>Join Club</button>
+                                        <button type="submit" class="club-card-cta club-card-cta--primary"><i class="bi bi-person-plus" aria-hidden="true"></i>Join Club</button>
                                     </form>
                                 {% endif %}
                             {% else %}
-                                <a href="{{ url_for('auth.login') }}" class="club-card-cta"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Login to Join</a>
+                                <a href="{{ url_for('auth.login') }}" class="club-card-cta club-card-cta--primary"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>Login to Join</a>
                             {% endif %}
                         </div>
                     </article>

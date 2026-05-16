@@ -37,21 +37,6 @@
     object-position: center;
 }
 
-.club-hero-visual span {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    font-size: var(--clubs-label-size);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: var(--clubs-label-letter-spacing);
-    color: var(--clubs-heading-color);
-    background: rgba(254, 253, 223, 0.95);
-    box-shadow: 0 4px 12px rgba(18, 49, 70, 0.14);
-    border-radius: var(--clubs-chip-radius);
-    padding: var(--clubs-chip-padding);
-}
-
 .club-hero-content {
     padding: 24px;
     display: flex;
@@ -104,29 +89,6 @@
     flex-wrap: wrap;
     gap: var(--clubs-item-gap);
     margin-top: 2px;
-}
-
-.club-secondary-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    text-decoration: none;
-    border-radius: var(--clubs-action-radius);
-    font-weight: 700;
-    min-height: 40px;
-    padding: var(--clubs-action-padding);
-    font-size: 0.9rem;
-    line-height: 1.2;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    background: var(--clubs-action-bg);
-    border: 1px solid var(--clubs-action-border);
-    color: var(--clubs-action-color);
-}
-
-.club-secondary-action:hover {
-    background: var(--clubs-action-hover-bg);
-    border-color: #abc9dc;
 }
 
 .club-subnav {
@@ -388,6 +350,14 @@
         min-height: 0;
     }
 
+    .club-hero-actions,
+    .club-hero-actions form,
+    .club-hero-actions .club-primary-action,
+    .club-hero-actions .club-danger-action,
+    .club-hero-actions .club-secondary-action {
+        width: 100%;
+    }
+
     .club-details-layout {
         grid-template-columns: 1fr;
     }
@@ -407,7 +377,8 @@
     }
 
     .club-event-cta {
-        grid-column: 2;
-        justify-self: start;
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        width: 100%;
     }
 }

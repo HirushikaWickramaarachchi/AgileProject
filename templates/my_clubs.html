@@ -47,6 +47,11 @@
                                 </a>
                             </h2>
                             <p class="my-club-description">{{ summary.club.description }}</p>
+                            <div class="club-hero-meta" aria-label="Club summary">
+                                <span><i class="bi bi-people" aria-hidden="true"></i>{{ summary.member_count }} member{% if summary.member_count != 1 %}s{% endif %}</span>
+                                <span><i class="bi bi-calendar2-event" aria-hidden="true"></i>{{ summary.event_count }} event{% if summary.event_count != 1 %}s{% endif %}</span>
+                                <span><i class="bi bi-person-check" aria-hidden="true"></i>{{ summary.attended_events|length }} attending</span>
+                            </div>
                             <div class="my-club-actions">
                                 <a href="{{ url_for('clubs.club_details', club_id=summary.club.id) }}" class="my-club-btn"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>View Club</a>
                                 <form method="POST" action="{{ url_for('clubs.leave_club', club_id=summary.club.id) }}">
@@ -71,11 +76,6 @@
                                 </form>
                             </div>
                         </div>
-                        <ul class="my-club-meta" aria-label="Club summary">
-                                <li><i class="bi bi-people" aria-hidden="true"></i>{{ summary.member_count }} member{% if summary.member_count != 1 %}s{% endif %}</li>
-                                <li><i class="bi bi-calendar2-event" aria-hidden="true"></i>{{ summary.event_count }} event{% if summary.event_count != 1 %}s{% endif %}</li>
-                                <li><i class="bi bi-person-check" aria-hidden="true"></i>{{ summary.attended_events|length }} attending</li>
-                        </ul>
                     </section>
 
                     <section class="my-club-events">
