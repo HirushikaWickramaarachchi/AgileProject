@@ -188,9 +188,25 @@ button:hover {
 .clubs-page {
     color: #22303d;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     background:
         radial-gradient(circle at 92% 0%, rgba(115, 165, 202, 0.25), transparent 36%),
         linear-gradient(180deg, #fffef2 0%, var(--background) 100%);
+}
+
+.clubs-main,
+.club-details-main,
+.event-main,
+.my-clubs-main,
+.search-main {
+    flex: 1 0 auto;
+    width: 100%;
+}
+
+.clubs-page > .leave-club-dialog,
+.clubs-page > .leave-club-dialog + script {
+    flex: 0 0 auto;
 }
 
 .site-header {
@@ -663,6 +679,7 @@ button:hover {
 }
 
 .clubs-footer {
+    flex-shrink: 0;
     margin-top: 38px;
     text-align: center;
     color: #516978;
