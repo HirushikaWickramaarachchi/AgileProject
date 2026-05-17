@@ -85,9 +85,9 @@
             <article class="card admin-metric-card mc-navy h-100">
                 <div class="card-body">
                     <div class="admin-metric-icon blue"><i class="bi bi-people-fill"></i></div>
-                    <p class="admin-metric-label mb-1">Total Members</p>
+                    <p class="admin-metric-label mb-1">Registered Users</p>
                     <p class="admin-metric-value mb-1">{{ total_users }}</p>
-                    <span class="admin-metric-trend text-success"><i class="bi bi-people"></i> Registered users</span>
+                    <span class="admin-metric-trend" style="color:var(--cs-navy)"><i class="bi bi-person-check"></i> Student accounts</span>
                 </div>
             </article>
         </div>
@@ -97,27 +97,27 @@
                     <div class="admin-metric-icon green"><i class="bi bi-calendar-check-fill"></i></div>
                     <p class="admin-metric-label mb-1">Total Events</p>
                     <p class="admin-metric-value mb-1">{{ total_events }}</p>
-                    <span class="admin-metric-trend text-success"><i class="bi bi-calendar2-week"></i> Across all clubs</span>
+                    <span class="admin-metric-trend" style="color:var(--cs-navy)"><i class="bi bi-calendar2-week"></i> Across {{ total_clubs }} clubs</span>
                 </div>
             </article>
         </div>
         <div class="col-6 col-xl-3">
             <article class="card admin-metric-card mc-orange h-100">
                 <div class="card-body">
-                    <div class="admin-metric-icon orange"><i class="bi bi-hourglass-split"></i></div>
-                    <p class="admin-metric-label mb-1">Total Memberships</p>
+                    <div class="admin-metric-icon orange"><i class="bi bi-diagram-3-fill"></i></div>
+                    <p class="admin-metric-label mb-1">Club Memberships</p>
                     <p class="admin-metric-value mb-1">{{ total_memberships }}</p>
-                    <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-diagram-3"></i> Club enrolments</span>
+                    <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-bar-chart"></i> {{ avg_members }} avg per club</span>
                 </div>
             </article>
         </div>
         <div class="col-6 col-xl-3">
             <article class="card admin-metric-card mc-yellow h-100">
                 <div class="card-body">
-                    <div class="admin-metric-icon purple"><i class="bi bi-activity"></i></div>
-                    <p class="admin-metric-label mb-1">Total Clubs</p>
-                    <p class="admin-metric-value mb-1">{{ total_clubs }}</p>
-                    <span class="admin-metric-trend text-success"><i class="bi bi-building"></i> Active on campus</span>
+                    <div class="admin-metric-icon purple"><i class="bi bi-ticket-perforated-fill"></i></div>
+                    <p class="admin-metric-label mb-1">Event RSVPs</p>
+                    <p class="admin-metric-value mb-1">{{ total_attendance }}</p>
+                    <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-activity"></i> Total attendance records</span>
                 </div>
             </article>
         </div>
@@ -133,14 +133,19 @@
                 </div>
                 <div class="card-body">
                     <div class="admin-timeline">
-                        {% for event, club in upcoming_events %}
+                        {% for event, club, rsvp_count in upcoming_events %}
                         <div class="admin-timeline-item">
                             <div>
                                 <h3 class="h6 mb-1">{{ event.title }}</h3>
                                 <p class="mb-1 small" style="color:var(--admin-text-muted)">{{ event.description[:80] ~ '…' if event.description and event.description|length > 80 else (event.description or 'No description.') }}</p>
                                 <small class="text-secondary">{{ club.name }} &middot; {{ event.date }}</small>
                             </div>
-                            <span class="badge text-bg-success flex-shrink-0">Scheduled</span>
+                            <div class="d-flex flex-column align-items-end gap-1 flex-shrink-0">
+                                <span class="badge text-bg-success">Scheduled</span>
+                                <span class="badge rounded-pill" style="background:rgba(var(--cs-navy-rgb,24,71,102),0.1);color:var(--cs-navy)">
+                                    <i class="bi bi-ticket-perforated me-1"></i>{{ rsvp_count }} RSVP{{ 's' if rsvp_count != 1 }}
+                                </span>
+                            </div>
                         </div>
                         {% else %}
                         <p class="text-muted small mb-0">No events yet. <a href="{{ url_for('admin.events') }}">Create one.</a></p>
@@ -194,22 +199,29 @@
         </div>
         <div class="col-12 col-lg-5">
             <section class="card admin-card">
-                <div class="card-header">Recent Memberships</div>
+                <div class="card-header">
+                    <span>Most Active Members</span>
+                    <span class="badge rounded-pill text-bg-warning" style="color:#000!important">Top 5</span>
+                </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
-                        {% for membership, user, club in recent_memberships %}
+                        {% for user, event_count in most_active_users %}
                         <li class="list-group-item px-4 py-3 border-0" style="border-bottom:1px solid var(--admin-border) !important">
-                            <div class="d-flex gap-3 align-items-start">
+                            <div class="d-flex gap-3 align-items-center">
                                 <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;border-radius:9px;font-size:.75rem;margin:0">{{ user.name[:2]|upper }}</div>
-                                <div>
-                                    <p class="mb-0 small fw-semibold">{{ user.name }} joined <strong>{{ club.name }}</strong></p>
+                                <div class="flex-grow-1 min-width-0">
+                                    <p class="mb-0 small fw-semibold text-truncate">{{ user.name }}</p>
                                     <span class="text-muted" style="font-size:.75rem">{{ user.email }}</span>
+                                </div>
+                                <div class="text-end flex-shrink-0">
+                                    <span class="fw-bold small" style="color:var(--cs-navy)">{{ event_count }}</span>
+                                    <div class="text-muted" style="font-size:.7rem">event{{ 's' if event_count != 1 }}</div>
                                 </div>
                             </div>
                         </li>
                         {% else %}
                         <li class="list-group-item px-4 py-3 border-0">
-                            <p class="text-muted small mb-0">No memberships yet.</p>
+                            <p class="text-muted small mb-0">No attendance records yet.</p>
                         </li>
                         {% endfor %}
                     </ul>

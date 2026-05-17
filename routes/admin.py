@@ -82,6 +82,8 @@ def dashboard():
     total_clubs = Club.query.count()
     total_events = Event.query.count()
     total_memberships = Membership.query.count()
+    total_attendance = Attendance.query.count()
+    avg_members = round(total_memberships / total_clubs, 1) if total_clubs else 0
 
     clubs_with_counts = (
         db.session.query(Club, db.func.count(Membership.id).label("member_count"))
@@ -93,15 +95,19 @@ def dashboard():
     )
 
     upcoming_events = sorted(
-        db.session.query(Event, Club).join(Club, Event.club_id == Club.id).all(),
+        db.session.query(Event, Club, db.func.count(Attendance.id).label("rsvp_count"))
+        .join(Club, Event.club_id == Club.id)
+        .outerjoin(Attendance, Attendance.event_id == Event.id)
+        .group_by(Event.id)
+        .all(),
         key=lambda row: _parse_event_date(row[0].date)
     )[:4]
 
-    recent_memberships = (
-        db.session.query(Membership, User, Club)
-        .join(User, Membership.user_id == User.id)
-        .join(Club, Membership.club_id == Club.id)
-        .order_by(Membership.id.desc())
+    most_active_users = (
+        db.session.query(User, db.func.count(Attendance.id).label("event_count"))
+        .join(Attendance, Attendance.user_id == User.id)
+        .group_by(User.id)
+        .order_by(db.desc("event_count"))
         .limit(5)
         .all()
     )
@@ -112,9 +118,11 @@ def dashboard():
         total_clubs=total_clubs,
         total_events=total_events,
         total_memberships=total_memberships,
+        total_attendance=total_attendance,
+        avg_members=avg_members,
         clubs_with_counts=clubs_with_counts,
         upcoming_events=upcoming_events,
-        recent_memberships=recent_memberships,
+        most_active_users=most_active_users,
     )
 
 
