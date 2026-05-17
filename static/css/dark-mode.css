@@ -288,7 +288,11 @@ html.dark-mode .section-bg { background: var(--section-bg) !important; }
 html.dark-mode .about-page { background: #0d1b2a !important; color: #d8eaf5; }
 html.dark-mode .about-card,
 html.dark-mode .about-section { background: #112336 !important; border-color: rgba(255,255,255,0.08) !important; }
-html.dark-mode .about-hero { background: linear-gradient(135deg, #0a1929, #0d2035) !important; }
+html.dark-mode .about-hero {
+    background:
+        linear-gradient(rgba(2, 8, 20, 0.88), rgba(2, 8, 20, 0.88)),
+        url("../images/about2.png") center/cover no-repeat !important;
+}
 
 /* ── Flash messages ───────────────────────────────────────── */
 html.dark-mode .alert-success { background: rgba(34,197,94,0.12)  !important; border-color: rgba(34,197,94,0.3)  !important; color: #4ade80 !important; }
