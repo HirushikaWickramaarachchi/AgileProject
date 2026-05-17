@@ -1,7 +1,9 @@
+import csv
+import io
 import os
 import uuid
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app, Response
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from models import db
@@ -323,6 +325,30 @@ def remove_attendance(attendance_id):
     db.session.delete(record)
     db.session.commit()
     return jsonify({"ok": True})
+
+
+@admin_bp.route("/events/<int:event_id>/attendees/export")
+@admin_required
+def export_attendees(event_id):
+    event = Event.query.get_or_404(event_id)
+    attendees = (
+        db.session.query(User)
+        .join(Attendance, Attendance.user_id == User.id)
+        .filter(Attendance.event_id == event_id)
+        .order_by(User.name)
+        .all()
+    )
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Name", "Email"])
+    for u in attendees:
+        writer.writerow([u.name, u.email])
+    filename = f"{event.title.replace(' ', '_')}_attendees.csv"
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
 
 @admin_bp.route("/events/<int:event_id>/edit", methods=["POST"])
