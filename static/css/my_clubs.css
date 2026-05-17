@@ -5,7 +5,6 @@
 }
 
 .my-clubs-hero {
-    max-width: var(--clubs-hero-max-width);
     margin-bottom: var(--clubs-section-gap);
 }
 
@@ -18,6 +17,7 @@
 .my-clubs-hero p {
     color: var(--clubs-text-color);
     line-height: var(--clubs-body-line-height);
+    max-width: var(--clubs-readable-max-width);
 }
 
 .my-clubs-list {
@@ -37,7 +37,7 @@
 
 .my-club-overview {
     display: grid;
-    grid-template-columns: minmax(220px, 27%) minmax(0, 1fr) 160px;
+    grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
     gap: var(--clubs-card-gap);
     align-items: start;
 }
@@ -67,6 +67,7 @@
     color: var(--clubs-text-color);
     line-height: var(--clubs-body-line-height);
     font-size: var(--clubs-body-size);
+    max-width: var(--clubs-readable-max-width);
 }
 
 .my-club-title-link {
@@ -240,7 +241,6 @@
     padding: var(--clubs-card-padding);
     display: grid;
     gap: var(--clubs-item-gap);
-    max-width: 720px;
 }
 
 .my-clubs-empty h2 {

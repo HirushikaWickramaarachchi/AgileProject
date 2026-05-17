@@ -11,7 +11,7 @@
     overflow: hidden;
     box-shadow: var(--clubs-card-shadow-strong);
     display: grid;
-    grid-template-columns: minmax(340px, 56%) 1fr;
+    grid-template-columns: minmax(20%, 544px) minmax(0, 1fr);
     margin-bottom: var(--clubs-section-gap);
 }
 
@@ -121,7 +121,7 @@
 
 .club-details-layout {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(280px, var(--clubs-sidebar-max-width));
     gap: var(--clubs-section-gap);
 }
 
@@ -148,6 +148,7 @@
     color: var(--clubs-text-color);
     line-height: var(--clubs-body-line-height);
     font-size: var(--clubs-body-size);
+    max-width: var(--clubs-readable-max-width);
 }
 
 .club-section-card p + p {

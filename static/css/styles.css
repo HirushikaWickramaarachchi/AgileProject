@@ -4,11 +4,13 @@
     --background: #FEFDDF;
     --accent: #FFC81E;
     --highlight: #E87F24;
-    --clubs-page-max-width: 1180px;
-    --clubs-page-padding: 36px 24px 20px;
+    --clubs-page-max-width: 100%;
+    --clubs-page-inline-padding: clamp(18px, 3vw, 48px);
+    --clubs-readable-max-width: 780px;
+    --clubs-sidebar-max-width: 420px;
+    --clubs-page-padding: 36px var(--clubs-page-inline-padding) 20px;
     --clubs-page-padding-tablet: 28px 24px 12px;
     --clubs-page-padding-mobile: 22px 16px 12px;
-    --clubs-hero-max-width: 780px;
     --clubs-section-gap: 20px;
     --clubs-card-gap: 20px;
     --clubs-item-gap: 10px;
@@ -221,9 +223,9 @@ button:hover {
 }
 
 .navbar-inner {
-    max-width: 1180px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 12px 24px;
+    padding: 12px var(--clubs-page-inline-padding);
     display: flex;
     align-items: center;
     gap: 24px;
@@ -344,7 +346,7 @@ button:hover {
 }
 
 .navbar-search input {
-    width: 280px;
+    width: clamp(240px, 22vw, 400px);
     max-width: 100%;
     padding: 10px 14px;
     margin: 0;
