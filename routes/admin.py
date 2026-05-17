@@ -116,17 +116,20 @@ def dashboard():
     )
 
 
+ALLOWED_IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
+
+
 def _save_club_image(file):
     if not file or file.filename == "":
-        return None
+        return None, None
     ext = os.path.splitext(secure_filename(file.filename))[1].lower()
-    if ext not in {".png", ".jpg", ".jpeg", ".gif", ".webp"}:
-        return None
+    if ext not in ALLOWED_IMAGE_EXTS:
+        return None, f"Invalid image format '{ext}'. Allowed: PNG, JPG, GIF, WEBP."
     filename = f"clubs/{uuid.uuid4().hex}{ext}"
     save_path = os.path.join(current_app.root_path, "static", "images", filename)
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     file.save(save_path)
-    return f"images/{filename}"
+    return f"images/{filename}", None
 
 
 @admin_bp.route("/clubs", methods=["GET", "POST"])
@@ -140,10 +143,13 @@ def clubs():
         elif Club.query.filter_by(name=name).first():
             flash("A club with that name already exists.", "danger")
         else:
-            image_path = _save_club_image(request.files.get("image"))
-            db.session.add(Club(name=name, description=description, image_path=image_path))
-            db.session.commit()
-            flash("Club created successfully.", "success")
+            image_path, img_err = _save_club_image(request.files.get("image"))
+            if img_err:
+                flash(img_err, "danger")
+            else:
+                db.session.add(Club(name=name, description=description, image_path=image_path))
+                db.session.commit()
+                flash("Club created successfully.", "success")
         return redirect(url_for("admin.clubs"))
 
     all_clubs = (
@@ -167,13 +173,16 @@ def edit_club(club_id):
     elif Club.query.filter(Club.name == name, Club.id != club_id).first():
         flash("A club with that name already exists.", "danger")
     else:
-        club.name = name
-        club.description = description
-        new_image = _save_club_image(request.files.get("image"))
-        if new_image:
-            club.image_path = new_image
-        db.session.commit()
-        flash(f'"{club.name}" updated successfully.', "success")
+        new_image, img_err = _save_club_image(request.files.get("image"))
+        if img_err:
+            flash(img_err, "danger")
+        else:
+            club.name = name
+            club.description = description
+            if new_image:
+                club.image_path = new_image
+            db.session.commit()
+            flash(f'"{club.name}" updated successfully.', "success")
     return redirect(url_for("admin.clubs"))
 
 
