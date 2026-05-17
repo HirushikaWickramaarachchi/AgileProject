@@ -3,6 +3,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
+import sqlalchemy as sa
 from werkzeug.security import generate_password_hash
 from app import app as flask_app
 from models import db as _db
@@ -14,6 +15,22 @@ from models.membership import Membership
 
 @pytest.fixture
 def app():
+    original_uri = flask_app.config.get("SQLALCHEMY_DATABASE_URI")
+    # Flask-SQLAlchemy 3.x builds engines at init_app time and caches them in
+    # _db._app_engines[flask_app]. Simply changing SQLALCHEMY_DATABASE_URI does
+    # NOT make it recreate the engine, so _db.drop_all() would hit the real DB.
+    # Fix: swap in a fresh in-memory engine before each test, restore after.
+    app_engines = _db._app_engines.get(flask_app, {})
+    original_engines = dict(app_engines)
+    test_engine = sa.create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+    )
+    for old_engine in app_engines.values():
+        old_engine.dispose()
+    app_engines.clear()
+    app_engines[None] = test_engine
+
     flask_app.config["TESTING"] = True
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
     flask_app.config["WTF_CSRF_ENABLED"] = False
@@ -24,6 +41,12 @@ def app():
         yield flask_app
         _db.session.remove()
         _db.drop_all()
+        test_engine.dispose()
+
+    # Restore real engine so the running server / Selenium tests are unaffected.
+    flask_app.config["SQLALCHEMY_DATABASE_URI"] = original_uri
+    app_engines.clear()
+    app_engines.update(original_engines)
 
 
 @pytest.fixture

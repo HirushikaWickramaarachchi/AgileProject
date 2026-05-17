@@ -13,8 +13,8 @@ class TestRegister:
         res = client.post("/register", data={
             "name": "New User",
             "email": "new@example.com",
-            "password": "password123",
-            "confirmPassword": "password123",
+            "password": "Password@123",
+            "confirmPassword": "Password@123",
         }, follow_redirects=True)
         assert res.status_code == 200
         with app.app_context():
@@ -26,8 +26,8 @@ class TestRegister:
         client.post("/register", data={
             "name": "New User",
             "email": "new@example.com",
-            "password": "password123",
-            "confirmPassword": "password123",
+            "password": "Password@123",
+            "confirmPassword": "Password@123",
         })
         with client.session_transaction() as sess:
             assert "user_id" in sess
@@ -36,8 +36,8 @@ class TestRegister:
         res = client.post("/register", data={
             "name": "Another",
             "email": "test@example.com",
-            "password": "password123",
-            "confirmPassword": "password123",
+            "password": "Password@123",
+            "confirmPassword": "Password@123",
         }, follow_redirects=True)
         assert b"Email already exists" in res.data
 
@@ -45,8 +45,8 @@ class TestRegister:
         res = client.post("/register", data={
             "name": "User",
             "email": "mismatch@example.com",
-            "password": "password123",
-            "confirmPassword": "different",
+            "password": "Password@123",
+            "confirmPassword": "Different@456",
         }, follow_redirects=True)
         assert b"Passwords do not match" in res.data
 
@@ -151,16 +151,16 @@ class TestForgotPassword:
 
         res = client.post("/forgot-password", data={
             "email": "reset@example.com",
-            "password": "newpass123",
-            "confirmPassword": "newpass123",
+            "password": "NewPass@123",
+            "confirmPassword": "NewPass@123",
         }, follow_redirects=True)
         assert b"Password reset successful" in res.data
 
     def test_reset_unknown_email(self, client):
         res = client.post("/forgot-password", data={
             "email": "ghost@example.com",
-            "password": "newpass",
-            "confirmPassword": "newpass",
+            "password": "NewPass@123",
+            "confirmPassword": "NewPass@123",
         }, follow_redirects=True)
         assert b"Email not found" in res.data
 
@@ -176,7 +176,7 @@ class TestForgotPassword:
 
         res = client.post("/forgot-password", data={
             "email": "reset2@example.com",
-            "password": "newpass",
-            "confirmPassword": "different",
+            "password": "NewPass@123",
+            "confirmPassword": "Different@456",
         }, follow_redirects=True)
         assert b"Passwords do not match" in res.data

@@ -53,9 +53,9 @@ class TestAdminDashboard:
 
     def test_dashboard_shows_counts(self, admin_client):
         res = admin_client.get("/admin/dashboard")
-        assert b"Total Members" in res.data
+        assert b"Registered Users" in res.data
         assert b"Total Events" in res.data
-        assert b"Total Clubs" in res.data
+        assert b"Club Memberships" in res.data
 
 
 class TestAdminEvents:
