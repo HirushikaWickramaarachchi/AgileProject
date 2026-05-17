@@ -3,7 +3,7 @@ let selectedForm = null;
 // Switch between sections (left menu)
 function showSection(sectionId, clickedButton) {
     const sections = document.querySelectorAll(".settings-section");
-    const buttons = document.querySelectorAll(".sidebar-item");
+    const buttons = document.querySelectorAll(".sidebar-btn");
 
     sections.forEach(section => {
         section.classList.remove("active-section");
