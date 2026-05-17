@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script>if(localStorage.getItem('adminDarkMode')==='true')document.documentElement.classList.add('admin-dark');</script>
     <style>.pre-dark body,.pre-dark .admin-body{background:#0d1b2a!important}</style>
 </head>
@@ -66,10 +67,18 @@
                 <h2 class="h4 fw-bold text-white mb-1">Welcome back, {{ session.get('admin_name', 'Admin') }}</h2>
                 <p class="mb-0 small text-white opacity-75">Here's everything happening across ClubSync today.</p>
             </div>
-            <div class="d-flex gap-3 flex-wrap">
+            <div class="d-flex gap-2 flex-wrap">
                 <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
-                    <div class="fw-bold text-white small">{{ total_clubs }} Clubs</div>
-                    <div class="text-white opacity-75" style="font-size:.72rem">Active on campus</div>
+                    <div class="fw-bold text-white small">{{ total_clubs }}</div>
+                    <div class="text-white opacity-75" style="font-size:.72rem">Clubs</div>
+                </div>
+                <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
+                    <div class="fw-bold text-white small">{{ total_events }}</div>
+                    <div class="text-white opacity-75" style="font-size:.72rem">Events</div>
+                </div>
+                <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
+                    <div class="fw-bold text-white small">{{ total_attendance }}</div>
+                    <div class="text-white opacity-75" style="font-size:.72rem">RSVPs</div>
                 </div>
                 <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,200,30,0.18);border:1px solid rgba(255,200,30,0.3)">
                     <div class="fw-bold small" style="color:#FFC81E">UWA Campus</div>
@@ -80,13 +89,16 @@
     </div>
 
     <!-- Metric cards -->
-    <div class="row g-3 mb-4">
+    <div class="row g-3 mb-4" id="metricRow">
         <div class="col-6 col-xl-3">
             <article class="card admin-metric-card mc-navy h-100">
                 <div class="card-body">
-                    <div class="admin-metric-icon blue"><i class="bi bi-people-fill"></i></div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="admin-metric-icon blue"><i class="bi bi-people-fill"></i></div>
+                        <span class="badge rounded-pill" style="background:rgba(24,71,102,0.1);color:var(--cs-navy);font-size:.7rem">Users</span>
+                    </div>
+                    <p class="admin-metric-value mb-1" data-count-to="{{ total_users }}">0</p>
                     <p class="admin-metric-label mb-1">Registered Users</p>
-                    <p class="admin-metric-value mb-1">{{ total_users }}</p>
                     <span class="admin-metric-trend" style="color:var(--cs-navy)"><i class="bi bi-person-check"></i> Student accounts</span>
                 </div>
             </article>
@@ -94,9 +106,12 @@
         <div class="col-6 col-xl-3">
             <article class="card admin-metric-card mc-blue h-100">
                 <div class="card-body">
-                    <div class="admin-metric-icon green"><i class="bi bi-calendar-check-fill"></i></div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="admin-metric-icon green"><i class="bi bi-calendar-check-fill"></i></div>
+                        <span class="badge rounded-pill" style="background:rgba(115,165,202,0.15);color:var(--cs-navy);font-size:.7rem">Events</span>
+                    </div>
+                    <p class="admin-metric-value mb-1" data-count-to="{{ total_events }}">0</p>
                     <p class="admin-metric-label mb-1">Total Events</p>
-                    <p class="admin-metric-value mb-1">{{ total_events }}</p>
                     <span class="admin-metric-trend" style="color:var(--cs-navy)"><i class="bi bi-calendar2-week"></i> Across {{ total_clubs }} clubs</span>
                 </div>
             </article>
@@ -104,9 +119,12 @@
         <div class="col-6 col-xl-3">
             <article class="card admin-metric-card mc-orange h-100">
                 <div class="card-body">
-                    <div class="admin-metric-icon orange"><i class="bi bi-diagram-3-fill"></i></div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="admin-metric-icon orange"><i class="bi bi-diagram-3-fill"></i></div>
+                        <span class="badge rounded-pill" style="background:rgba(232,127,36,0.12);color:var(--cs-orange);font-size:.7rem">Members</span>
+                    </div>
+                    <p class="admin-metric-value mb-1" data-count-to="{{ total_memberships }}">0</p>
                     <p class="admin-metric-label mb-1">Club Memberships</p>
-                    <p class="admin-metric-value mb-1">{{ total_memberships }}</p>
                     <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-bar-chart"></i> {{ avg_members }} avg per club</span>
                 </div>
             </article>
@@ -114,9 +132,12 @@
         <div class="col-6 col-xl-3">
             <article class="card admin-metric-card mc-yellow h-100">
                 <div class="card-body">
-                    <div class="admin-metric-icon purple"><i class="bi bi-ticket-perforated-fill"></i></div>
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="admin-metric-icon purple"><i class="bi bi-ticket-perforated-fill"></i></div>
+                        <span class="badge rounded-pill" style="background:rgba(255,200,30,0.2);color:#92600a;font-size:.7rem">RSVPs</span>
+                    </div>
+                    <p class="admin-metric-value mb-1" data-count-to="{{ total_attendance }}">0</p>
                     <p class="admin-metric-label mb-1">Event RSVPs</p>
-                    <p class="admin-metric-value mb-1">{{ total_attendance }}</p>
                     <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-activity"></i> Total attendance records</span>
                 </div>
             </article>
@@ -128,21 +149,22 @@
         <div class="col-12 col-xl-8">
             <section class="card admin-card h-100">
                 <div class="card-header">
-                    <span>Upcoming Events</span>
+                    <span><i class="bi bi-calendar3 me-2 text-primary"></i>Upcoming Events</span>
                     <span class="badge rounded-pill text-bg-primary">{{ upcoming_events|length }} scheduled</span>
                 </div>
                 <div class="card-body">
                     <div class="admin-timeline">
                         {% for event, club, rsvp_count in upcoming_events %}
-                        <div class="admin-timeline-item">
-                            <div>
+                        <div class="admin-timeline-item" style="--tl-accent:{% if loop.index == 1 %}var(--cs-navy){% elif loop.index == 2 %}var(--cs-blue){% elif loop.index == 3 %}var(--cs-orange){% else %}var(--cs-yellow){% endif %}">
+                            <div class="tl-dot"></div>
+                            <div class="flex-grow-1 min-width-0">
                                 <h3 class="h6 mb-1">{{ event.title }}</h3>
                                 <p class="mb-1 small" style="color:var(--admin-text-muted)">{{ event.description[:80] ~ '…' if event.description and event.description|length > 80 else (event.description or 'No description.') }}</p>
                                 <small class="text-secondary">{{ club.name }} &middot; {{ event.date }}</small>
                             </div>
                             <div class="d-flex flex-column align-items-end gap-1 flex-shrink-0">
                                 <span class="badge text-bg-success">Scheduled</span>
-                                <span class="badge rounded-pill" style="background:rgba(var(--cs-navy-rgb,24,71,102),0.1);color:var(--cs-navy)">
+                                <span class="badge rounded-pill" style="background:rgba(24,71,102,0.1);color:var(--cs-navy);font-size:.7rem">
                                     <i class="bi bi-ticket-perforated me-1"></i>{{ rsvp_count }} RSVP{{ 's' if rsvp_count != 1 }}
                                 </span>
                             </div>
@@ -156,19 +178,27 @@
         </div>
         <div class="col-12 col-xl-4">
             <section class="card admin-card h-100">
-                <div class="card-header">Quick Actions</div>
+                <div class="card-header"><i class="bi bi-lightning-charge-fill me-2 text-warning"></i>Quick Actions</div>
                 <div class="card-body d-grid gap-2">
-                    <a class="btn btn-outline-primary text-start fw-semibold" href="{{ url_for('admin.events') }}">
-                        <i class="bi bi-plus-circle me-2"></i>New Event
+                    <a class="btn admin-quick-action-btn text-start fw-semibold" href="{{ url_for('admin.events') }}" style="--qa-accent:#184766">
+                        <span class="qa-icon" style="background:rgba(24,71,102,0.1);color:var(--cs-navy)"><i class="bi bi-plus-circle-fill"></i></span>
+                        <span class="flex-grow-1">New Event</span>
+                        <i class="bi bi-chevron-right qa-arrow"></i>
                     </a>
-                    <a class="btn btn-outline-secondary text-start fw-semibold" href="{{ url_for('admin.clubs') }}">
-                        <i class="bi bi-building me-2"></i>Manage Clubs
+                    <a class="btn admin-quick-action-btn text-start fw-semibold" href="{{ url_for('admin.clubs') }}" style="--qa-accent:#73A5CA">
+                        <span class="qa-icon" style="background:rgba(115,165,202,0.15);color:var(--cs-navy)"><i class="bi bi-building-fill"></i></span>
+                        <span class="flex-grow-1">Manage Clubs</span>
+                        <i class="bi bi-chevron-right qa-arrow"></i>
                     </a>
-                    <a class="btn btn-outline-secondary text-start fw-semibold" href="{{ url_for('admin.users') }}">
-                        <i class="bi bi-person-lines-fill me-2"></i>Manage Users
+                    <a class="btn admin-quick-action-btn text-start fw-semibold" href="{{ url_for('admin.users') }}" style="--qa-accent:#E87F24">
+                        <span class="qa-icon" style="background:rgba(232,127,36,0.12);color:var(--cs-orange)"><i class="bi bi-person-lines-fill"></i></span>
+                        <span class="flex-grow-1">Manage Users</span>
+                        <i class="bi bi-chevron-right qa-arrow"></i>
                     </a>
-                    <a class="btn btn-outline-dark text-start fw-semibold" href="{{ url_for('admin.members') }}">
-                        <i class="bi bi-people-fill me-2"></i>View Members
+                    <a class="btn admin-quick-action-btn text-start fw-semibold" href="{{ url_for('admin.members') }}" style="--qa-accent:#FFC81E">
+                        <span class="qa-icon" style="background:rgba(255,200,30,0.18);color:#92600a"><i class="bi bi-people-fill"></i></span>
+                        <span class="flex-grow-1">View Members</span>
+                        <i class="bi bi-chevron-right qa-arrow"></i>
                     </a>
                 </div>
             </section>
@@ -179,28 +209,19 @@
     <div class="row g-3">
         <div class="col-12 col-lg-7">
             <section class="card admin-card">
-                <div class="card-header">Top Clubs by Members</div>
-                <div class="card-body d-grid gap-3">
-                    {% set max_count = clubs_with_counts[0][1] if clubs_with_counts else 1 %}
-                    {% for club, count in clubs_with_counts %}
-                    {% set pct = ((count / max_count) * 100) | int if max_count > 0 else 0 %}
-                    <div>
-                        <div class="d-flex justify-content-between small fw-semibold mb-1">
-                            <span>{{ club.name }}</span>
-                            <span class="text-primary">{{ count }} member{{ 's' if count != 1 }}</span>
-                        </div>
-                        <div class="progress"><div class="progress-bar bg-primary" style="width:{{ pct }}%"></div></div>
-                    </div>
-                    {% else %}
-                    <p class="text-muted small mb-0">No clubs yet.</p>
-                    {% endfor %}
+                <div class="card-header">
+                    <span><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Top Clubs by Members</span>
+                    <span class="text-muted small">Top {{ clubs_with_counts|length }}</span>
+                </div>
+                <div class="card-body">
+                    <canvas id="clubsChart" height="{% if clubs_with_counts|length <= 3 %}130{% elif clubs_with_counts|length == 4 %}160{% else %}200{% endif %}"></canvas>
                 </div>
             </section>
         </div>
         <div class="col-12 col-lg-5">
             <section class="card admin-card">
                 <div class="card-header">
-                    <span>Most Active Members</span>
+                    <span><i class="bi bi-trophy-fill me-2" style="color:var(--cs-yellow)"></i>Most Active Members</span>
                     <span class="badge rounded-pill text-bg-warning" style="color:#000!important">Top 5</span>
                 </div>
                 <div class="card-body p-0">
@@ -208,6 +229,13 @@
                         {% for user, event_count in most_active_users %}
                         <li class="list-group-item px-4 py-3 border-0" style="border-bottom:1px solid var(--admin-border) !important">
                             <div class="d-flex gap-3 align-items-center">
+                                <div class="admin-rank-badge flex-shrink-0
+                                    {% if loop.index == 1 %}rank-gold
+                                    {% elif loop.index == 2 %}rank-silver
+                                    {% elif loop.index == 3 %}rank-bronze
+                                    {% else %}rank-plain{% endif %}">
+                                    {{ loop.index }}
+                                </div>
                                 <div class="admin-avatar flex-shrink-0" style="width:34px;height:34px;border-radius:9px;font-size:.75rem;margin:0">{{ user.name[:2]|upper }}</div>
                                 <div class="flex-grow-1 min-width-0">
                                     <p class="mb-0 small fw-semibold text-truncate">{{ user.name }}</p>
@@ -243,10 +271,113 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+
+<!-- Chart data from server -->
 <script>
-    document.getElementById('mobileMenuToggle').addEventListener('click', () => {
-        document.getElementById('mobileMenu').classList.toggle('open');
+const _clubLabels = [{% for club, count in clubs_with_counts %}"{{ club.name | replace('"', '\\"') | replace("'", "\\'") }}"{% if not loop.last %},{% endif %}{% endfor %}];
+const _clubValues = [{% for club, count in clubs_with_counts %}{{ count }}{% if not loop.last %},{% endif %}{% endfor %}];
+</script>
+
+<script>
+// ── Count-up animation ──────────────────────────────────────────
+function countUp(el, target) {
+    const duration = 1200;
+    const start = performance.now();
+    const update = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(ease * target).toLocaleString();
+        if (t < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+}
+document.querySelectorAll('[data-count-to]').forEach(el => {
+    countUp(el, parseInt(el.dataset.countTo, 10));
+});
+
+// ── Stagger fade-in for metric cards ───────────────────────────
+document.querySelectorAll('#metricRow .col-6, #metricRow .col-xl-3').forEach((col, i) => {
+    col.style.opacity = '0';
+    col.style.transform = 'translateY(18px)';
+    col.style.transition = `opacity 0.45s ease ${i * 90}ms, transform 0.45s ease ${i * 90}ms`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        col.style.opacity = '1';
+        col.style.transform = 'translateY(0)';
+    }));
+});
+
+// ── Stagger fade-in for admin-card sections ────────────────────
+document.querySelectorAll('.admin-card').forEach((card, i) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(14px)';
+    card.style.transition = `opacity 0.4s ease ${80 + i * 60}ms, transform 0.4s ease ${80 + i * 60}ms`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+    }));
+});
+
+// ── Chart.js: Top Clubs by Members ─────────────────────────────
+const clubsChartEl = document.getElementById('clubsChart');
+if (clubsChartEl && _clubLabels.length > 0) {
+    const isDark = document.documentElement.classList.contains('admin-dark');
+    const gridColor  = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+    const tickColor  = isDark ? '#7eb3d0' : '#5e7a8e';
+    const barColors  = ['#184766','#73A5CA','#E87F24','#FFC81E','#1e6b9e'];
+    const hoverColors= ['#0d2e44','#5a90b8','#c96c18','#d4a900','#155a8a'];
+
+    new Chart(clubsChartEl.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: _clubLabels,
+            datasets: [{
+                data: _clubValues,
+                backgroundColor: barColors.slice(0, _clubLabels.length),
+                hoverBackgroundColor: hoverColors.slice(0, _clubLabels.length),
+                borderRadius: 8,
+                borderSkipped: false,
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            animation: { duration: 900, easing: 'easeOutQuart' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: isDark ? '#112336' : '#132535',
+                    titleColor: '#fff',
+                    bodyColor: 'rgba(255,255,255,0.8)',
+                    padding: 10,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: ctx => `  ${ctx.parsed.x} member${ctx.parsed.x !== 1 ? 's' : ''}`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: gridColor },
+                    border: { display: false },
+                    ticks: { color: tickColor, precision: 0 }
+                },
+                y: {
+                    grid: { display: false },
+                    border: { display: false },
+                    ticks: { color: tickColor, font: { weight: '600' } }
+                }
+            }
+        }
     });
+} else if (clubsChartEl) {
+    clubsChartEl.closest('.card-body').innerHTML = '<p class="text-muted small mb-0">No clubs yet.</p>';
+}
+
+// ── Mobile menu toggle ─────────────────────────────────────────
+document.getElementById('mobileMenuToggle').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('open');
+});
 </script>
 </body>
 </html>

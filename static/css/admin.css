@@ -348,24 +348,6 @@
 }
 .admin-card .card-body { padding: 1.25rem; }
 
-/* ── Timeline ─────────────────────────────────────────────── */
-.admin-timeline { display: grid; gap: 0.75rem; }
-.admin-timeline-item {
-    border: 1px solid var(--admin-border);
-    border-radius: 10px;
-    background: #fdfbe8;
-    padding: 0.85rem 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 0.75rem;
-    transition: border-color var(--admin-transition), background var(--admin-transition);
-}
-.admin-timeline-item:hover {
-    border-color: var(--cs-blue);
-    background: #faf8e0;
-}
-
 /* ── Progress bars ────────────────────────────────────────── */
 .progress { height: 7px; border-radius: 99px; background: #e8e4c0; }
 .progress-bar { border-radius: 99px; transition: width 0.6s ease; }
@@ -604,16 +586,6 @@ html.admin-dark table {
     color: #cce0f0;
 }
 html.admin-dark .table-responsive { border-color: transparent; }
-
-/* Timeline */
-html.admin-dark .admin-timeline-item {
-    background: #0f2135;
-    border-color: rgba(255, 255, 255, 0.08);
-}
-html.admin-dark .admin-timeline-item:hover {
-    background: #132840;
-    border-color: var(--cs-blue);
-}
 
 /* Progress bars */
 html.admin-dark .progress { background: rgba(255,255,255,0.1); }
@@ -904,6 +876,124 @@ html.admin-dark .admin-navbar {
 .admin-navbar-mobile a.active { color: #fff; background: rgba(255,200,30,0.12); }
 .admin-navbar-mobile a.active { color: var(--cs-yellow); font-weight: 600; }
 .admin-navbar-mobile.open { display: flex; }
+
+/* ── Metric card gradient tints (light mode) ──────────────── */
+.admin-metric-card.mc-navy { background: linear-gradient(145deg, #eef4fb 0%, #fff 60%) !important; }
+.admin-metric-card.mc-blue { background: linear-gradient(145deg, #eaf4ff 0%, #fff 60%) !important; }
+.admin-metric-card.mc-orange { background: linear-gradient(145deg, #fef5ee 0%, #fff 60%) !important; }
+.admin-metric-card.mc-yellow { background: linear-gradient(145deg, #fffce8 0%, #fff 60%) !important; }
+
+/* ── Timeline redesign ────────────────────────────────────── */
+.admin-timeline { display: grid; gap: 0.65rem; }
+.admin-timeline-item {
+    border: 1px solid var(--admin-border);
+    border-left: 3px solid var(--tl-accent, var(--cs-blue));
+    border-radius: 10px;
+    background: #fdfbe8;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: border-color var(--admin-transition), background var(--admin-transition),
+                box-shadow var(--admin-transition), transform 0.15s ease;
+    position: relative;
+}
+.admin-timeline-item:hover {
+    border-left-color: var(--tl-accent, var(--cs-blue));
+    background: #faf8e0;
+    box-shadow: 0 4px 16px rgba(24,71,102,0.08);
+    transform: translateX(3px);
+}
+.tl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--tl-accent, var(--cs-blue));
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+/* ── Quick action buttons ─────────────────────────────────── */
+.admin-quick-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--admin-border);
+    background: #fff;
+    color: var(--admin-text);
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: background var(--admin-transition), border-color var(--admin-transition),
+                box-shadow var(--admin-transition), transform 0.15s ease;
+}
+.admin-quick-action-btn:hover {
+    background: #faf8e0;
+    border-color: var(--qa-accent, var(--cs-blue));
+    color: var(--admin-text);
+    box-shadow: 0 3px 12px rgba(24,71,102,0.1);
+    transform: translateX(3px);
+}
+.qa-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+.admin-quick-action-btn:hover .qa-icon { transform: scale(1.1); }
+.qa-arrow {
+    color: var(--admin-text-muted);
+    font-size: 0.75rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+.admin-quick-action-btn:hover .qa-arrow {
+    transform: translateX(3px);
+    color: var(--qa-accent, var(--cs-navy));
+}
+
+/* ── Rank badges ──────────────────────────────────────────── */
+.admin-rank-badge {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+.rank-gold   { background: #FFC81E; color: #5a3d00; }
+.rank-silver { background: #c0d8e8; color: #1a3a50; }
+.rank-bronze { background: #E87F24; color: #fff; }
+.rank-plain  { background: #e8e4c0; color: var(--admin-text-muted); }
+
+/* ── Dark mode: new additions ─────────────────────────────── */
+html.admin-dark .admin-metric-card.mc-navy,
+html.admin-dark .admin-metric-card.mc-blue,
+html.admin-dark .admin-metric-card.mc-orange,
+html.admin-dark .admin-metric-card.mc-yellow { background: #112336 !important; }
+
+html.admin-dark .admin-timeline-item {
+    background: #0f2135;
+    border-color: rgba(255,255,255,0.08);
+}
+html.admin-dark .admin-timeline-item:hover {
+    background: #132840;
+    border-left-color: var(--tl-accent, var(--cs-blue));
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+html.admin-dark .tl-dot { opacity: 0.85; }
+html.admin-dark .admin-quick-action-btn {
+    background: #0f2135;
+    border-color: rgba(255,255,255,0.1);
+    color: #cce0f0;
+}
+html.admin-dark .admin-quick-action-btn:hover {
+    background: #132840;
+    border-color: var(--qa-accent, var(--cs-blue));
+    color: #fff;
+}
+html.admin-dark .rank-plain { background: rgba(255,255,255,0.1); color: #7eb3d0; }
 
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
