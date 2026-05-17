@@ -20,7 +20,7 @@ from selenium.webdriver.support import expected_conditions as EC
 BASE_URL = "http://127.0.0.1:5000"
 
 TEST_EMAIL = f"selenium_{int(time.time())}@example.com"
-TEST_PASSWORD = "seleniumpass123"
+TEST_PASSWORD = "Selenium@123"
 TEST_NAME = "Selenium User"
 
 
