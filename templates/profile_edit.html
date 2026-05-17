@@ -218,10 +218,21 @@
                 <label>Gender</label>
 
                 <select name="gender">
-                  <option value="">Not specified</option>
-                  <option value="Female">Female</option>
-                  <option value="Male">Male</option>
-                  <option value="Other">Other</option>
+                  <option value="" {% if not profile or not profile.gender %}selected{% endif %}>
+                    Not specified
+                  </option>
+
+                  <option value="Female" {% if profile and profile.gender=='Female' %}selected{% endif %}>
+                    Female
+                  </option>
+
+                  <option value="Male" {% if profile and profile.gender=='Male' %}selected{% endif %}>
+                    Male
+                  </option>
+
+                  <option value="Other" {% if profile and profile.gender=='Other' %}selected{% endif %}>
+                    Other
+                  </option>
                 </select>
               </div>
 
