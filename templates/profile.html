@@ -310,7 +310,27 @@
                 </div>
 
                 <div class="attendance-status">
-                  <span class="status-badge"> Attended </span>
+                
+                  {% set left_club = false %}
+                
+                  {% for membership in user.memberships %}
+                  {% if membership.club.id == attendance.event.club.id and membership.status == "left" %}
+                  {% set left_club = true %}
+                  {% endif %}
+                  {% endfor %}
+                
+                  {% if left_club %}
+                  <span class="status-badge left-badge">
+                    Left Club
+                  </span>
+                
+                  {% else %}
+                  <span class="status-badge">
+                    Attended
+                  </span>
+                
+                  {% endif %}
+                
                 </div>
               </div>
 
