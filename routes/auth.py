@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+import re
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User
 
@@ -14,16 +15,38 @@ def register():
         password = request.form.get("password")
         confirm = request.form.get("confirmPassword")
 
+        # EMAIL VALIDATION
+        email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+
+        if not re.match(email_pattern, email):
+            flash("Please enter a valid email address.", "danger")
+            return redirect(url_for("auth.register"))
+
+        # STRONG PASSWORD VALIDATION
+        password_pattern = (
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+        )
+
+        if not re.match(password_pattern, password):
+            flash(
+                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.",
+                "danger",
+            )
+            return redirect(url_for("auth.register"))
+
+        # PASSWORD MATCH CHECK
         if password != confirm:
             flash("Passwords do not match.", "danger")
             return redirect(url_for("auth.register"))
 
+        # CHECK EXISTING EMAIL
         existing = User.query.filter_by(email=email).first()
 
         if existing:
             flash("Email already exists.", "danger")
             return redirect(url_for("auth.register"))
 
+        # CREATE USER
         new_user = User(
             name=name,
             email=email,
@@ -37,6 +60,7 @@ def register():
         session["user_name"] = new_user.name
 
         flash("Account created successfully.", "success")
+
         return redirect(url_for("dashboard.home"))
 
     return render_template("signup.html")
@@ -82,20 +106,37 @@ def forgot_password():
         password = request.form.get("password")
         confirm = request.form.get("confirmPassword")
 
+        # STRONG PASSWORD VALIDATION
+        password_pattern = (
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+        )
+
+        if not re.match(password_pattern, password):
+            flash(
+                "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character.",
+                "danger",
+            )
+            return redirect(url_for("auth.forgot_password"))
+
+        # CHECK PASSWORD MATCH
+        if password != confirm:
+            flash("Passwords do not match.", "danger")
+            return redirect(url_for("auth.forgot_password"))
+
+        # CHECK USER EXISTS
         user = User.query.filter_by(email=email).first()
 
         if not user:
             flash("Email not found.", "danger")
             return redirect(url_for("auth.forgot_password"))
 
-        if password != confirm:
-            flash("Passwords do not match.", "danger")
-            return redirect(url_for("auth.forgot_password"))
-
+        # UPDATE PASSWORD
         user.password_hash = generate_password_hash(password)
+
         db.session.commit()
 
         flash("Password reset successful.", "success")
+
         return redirect(url_for("auth.login"))
 
     return render_template("forgot_password.html")

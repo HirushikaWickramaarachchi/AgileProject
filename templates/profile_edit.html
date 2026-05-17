@@ -200,7 +200,13 @@
 
             <p class="edit-subtitle">Manage your personal details.</p>
 
-            <form class="edit-form">
+            <form method="POST" action="/profile-edit" class="edit-form">
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+
               <!-- GENDER -->
               <div class="form-group">
                 <label>Gender</label>
@@ -217,7 +223,11 @@
               <div class="form-group">
                 <label>Date of Birth</label>
 
-                <input type="date" name="dob" />
+                <input
+                  type="date"
+                  name="dob"
+                  value="{{ profile.dob if profile else '' }}"
+                />
               </div>
 
               <!-- PHONE -->
@@ -225,9 +235,13 @@
                 <label>Phone</label>
 
                 <input
-                  type="text"
+                  type="tel"
                   name="phone"
                   value="{{ profile.phone if profile else '' }}"
+                  pattern="^\+?[0-9]{8,15}$"
+                  title="Enter a valid phone number (8-15 digits)"
+                  placeholder="e.g. +61412345678"
+                  required
                 />
               </div>
 
@@ -239,6 +253,8 @@
                   type="email"
                   name="email"
                   value="{{ user.email }}"
+                  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                  title="Enter a valid email address"
                   required
                 />
               </div>
@@ -266,20 +282,40 @@
 
             <p class="edit-subtitle">Change your account password.</p>
 
-            <form class="edit-form">
+            <form method="POST" action="/profile-edit" class="edit-form">
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+
               <div class="form-group">
                 <label>Current Password</label>
-                <input type="password" />
+
+                <input type="password" name="current_password" required />
               </div>
 
               <div class="form-group">
                 <label>New Password</label>
-                <input type="password" />
+
+                <input
+                  type="password"
+                  name="new_password"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+                  title="Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character."
+                  required
+                />
+
+                <small class="password-hint">
+                  Password must contain: 8+ characters, uppercase, lowercase,
+                  number, and special character.
+                </small>
               </div>
 
               <div class="form-group">
                 <label>Confirm New Password</label>
-                <input type="password" />
+
+                <input type="password" name="confirm_new_password" required />
               </div>
 
               <button type="submit" class="save-btn">Update Password</button>

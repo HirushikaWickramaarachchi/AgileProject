@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, reques
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import os
+import re
 
 from models import db
 from models.user import User
@@ -15,10 +16,12 @@ profile_bp = Blueprint("profile", __name__)
 
 @profile_bp.route("/my-profile")
 def profile():
+
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
     user_id = session["user_id"]
+
     user = User.query.get(user_id)
 
     joined_clubs = (
@@ -41,6 +44,7 @@ def profile():
 
 @profile_bp.route("/profile-edit", methods=["GET", "POST"])
 def profile_edit():
+
     if "user_id" not in session:
         return redirect(url_for("auth.login"))
 
@@ -54,6 +58,7 @@ def profile_edit():
 
     if request.method == "POST":
 
+        # PROFILE IMAGE
         avatar = request.files.get("avatar")
 
         if avatar and avatar.filename:
@@ -76,48 +81,121 @@ def profile_edit():
 
             profile_data.avatar = filename
 
-
-
-        # Account Management: change password
+        # ACCOUNT MANAGEMENT - PASSWORD CHANGE
         if request.form.get("current_password"):
+
             current_password = request.form.get("current_password")
+
             new_password = request.form.get("new_password")
-            confirm_password = request.form.get("confirm_password")
 
-            if not current_password and not new_password and not confirm_password:
-                return redirect(url_for("profile.profile_edit", error="no_change"))
+            confirm_password = request.form.get(
+                "confirm_new_password"
+            )
 
-            if not check_password_hash(user.password_hash, current_password):
-                return redirect(url_for("profile.profile_edit", error="wrong_password"))
+            password_pattern = (
+                r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+            )
+
+            if not check_password_hash(
+                user.password_hash,
+                current_password
+            ):
+                return redirect(
+                    url_for(
+                        "profile.profile_edit",
+                        error="wrong_password"
+                    )
+                )
+
+            if not re.match(password_pattern, new_password):
+                return redirect(
+                    url_for(
+                        "profile.profile_edit",
+                        error="weak_password"
+                    )
+                )
 
             if new_password != confirm_password:
-                return redirect(url_for("profile.profile_edit", error="password_mismatch"))
+                return redirect(
+                    url_for(
+                        "profile.profile_edit",
+                        error="password_mismatch"
+                    )
+                )
 
-            if not new_password:
-                return "New password cannot be empty"
+            user.password_hash = generate_password_hash(
+                new_password
+            )
 
-            user.password_hash = generate_password_hash(new_password)
             db.session.commit()
 
-            return redirect(url_for("profile.profile_edit", updated=1))
+            return redirect(
+                url_for(
+                    "profile.profile_edit",
+                    updated=1
+                )
+            )
 
-        # User table fields
+        # USER TABLE FIELDS
         if "name" in request.form:
+
             name = request.form.get("name")
+
             if name:
                 user.name = name
 
+        # EMAIL VALIDATION
         if "email" in request.form:
-            email = request.form.get("email")
-            if email:
-                user.email = email
 
-        # ProfileUser table fields
+            email = request.form.get(
+                "email"
+            ).strip().lower()
+
+            email_pattern = (
+                r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            )
+
+            if not re.match(email_pattern, email):
+                return redirect(
+                    url_for(
+                        "profile.profile_edit",
+                        error="invalid_email"
+                    )
+                )
+
+            existing_user = User.query.filter_by(
+                email=email
+            ).first()
+
+            if existing_user and existing_user.id != user.id:
+                return redirect(
+                    url_for(
+                        "profile.profile_edit",
+                        error="email_exists"
+                    )
+                )
+
+            user.email = email
+
+        # PROFILE USER TABLE FIELDS
         if "major" in request.form:
             profile_data.major = request.form.get("major")
 
         if "phone" in request.form:
-            profile_data.phone = request.form.get("phone")
+
+            phone = request.form.get("phone").strip()
+
+            phone_pattern = r"^\+?[0-9]{8,15}$"
+
+            if not re.match(phone_pattern, phone):
+                return redirect(
+                    url_for(
+                        "profile.profile_edit",
+                        error="invalid_phone"
+                    )
+                )
+
+            profile_data.phone = phone
 
         if "address" in request.form:
             profile_data.address = request.form.get("address")
@@ -133,8 +211,18 @@ def profile_edit():
 
         db.session.commit()
 
-        section = request.args.get("section", "edit-profile")
-        return redirect(url_for("profile.profile_edit", updated=1, section=section))
+        section = request.args.get(
+            "section",
+            "edit-profile"
+        )
+
+        return redirect(
+            url_for(
+                "profile.profile_edit",
+                updated=1,
+                section=section
+            )
+        )
 
     return render_template(
         "profile_edit.html",
