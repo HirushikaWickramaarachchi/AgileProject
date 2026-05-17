@@ -1,7 +1,9 @@
+import csv
+import io
 import os
 import uuid
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app, Response
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from models import db
@@ -80,6 +82,8 @@ def dashboard():
     total_clubs = Club.query.count()
     total_events = Event.query.count()
     total_memberships = Membership.query.count()
+    total_attendance = Attendance.query.count()
+    avg_members = round(total_memberships / total_clubs, 1) if total_clubs else 0
 
     clubs_with_counts = (
         db.session.query(Club, db.func.count(Membership.id).label("member_count"))
@@ -91,15 +95,19 @@ def dashboard():
     )
 
     upcoming_events = sorted(
-        db.session.query(Event, Club).join(Club, Event.club_id == Club.id).all(),
+        db.session.query(Event, Club, db.func.count(Attendance.id).label("rsvp_count"))
+        .join(Club, Event.club_id == Club.id)
+        .outerjoin(Attendance, Attendance.event_id == Event.id)
+        .group_by(Event.id)
+        .all(),
         key=lambda row: _parse_event_date(row[0].date)
     )[:4]
 
-    recent_memberships = (
-        db.session.query(Membership, User, Club)
-        .join(User, Membership.user_id == User.id)
-        .join(Club, Membership.club_id == Club.id)
-        .order_by(Membership.id.desc())
+    most_active_users = (
+        db.session.query(User, db.func.count(Attendance.id).label("event_count"))
+        .join(Attendance, Attendance.user_id == User.id)
+        .group_by(User.id)
+        .order_by(db.desc("event_count"))
         .limit(5)
         .all()
     )
@@ -110,9 +118,11 @@ def dashboard():
         total_clubs=total_clubs,
         total_events=total_events,
         total_memberships=total_memberships,
+        total_attendance=total_attendance,
+        avg_members=avg_members,
         clubs_with_counts=clubs_with_counts,
         upcoming_events=upcoming_events,
-        recent_memberships=recent_memberships,
+        most_active_users=most_active_users,
     )
 
 
@@ -279,6 +289,56 @@ def events():
 @admin_required
 def event_attendees(event_id):
     event = Event.query.get_or_404(event_id)
+    attendance_records = (
+        db.session.query(Attendance, User)
+        .join(User, Attendance.user_id == User.id)
+        .filter(Attendance.event_id == event_id)
+        .order_by(User.name)
+        .all()
+    )
+    attended_user_ids = {a.user_id for a, _ in attendance_records}
+    all_users = User.query.filter_by(is_admin=False).order_by(User.name).all()
+    non_attendees = [u for u in all_users if u.id not in attended_user_ids]
+    return jsonify({
+        "event": event.title,
+        "attendees": [
+            {"attendance_id": a.id, "name": u.name, "email": u.email}
+            for a, u in attendance_records
+        ],
+        "non_attendees": [{"id": u.id, "name": u.name} for u in non_attendees],
+    })
+
+
+@admin_bp.route("/events/<int:event_id>/attendance/add", methods=["POST"])
+@admin_required
+def add_attendance(event_id):
+    Event.query.get_or_404(event_id)
+    user_id = request.form.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id required"}), 400
+    existing = Attendance.query.filter_by(user_id=int(user_id), event_id=event_id).first()
+    if existing:
+        return jsonify({"error": "Already marked as attended"}), 409
+    record = Attendance(user_id=int(user_id), event_id=event_id)
+    db.session.add(record)
+    db.session.commit()
+    user = User.query.get(int(user_id))
+    return jsonify({"attendance_id": record.id, "name": user.name, "email": user.email})
+
+
+@admin_bp.route("/events/attendance/<int:attendance_id>/remove", methods=["POST"])
+@admin_required
+def remove_attendance(attendance_id):
+    record = Attendance.query.get_or_404(attendance_id)
+    db.session.delete(record)
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+@admin_bp.route("/events/<int:event_id>/attendees/export")
+@admin_required
+def export_attendees(event_id):
+    event = Event.query.get_or_404(event_id)
     attendees = (
         db.session.query(User)
         .join(Attendance, Attendance.user_id == User.id)
@@ -286,10 +346,17 @@ def event_attendees(event_id):
         .order_by(User.name)
         .all()
     )
-    return jsonify({
-        "event": event.title,
-        "attendees": [{"name": u.name, "email": u.email} for u in attendees]
-    })
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Name", "Email"])
+    for u in attendees:
+        writer.writerow([u.name, u.email])
+    filename = f"{event.title.replace(' ', '_')}_attendees.csv"
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
 
 @admin_bp.route("/events/<int:event_id>/edit", methods=["POST"])
