@@ -86,12 +86,44 @@
     <div class="alc-footer">
         <a href="/"><i class="bi bi-arrow-left me-1"></i>Back to ClubSync</a>
         &nbsp;·&nbsp;
-        <a href="#">Need access?</a>
+        <a href="#" id="needAccessBtn">Need access?</a>
     </div>
 
 </div>
 
+<!-- Need Access Modal -->
+<div id="needAccessOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;align-items:center;justify-content:center;">
+    <div style="background:#1e2a38;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;max-width:380px;width:90%;text-align:center;position:relative;">
+        <button id="needAccessClose" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;line-height:1;">&times;</button>
+        <div style="width:52px;height:52px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <i class="bi bi-person-badge-fill" style="color:#fff;font-size:22px;"></i>
+        </div>
+        <h3 style="color:#fff;margin:0 0 8px;font-size:18px;">Request Admin Access</h3>
+        <p style="color:#94a3b8;font-size:14px;margin:0 0 20px;line-height:1.6;">
+            Admin access is restricted to authorised staff only.<br>
+            Contact the system administrator to request credentials.
+        </p>
+        <a href="mailto:admin@clubsync.edu" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;">
+            <i class="bi bi-envelope-fill"></i>
+            admin@clubsync.edu
+        </a>
+    </div>
+</div>
+
 <script>
+    /* ── Need Access modal ───────────────────────────────────── */
+    const overlay = document.getElementById('needAccessOverlay');
+    document.getElementById('needAccessBtn').addEventListener('click', e => {
+        e.preventDefault();
+        overlay.style.display = 'flex';
+    });
+    document.getElementById('needAccessClose').addEventListener('click', () => {
+        overlay.style.display = 'none';
+    });
+    overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.style.display = 'none';
+    });
+
     /* ── Toggle password ─────────────────────────────────────── */
     document.querySelectorAll('.toggle-pw').forEach(btn => {
         btn.addEventListener('click', () => {

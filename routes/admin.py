@@ -34,21 +34,38 @@ def admin_required(f):
     from functools import wraps
     @wraps(f)
     def decorated(*args, **kwargs):
-        if not session.get("admin_logged_in"):
-            return redirect(url_for("admin.login"))
-        return f(*args, **kwargs)
+        if session.get("admin_logged_in"):
+            return f(*args, **kwargs)
+        user_id = session.get("user_id")
+        if user_id:
+            user = User.query.get(user_id)
+            if user and user.is_admin:
+                session["admin_logged_in"] = True
+                session["admin_user_id"] = user.id
+                session["admin_name"] = user.name
+                return f(*args, **kwargs)
+        return redirect(url_for("admin.login"))
     return decorated
 
 
 @admin_bp.route("/")
+@admin_required
 def index():
-    return redirect(url_for("admin.login"))
+    return redirect(url_for("admin.dashboard"))
 
 
 @admin_bp.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("admin_logged_in"):
         return redirect(url_for("admin.dashboard"))
+    user_id = session.get("user_id")
+    if user_id:
+        user = User.query.get(user_id)
+        if user and user.is_admin:
+            session["admin_logged_in"] = True
+            session["admin_user_id"] = user.id
+            session["admin_name"] = user.name
+            return redirect(url_for("admin.dashboard"))
 
     if request.method == "POST":
         email = request.form.get("email", "").strip()
