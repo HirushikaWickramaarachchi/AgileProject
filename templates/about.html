@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>About Us - ClubSync</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/about.css') }}"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    {% set active_page = 'about' %} {% include "_site_header.html" %}
+
+    <!-- HERO SECTION -->
+
+    <section class="about-hero">
+      <div class="hero-content">
+        <h1>About ClubSync</h1>
+
+        <p>
+          Connecting students, clubs, and unforgettable campus experiences all
+          in one place.
+        </p>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+
+    <section class="about-section">
+      <div class="about-container">
+        <div class="about-text">
+          <span>WHO WE ARE</span>
+
+          <h2>Building Stronger Student Communities</h2>
+
+          <p>
+            ClubSync is a modern student club management platform designed to
+            help students discover clubs, participate in events, and stay
+            connected with university life.
+          </p>
+
+          <p>
+            Our mission is to make campus engagement easier, more exciting, and
+            more accessible for every student.
+          </p>
+
+          <div class="about-stats">
+            <div class="stat-card">
+              <h3>50+</h3>
+              <p>Student Clubs</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>100+</h3>
+              <p>Events Hosted</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>1000+</h3>
+              <p>Students Connected</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-image">
+          <img
+            src="{{ url_for('static', filename='images/about1.jpg') }}"
+            alt="About ClubSync"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features-section">
+      <div class="section-title">
+        <span>WHY CHOOSE US</span>
+
+        <h2>Everything You Need In One Platform</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon">🎯</div>
+
+          <h3>Discover Clubs</h3>
+
+          <p>Explore clubs and communities that match your interests.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon">📅</div>
+
+          <h3>Attend Events</h3>
+
+          <p>Stay updated with campus events and activities.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon">🤝</div>
+
+          <h3>Build Connections</h3>
+
+          <p>Meet students, make friends, and grow your network.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon">🚀</div>
+
+          <h3>Boost Engagement</h3>
+
+          <p>Encourage student participation and community growth.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+
+    <section class="gallery-section">
+      <div class="section-title">
+        <span>CAMPUS MEMORIES</span>
+
+        <h2>Create Memories With Us</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <img src="{{ url_for('static', filename='images/gallery1.jpg') }}" />
+        <img src="{{ url_for('static', filename='images/gallery2.jpg') }}" />
+        <img src="{{ url_for('static', filename='images/gallery3.jpg') }}" />
+        <img src="{{ url_for('static', filename='images/gallery4.jpg') }}" />
+      </div>
+    </section>
+
+    <!-- CTA -->
+
+    <section class="cta-section">
+      <div class="cta-content">
+        <h2>Join The ClubSync Community Today</h2>
+
+        <p>
+          Discover clubs, attend events, and connect with students across your
+          campus.
+        </p>
+
+        <a href="/clubs" class="cta-btn"> Explore Clubs </a>
+      </div>
+    </section>
+  </body>
+</html>
