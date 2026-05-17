@@ -249,11 +249,15 @@
             </div>
 
             {% if user.attendances|length == 0 %}
-
+            
             <div class="empty-box">
               <p>No attendance history yet.</p>
+            
+              <a href="/clubs" class="browse-clubs-btn">
+                Browse Clubs
+              </a>
             </div>
-
+            
             {% else %}
 
             <div class="attendance-list">
