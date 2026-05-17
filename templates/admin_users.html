@@ -146,6 +146,21 @@
                     <td class="d-none d-md-table-cell small text-muted">{{ user.email }}</td>
                     <td class="text-end">
                         <div class="btn-group btn-group-sm">
+                            <button class="btn btn-sm btn-outline-info js-view-profile"
+                                    data-user-id="{{ user.id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#userProfileModal"
+                                    title="View profile">
+                                <i class="bi bi-person-badge"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#resetPasswordModal"
+                                    data-id="{{ user.id }}"
+                                    data-name="{{ user.name }}"
+                                    title="Reset password">
+                                <i class="bi bi-key"></i>
+                            </button>
                             {% if user.id != session.get('admin_user_id') %}
                             <form method="POST" action="{{ url_for('admin.toggle_admin', user_id=user.id) }}">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -177,6 +192,47 @@
     </section>
 </main>
 
+<!-- User Profile Modal -->
+<div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="userProfileModalLabel">User Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="userProfileModalBody">
+                <div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="resetPasswordModalLabel">Reset Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" id="resetPasswordForm" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">Setting a new password for <strong id="resetPasswordUserName"></strong>.</p>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">New Password</label>
+                        <input type="password" class="form-control" name="new_password" minlength="6" required placeholder="Minimum 6 characters">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Reset Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
     <div id="adminActionToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -192,6 +248,64 @@
 <script>
     document.getElementById('mobileMenuToggle').addEventListener('click', () => {
         document.getElementById('mobileMenu').classList.toggle('open');
+    });
+
+    document.querySelectorAll('.js-view-profile').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const userId = btn.dataset.userId;
+            const body = document.getElementById('userProfileModalBody');
+            body.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>';
+            fetch(`/admin/users/${userId}/profile`)
+                .then(r => r.json())
+                .then(d => {
+                    const row = (label, val) => val
+                        ? `<tr><td class="text-muted small fw-semibold" style="width:40%">${label}</td><td class="small">${val}</td></tr>`
+                        : '';
+                    body.innerHTML = `
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="admin-avatar" style="width:48px;height:48px;font-size:1rem">${d.name.slice(0,2).toUpperCase()}</div>
+                            <div>
+                                <div class="fw-semibold">${d.name}${d.is_admin ? ' <span class="badge text-bg-warning ms-1" style="font-size:.65rem">Admin</span>' : ''}</div>
+                                <div class="text-muted small">${d.email}</div>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="admin-metric-card card p-2 text-center">
+                                    <div class="fw-bold">${d.clubs_joined}</div>
+                                    <div class="text-muted" style="font-size:.75rem">Clubs Joined</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="admin-metric-card card p-2 text-center">
+                                    <div class="fw-bold">${d.events_attended}</div>
+                                    <div class="text-muted" style="font-size:.75rem">Events Attended</div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                ${row('Major', d.major)}
+                                ${row('Date of Birth', d.dob)}
+                                ${row('Gender', d.gender)}
+                                ${row('Phone', d.phone)}
+                                ${row('Address', d.address)}
+                                ${row('Bio', d.bio)}
+                            </tbody>
+                        </table>
+                        ${!d.major && !d.phone && !d.bio ? '<p class="text-muted small text-center mt-2">No profile details added yet.</p>' : ''}
+                    `;
+                })
+                .catch(() => {
+                    body.innerHTML = '<p class="text-danger text-center py-3">Failed to load profile.</p>';
+                });
+        });
+    });
+
+    document.getElementById('resetPasswordModal').addEventListener('show.bs.modal', function(e) {
+        const btn = e.relatedTarget;
+        document.getElementById('resetPasswordUserName').textContent = btn.dataset.name;
+        document.getElementById('resetPasswordForm').action = `/admin/users/${btn.dataset.id}/reset-password`;
     });
 
     const userSearch = document.getElementById('userSearch');
