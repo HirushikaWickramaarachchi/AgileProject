@@ -141,9 +141,16 @@
 
             <div class="stat-card purple">
               <h2>
-                {% if user.memberships|length > 0 %} {{
-                ((user.attendances|length / user.memberships|length) *
-                100)|round(0, 'floor')|int }}% {% else %} 0% {% endif %}
+                {% if total_joined_club_events > 0 %}
+                {{
+                (
+                (user.attendances|length / total_joined_club_events)
+                * 100
+                )|round(0, 'floor')|int
+                }}%
+                {% else %}
+                0%
+                {% endif %}
               </h2>
 
               <p>Engagement Rate</p>
