@@ -402,6 +402,16 @@ body {
   font-weight: 700;
 }
 
+.attendance-event-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.attendance-event-link:hover {
+  color: #e87f24;
+  text-decoration: underline;
+}
+
 /* EMPTY */
 
 .empty-box {

@@ -315,7 +315,11 @@
                   </div>
 
                   <div class="attendance-info">
-                    <h4>{{ attendance.event.title }}</h4>
+                    <h4>
+                      <a href="{{ url_for('clubs.event_details', event_id=attendance.event.id) }}" class="attendance-event-link">
+                        {{ attendance.event.title }}
+                      </a>
+                    </h4>
 
                     <p>{{ attendance.event.club.name }}</p>
                   </div>
