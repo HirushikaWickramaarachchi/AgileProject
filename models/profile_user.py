@@ -20,5 +20,3 @@ class ProfileUser(db.Model):
     bio = db.Column(db.Text, nullable=True)
     dob = db.Column(db.String(20), nullable=True)
     avatar = db.Column(db.String(255), nullable=True)
-    interests = db.Column(db.Text, nullable=True)
-    experience = db.Column(db.Text, nullable=True)
