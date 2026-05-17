@@ -229,7 +229,7 @@ body {
 /* CTA */
 
 .cta-section {
-  padding: 80px 7%;
+  padding: 60px 6% 30px;
   background: linear-gradient(to right, #ff4c60, #ff758f);
   text-align: center;
 }
@@ -303,4 +303,13 @@ body {
   .cta-content h2 {
     font-size: 32px;
   }
+}
+/* FOOTER */
+
+.clubs-footer {
+  margin-top: 30px;
+  text-align: center;
+  color: #e9ebec;
+  font-size: 0.9rem;
+  padding: 20px;
 }
