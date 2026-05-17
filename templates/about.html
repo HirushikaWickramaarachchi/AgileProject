@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
     <title>About Us - ClubSync</title>
 
@@ -22,6 +22,10 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
   </head>
 
@@ -63,17 +67,17 @@
 
           <div class="about-stats">
             <div class="stat-card">
-              <h3>50+</h3>
+              <h3>{{ total_clubs }}+</h3>
               <p>Student Clubs</p>
             </div>
 
             <div class="stat-card">
-              <h3>100+</h3>
+              <h3>{{ total_events }}+</h3>
               <p>Events Hosted</p>
             </div>
 
             <div class="stat-card">
-              <h3>1000+</h3>
+              <h3>{{ total_students }}+</h3>
               <p>Students Connected</p>
             </div>
           </div>
@@ -99,7 +103,9 @@
 
       <div class="features-grid">
         <div class="feature-card">
-          <div class="icon">🎯</div>
+          <div class="icon">
+            <i class="fa-solid fa-compass"></i>
+          </div>
 
           <h3>Discover Clubs</h3>
 
@@ -107,7 +113,9 @@
         </div>
 
         <div class="feature-card">
-          <div class="icon">📅</div>
+          <div class="icon">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
 
           <h3>Attend Events</h3>
 
@@ -115,7 +123,9 @@
         </div>
 
         <div class="feature-card">
-          <div class="icon">🤝</div>
+          <div class="icon">
+            <i class="fa-solid fa-users"></i>
+          </div>
 
           <h3>Build Connections</h3>
 
@@ -123,7 +133,9 @@
         </div>
 
         <div class="feature-card">
-          <div class="icon">🚀</div>
+          <div class="icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
 
           <h3>Boost Engagement</h3>
 
