@@ -345,3 +345,18 @@ def delete_user(user_id):
     db.session.commit()
     flash(f'User "{user.name}" has been deleted.', "success")
     return redirect(url_for("admin.users"))
+
+
+@admin_bp.route("/users/<int:user_id>/reset-password", methods=["POST"])
+@admin_required
+def reset_user_password(user_id):
+    from werkzeug.security import generate_password_hash
+    user = User.query.get_or_404(user_id)
+    new_password = request.form.get("new_password", "").strip()
+    if len(new_password) < 6:
+        flash("Password must be at least 6 characters.", "danger")
+        return redirect(url_for("admin.users"))
+    user.password_hash = generate_password_hash(new_password)
+    db.session.commit()
+    flash(f'Password for "{user.name}" has been reset.', "success")
+    return redirect(url_for("admin.users"))

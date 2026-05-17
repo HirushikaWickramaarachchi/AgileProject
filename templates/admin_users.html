@@ -146,6 +146,14 @@
                     <td class="d-none d-md-table-cell small text-muted">{{ user.email }}</td>
                     <td class="text-end">
                         <div class="btn-group btn-group-sm">
+                            <button class="btn btn-sm btn-outline-warning"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#resetPasswordModal"
+                                    data-id="{{ user.id }}"
+                                    data-name="{{ user.name }}"
+                                    title="Reset password">
+                                <i class="bi bi-key"></i>
+                            </button>
                             {% if user.id != session.get('admin_user_id') %}
                             <form method="POST" action="{{ url_for('admin.toggle_admin', user_id=user.id) }}">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -177,6 +185,32 @@
     </section>
 </main>
 
+<!-- Reset Password Modal -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="resetPasswordModalLabel">Reset Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" id="resetPasswordForm" action="">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">Setting a new password for <strong id="resetPasswordUserName"></strong>.</p>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">New Password</label>
+                        <input type="password" class="form-control" name="new_password" minlength="6" required placeholder="Minimum 6 characters">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-warning">Reset Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Toast -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
     <div id="adminActionToast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -192,6 +226,12 @@
 <script>
     document.getElementById('mobileMenuToggle').addEventListener('click', () => {
         document.getElementById('mobileMenu').classList.toggle('open');
+    });
+
+    document.getElementById('resetPasswordModal').addEventListener('show.bs.modal', function(e) {
+        const btn = e.relatedTarget;
+        document.getElementById('resetPasswordUserName').textContent = btn.dataset.name;
+        document.getElementById('resetPasswordForm').action = `/admin/users/${btn.dataset.id}/reset-password`;
     });
 
     const userSearch = document.getElementById('userSearch');
