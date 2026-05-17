@@ -5,7 +5,6 @@
 }
 
 .clubs-hero {
-    max-width: var(--clubs-hero-max-width);
     margin-bottom: var(--clubs-section-gap);
 }
 
@@ -18,6 +17,7 @@
 .clubs-hero p {
     line-height: var(--clubs-body-line-height);
     color: var(--clubs-text-color);
+    max-width: var(--clubs-readable-max-width);
 }
 
 .clubs-filter-row {
@@ -74,7 +74,7 @@
 
 .club-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
     gap: var(--clubs-card-gap);
     align-items: stretch;
 }
@@ -237,19 +237,9 @@
     box-shadow: 0 0 0 3px rgba(115, 165, 202, 0.26);
 }
 
-@media (max-width: 1200px) {
-    .club-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-}
-
 @media (max-width: 980px) {
     .clubs-main {
         padding: var(--clubs-page-padding-tablet);
-    }
-
-    .club-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
