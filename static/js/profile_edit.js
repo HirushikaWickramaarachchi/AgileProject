@@ -94,6 +94,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (msg) {
         setTimeout(() => {
             msg.style.display = "none";
+
+            const url = new URL(window.location.href);
+            url.searchParams.delete("updated");
+            url.searchParams.delete("section");
+            window.history.replaceState({}, "", url.pathname + url.search);
         }, 3000);
     }
 });
