@@ -245,15 +245,19 @@
           <!-- ATTENDANCE HISTORY -->
           <section class="content-card">
             <div class="section-header">
-              <h3>Attendance History</h3>
+              <h3>Event Attendance History</h3>
             </div>
 
             {% if user.attendances|length == 0 %}
-
+            
             <div class="empty-box">
-              <p>No attendance history yet.</p>
+              <p>No event attendance history yet.</p>
+            
+              <a href="/clubs" class="browse-clubs-btn">
+                Browse Clubs
+              </a>
             </div>
-
+            
             {% else %}
 
             <div class="attendance-list">
