@@ -134,6 +134,11 @@
 
       <!-- CONTENT -->
       <div class="sections-wrapper">
+          {% if request.args.get('updated') %}
+          <div class="success-message">
+            Your information has been updated successfully!
+          </div>
+          {% endif %}
         <!-- PROFILE SECTION -->
         <section id="profile-section" class="settings-section active-section">
           <main class="edit-main-card">
