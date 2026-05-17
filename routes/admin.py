@@ -172,7 +172,8 @@ def clubs():
             if img_err:
                 flash(img_err, "danger")
             else:
-                db.session.add(Club(name=name, description=description, image_path=image_path))
+                category = request.form.get("category", "").strip() or None
+                db.session.add(Club(name=name, description=description, category=category, image_path=image_path))
                 db.session.commit()
                 flash("Club created successfully.", "success")
         return redirect(url_for("admin.clubs"))
@@ -204,6 +205,7 @@ def edit_club(club_id):
         else:
             club.name = name
             club.description = description
+            club.category = request.form.get("category", "").strip() or None
             if new_image:
                 club.image_path = new_image
             db.session.commit()
