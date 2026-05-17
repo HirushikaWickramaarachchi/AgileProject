@@ -1,4 +1,5 @@
 import os
+import sys
 from flask import Flask, session
 from datetime import timedelta
 from flask_migrate import Migrate
@@ -44,9 +45,12 @@ def inject_navbar_access():
     }
 
 
+_cli_command = len(sys.argv) > 1 and sys.argv[1] in ('db', 'shell', 'routes')
+
 with app.app_context():
     db.create_all()
-    seed_demo_data()
+    if not _cli_command:
+        seed_demo_data()
 
 app.register_blueprint(auth)
 app.register_blueprint(dashboard_bp)
