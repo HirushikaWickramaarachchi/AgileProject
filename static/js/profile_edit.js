@@ -89,12 +89,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Auto hide success message after 3 seconds
 document.addEventListener("DOMContentLoaded", function () {
-    const msg = document.getElementById("successMessage");
+    const msg = document.querySelector(".success-message");
 
     if (msg) {
         setTimeout(() => {
             msg.style.display = "none";
-        }, 2000); // 2000ms = 2 seconds
+        }, 3000);
     }
 });
     
