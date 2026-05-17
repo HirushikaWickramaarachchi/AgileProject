@@ -227,3 +227,10 @@ body {
     padding: 12px;
   }
 }
+
+.password-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #666;
+}

@@ -40,6 +40,8 @@
               type="email"
               name="email"
               placeholder="Enter your email"
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              title="Enter a valid email address"
               required
             />
 
@@ -48,8 +50,14 @@
               type="password"
               name="password"
               placeholder="Enter password"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+              title="Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character."
               required
             />
+            <small class="password-hint">
+              Password must contain: 8+ characters, uppercase, lowercase,
+              number, and special character.
+            </small>
 
             <label>Confirm Password</label>
             <input
