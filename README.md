@@ -17,6 +17,7 @@ Users can sign up, browse and join clubs, view events, and track their attendanc
 - Unified login — admin users are automatically redirected to the admin dashboard from the standard login page
 - AJAX-powered event attendee viewer (admin panel)
 - CSRF protection on all state-changing forms
+- Global dark mode — persistent across all pages with moon/sun toggle; synced between user and admin interfaces
 
 ---
 
@@ -104,7 +105,7 @@ On first run, the database is created and populated automatically with demo club
 
 ## How to Run the Tests
 
-The project includes **72 unit tests** across three files and **10 Selenium browser tests**.
+The project includes **96 unit tests** across four files and **10 Selenium browser tests**.
 
 **Unit tests** (no server required)
 ```bash

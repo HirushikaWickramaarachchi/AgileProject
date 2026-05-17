@@ -291,9 +291,10 @@
     });
 
     /* ── Dark mode ──────────────────────────────────────────── */
-    const DARK_KEY = 'adminDarkMode';
-    const root     = document.documentElement;
-    const toggle   = document.getElementById('darkModeToggle');
+    const DARK_KEY      = 'adminDarkMode';
+    const USER_DARK_KEY = 'darkMode';
+    const root          = document.documentElement;
+    const toggle        = document.getElementById('darkModeToggle');
 
     const applyDark = (dark) => {
         root.classList.toggle('admin-dark', dark);
@@ -309,12 +310,16 @@
         }
     };
 
-    applyDark(localStorage.getItem(DARK_KEY) === 'true');
+    // Read either key so user-side dark mode carries over to admin
+    const initDark = localStorage.getItem(DARK_KEY) === 'true' || localStorage.getItem(USER_DARK_KEY) === 'true';
+    applyDark(initDark);
 
     if (toggle) {
         toggle.addEventListener('click', () => {
             const isDark = root.classList.toggle('admin-dark');
-            localStorage.setItem(DARK_KEY, isDark);
+            // Write both keys so user pages stay in sync
+            localStorage.setItem(DARK_KEY,      isDark);
+            localStorage.setItem(USER_DARK_KEY, isDark);
             applyDark(isDark);
         });
     }

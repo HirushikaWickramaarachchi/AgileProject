@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <script>if(localStorage.getItem('adminDarkMode')==='true')document.documentElement.classList.add('admin-dark');</script>
+    <script>if(localStorage.getItem('adminDarkMode')==='true'||localStorage.getItem('darkMode')==='true')document.documentElement.classList.add('admin-dark');</script>
     <style>.pre-dark body,.pre-dark .admin-body{background:#0d1b2a!important}</style>
 </head>
 <body class="admin-body">

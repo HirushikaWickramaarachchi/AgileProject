@@ -1,0 +1,318 @@
+/* ═══════════════════════════════════════════════════════════
+   ClubSync — Global User Dark Mode
+   Class:   html.dark-mode
+   Storage: localStorage('darkMode')
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Base ─────────────────────────────────────────────────── */
+html.dark-mode,
+html.dark-mode body {
+    background-color: #0d1b2a !important;
+    color: #d8eaf5;
+}
+
+/* ── CSS variable overrides (styles.css) ──────────────────── */
+html.dark-mode {
+    --background:                  #0d1b2a;
+    --primary:                     #73A5CA;
+    --accent:                      #FFC81E;
+    --highlight:                   #E87F24;
+
+    /* Clubs page tokens */
+    --clubs-card-bg:               #112336;
+    --clubs-card-soft-bg:          #0f2135;
+    --clubs-card-border:           1px solid rgba(255,255,255,0.08);
+    --clubs-card-border-strong:    1px solid rgba(255,255,255,0.12);
+    --clubs-card-shadow:           0 8px 18px rgba(0,0,0,0.35);
+    --clubs-card-shadow-strong:    0 10px 24px rgba(0,0,0,0.45);
+
+    --clubs-heading-color:         #d8eaf5;
+    --clubs-section-heading-color: #c8e0f0;
+    --clubs-card-title-color:      #cce0f0;
+    --clubs-text-color:            #94b8cc;
+    --clubs-muted-color:           #7eb3d0;
+
+    --clubs-chip-bg:               rgba(115,165,202,0.12);
+    --clubs-chip-active-bg:        rgba(115,165,202,0.22);
+    --clubs-chip-border:           1px solid rgba(115,165,202,0.25);
+    --clubs-chip-color:            #d8eaf5;
+
+    --clubs-action-bg:             rgba(115,165,202,0.10);
+    --clubs-action-border:         rgba(115,165,202,0.25);
+    --clubs-action-color:          #cce0f0;
+    --clubs-action-hover-bg:       rgba(115,165,202,0.18);
+
+    --clubs-danger-bg:             rgba(239,68,68,0.10);
+    --clubs-danger-border:         rgba(239,68,68,0.30);
+    --clubs-danger-color:          #fca5a5;
+    --clubs-danger-hover-bg:       rgba(239,68,68,0.18);
+    --clubs-danger-hover-border:   rgba(239,68,68,0.45);
+    --clubs-danger-hover-color:    #fca5a5;
+}
+
+/* ── home.css variable overrides ─────────────────────────── */
+html.dark-mode body {
+    --bg-color:        #0d1b2a;
+    --text-color:      #d8eaf5;
+    --card-bg:         #112336;
+    --section-bg:      #0f2135;
+    --secondary-text:  #94b8cc;
+    --heading-color:   #e8f4ff;
+    --footer-text:     #7eb3d0;
+}
+
+/* ── Site header / navbar ─────────────────────────────────── */
+html.dark-mode .site-header {
+    background: rgba(10, 25, 41, 0.97) !important;
+    border-bottom-color: rgba(255,255,255,0.08) !important;
+}
+html.dark-mode .navbar-brand { color: #fff !important; }
+html.dark-mode .navbar-links a,
+html.dark-mode .navbar-actions a {
+    color: rgba(255,255,255,0.72);
+}
+html.dark-mode .navbar-links a:hover,
+html.dark-mode .navbar-links a.active,
+html.dark-mode .navbar-links a[aria-current="page"],
+html.dark-mode .navbar-actions a:hover {
+    color: #fff;
+    border-color: var(--accent);
+}
+html.dark-mode .navbar-search input {
+    background: #0d2035;
+    border-color: rgba(255,255,255,0.14);
+    color: #d8eaf5;
+}
+html.dark-mode .navbar-search input::placeholder { color: rgba(255,255,255,0.35); }
+html.dark-mode .navbar-toggle {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.18);
+}
+html.dark-mode .navbar-toggle span { background: #d8eaf5; }
+
+/* ── Dark mode toggle button (shared between header and standalone) */
+.navbar-dark-toggle,
+.page-dark-toggle {
+    background: none;
+    border: 1.5px solid #bccbda;
+    border-radius: 9px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    color: #355163;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.3s;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+}
+.navbar-dark-toggle:hover,
+.page-dark-toggle:hover {
+    background: rgba(115,165,202,0.12);
+    border-color: #73A5CA;
+    transform: rotate(20deg);
+}
+html.dark-mode .navbar-dark-toggle,
+html.dark-mode .page-dark-toggle {
+    border-color: rgba(255,255,255,0.2);
+    color: #FFC81E;
+    background: rgba(255,200,30,0.08);
+}
+html.dark-mode .navbar-dark-toggle:hover,
+html.dark-mode .page-dark-toggle:hover {
+    background: rgba(255,200,30,0.16);
+    border-color: #FFC81E;
+}
+
+/* ── Club list / club details / event / search pages ──────── */
+html.dark-mode .clubs-page {
+    background:
+        radial-gradient(circle at 92% 0%, rgba(115,165,202,0.08), transparent 36%),
+        linear-gradient(180deg, #0a1929 0%, #0d1b2a 100%) !important;
+    color: #d8eaf5;
+}
+html.dark-mode .clubs-hero-title,
+html.dark-mode .clubs-hero h1,
+html.dark-mode h1, html.dark-mode h2,
+html.dark-mode h3, html.dark-mode h4 {
+    color: var(--clubs-heading-color);
+}
+html.dark-mode .club-card,
+html.dark-mode .club-side-card,
+html.dark-mode .club-section-card,
+html.dark-mode .event-card {
+    background: var(--clubs-card-bg) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+}
+html.dark-mode .club-card:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.4); }
+html.dark-mode .clubs-chip-btn,
+html.dark-mode .filter-chip {
+    background: var(--clubs-chip-bg) !important;
+    border-color: rgba(115,165,202,0.25) !important;
+    color: var(--clubs-chip-color) !important;
+}
+html.dark-mode .clubs-chip-btn.is-active,
+html.dark-mode .filter-chip.is-active,
+html.dark-mode .clubs-chip-btn[aria-pressed="true"] {
+    background: var(--clubs-chip-active-bg) !important;
+    color: #fff !important;
+}
+html.dark-mode .clubs-section-title,
+html.dark-mode .clubs-hero-tagline { color: var(--clubs-muted-color); }
+
+/* ── Forms (inputs, selects, textareas) ───────────────────── */
+html.dark-mode input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]),
+html.dark-mode textarea,
+html.dark-mode select {
+    background: #0d2035 !important;
+    border-color: rgba(255,255,255,0.14) !important;
+    color: #d8eaf5 !important;
+}
+html.dark-mode input::placeholder,
+html.dark-mode textarea::placeholder { color: rgba(255,255,255,0.3) !important; }
+html.dark-mode input:focus,
+html.dark-mode textarea:focus,
+html.dark-mode select:focus {
+    border-color: #73A5CA !important;
+    box-shadow: 0 0 0 3px rgba(115,165,202,0.2) !important;
+    outline: none;
+}
+
+/* ── Login / Signup pages ─────────────────────────────────── */
+html.dark-mode .login-page,
+html.dark-mode .signup-page { background: #0d1b2a !important; }
+html.dark-mode .login-left,
+html.dark-mode .signup-left { background: #0d1b2a !important; }
+html.dark-mode .login-card,
+html.dark-mode .signup-card {
+    background: #112336 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+}
+html.dark-mode .login-card h2,
+html.dark-mode .signup-card h2 { color: #73A5CA !important; }
+html.dark-mode .login-card label,
+html.dark-mode .signup-card label { color: #b0cfe0 !important; }
+html.dark-mode .subtitle { color: #7eb3d0 !important; }
+html.dark-mode .register a,
+html.dark-mode .login-link a { color: #73A5CA !important; }
+html.dark-mode .options a { color: #FFC81E !important; }
+
+/* ── Forgot password page ─────────────────────────────────── */
+html.dark-mode .forgot-page,
+html.dark-mode .forgot-container { background: #0d1b2a !important; }
+html.dark-mode .forgot-card {
+    background: #112336 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+}
+html.dark-mode .forgot-card h2 { color: #73A5CA !important; }
+html.dark-mode .forgot-card label { color: #b0cfe0 !important; }
+
+/* ── Profile page ─────────────────────────────────────────── */
+html.dark-mode .profile-page { background: #0d1b2a !important; color: #d8eaf5; }
+html.dark-mode .profile-card,
+html.dark-mode .profile-section,
+html.dark-mode .profile-sidebar { background: #112336 !important; border-color: rgba(255,255,255,0.08) !important; }
+html.dark-mode .profile-name { color: #e8f4ff !important; }
+html.dark-mode .profile-label,
+html.dark-mode .profile-meta { color: #7eb3d0 !important; }
+/* Profile-specific card classes */
+html.dark-mode .sidebar-card,
+html.dark-mode .content-card {
+    background: #112336 !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35) !important;
+    color: #d8eaf5;
+}
+html.dark-mode .sidebar-card h3,
+html.dark-mode .content-card h3 { color: #e8f4ff !important; }
+html.dark-mode .info-item {
+    background: #0d2035 !important;
+    border-color: rgba(255,255,255,0.06) !important;
+}
+html.dark-mode .info-item span { color: #7eb3d0 !important; }
+html.dark-mode .info-item p { color: #d8eaf5 !important; }
+html.dark-mode .stat-card.blue  { background: rgba(115,165,202,0.12) !important; }
+html.dark-mode .stat-card.green { background: rgba(34,197,94,0.10) !important; }
+html.dark-mode .stat-card.purple { background: rgba(167,139,250,0.10) !important; }
+html.dark-mode .stat-card h2 { color: #e8f4ff !important; }
+html.dark-mode .stat-card p { color: #7eb3d0 !important; }
+html.dark-mode .club-card {
+    background: #0d2035 !important;
+    color: #d8eaf5 !important;
+}
+html.dark-mode .club-content h4 { color: #e8f4ff !important; }
+html.dark-mode .club-content p { color: #94b8cc !important; }
+html.dark-mode .activity-item {
+    border-bottom-color: rgba(255,255,255,0.07) !important;
+}
+html.dark-mode .activity-content h4 { color: #d8eaf5 !important; }
+html.dark-mode .activity-content p,
+html.dark-mode .activity-time { color: #7eb3d0 !important; }
+html.dark-mode .attendance-item {
+    background: #0d2035 !important;
+}
+html.dark-mode .attendance-info h4 { color: #d8eaf5 !important; }
+html.dark-mode .attendance-info p { color: #94b8cc !important; }
+html.dark-mode .attendance-icon {
+    background: rgba(232,127,36,0.12) !important;
+    color: #e87f24 !important;
+}
+html.dark-mode .empty-box {
+    background: #0d2035 !important;
+    color: #7eb3d0 !important;
+}
+
+/* ── Home page ────────────────────────────────────────────── */
+html.dark-mode .feature-card,
+html.dark-mode .stat-card,
+html.dark-mode .info-card {
+    background: var(--card-bg) !important;
+    border-color: rgba(255,255,255,0.08) !important;
+}
+html.dark-mode .feature-card h3,
+html.dark-mode .stat-card h3,
+html.dark-mode .info-card h3 { color: #d8eaf5 !important; }
+html.dark-mode .feature-card p,
+html.dark-mode .stat-card p,
+html.dark-mode .info-card p { color: #94b8cc !important; }
+/* Only darken content sections — leave hero (bg image), cta-section (orange gradient), and moment-section alone */
+html.dark-mode .overview,
+html.dark-mode .features,
+html.dark-mode .features-section,
+html.dark-mode .gallery-section,
+html.dark-mode .section-bg { background: var(--section-bg) !important; }
+
+/* ── About page ───────────────────────────────────────────── */
+html.dark-mode .about-page { background: #0d1b2a !important; color: #d8eaf5; }
+html.dark-mode .about-card,
+html.dark-mode .about-section { background: #112336 !important; border-color: rgba(255,255,255,0.08) !important; }
+html.dark-mode .about-hero { background: linear-gradient(135deg, #0a1929, #0d2035) !important; }
+
+/* ── Flash messages ───────────────────────────────────────── */
+html.dark-mode .alert-success { background: rgba(34,197,94,0.12)  !important; border-color: rgba(34,197,94,0.3)  !important; color: #4ade80 !important; }
+html.dark-mode .alert-danger  { background: rgba(239,68,68,0.12)  !important; border-color: rgba(239,68,68,0.3)  !important; color: #f87171 !important; }
+html.dark-mode .alert-info    { background: rgba(115,165,202,0.12) !important; border-color: rgba(115,165,202,0.3) !important; color: #93c5fd !important; }
+html.dark-mode .alert-warning { background: rgba(255,200,30,0.12) !important; border-color: rgba(255,200,30,0.3) !important; color: #fde68a !important; }
+
+/* ── Generic white surfaces ───────────────────────────────── */
+html.dark-mode .bg-white,
+html.dark-mode .card { background: #112336 !important; color: #d8eaf5; }
+html.dark-mode .text-muted { color: #7eb3d0 !important; }
+html.dark-mode .border { border-color: rgba(255,255,255,0.08) !important; }
+html.dark-mode hr { border-color: rgba(255,255,255,0.08); }
+html.dark-mode a { color: #73A5CA; }
+html.dark-mode a:hover { color: #93c5fd; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+html.dark-mode footer,
+html.dark-mode .site-footer {
+    background: #060f18 !important;
+    color: #7eb3d0 !important;
+    border-top-color: rgba(255,255,255,0.07) !important;
+}
+html.dark-mode footer a,
+html.dark-mode .site-footer a { color: #7eb3d0; }
+html.dark-mode footer a:hover,
+html.dark-mode .site-footer a:hover { color: #fff; }

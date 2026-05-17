@@ -18,7 +18,7 @@
   --footer-text: #516978;
 }
 
-body.dark-mode {
+html.dark-mode {
   --bg-color: #0f172a;
   --text-color: #f8fafc;
   --card-bg: #1e293b;
