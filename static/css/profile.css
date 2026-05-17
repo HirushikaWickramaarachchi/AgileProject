@@ -327,11 +327,45 @@ body {
 
 /* ATTENDANCE */
 
+.empty-attendance {
+  text-align: center;
+}
+
+.browse-clubs-btn {
+  display: inline-block;
+
+  margin-top: 14px;
+
+  padding: 10px 22px;
+
+  background: #e87f24;
+
+  color: white;
+
+  text-decoration: none;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  transition: 0.2s ease;
+}
+
+.browse-clubs-btn:hover {
+  background: #cf6d1b;
+
+  transform: translateY(-2px);
+}
+
 .attendance-list {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
+
+
 
 .attendance-item {
   display: flex;
