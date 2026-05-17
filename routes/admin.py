@@ -279,17 +279,50 @@ def events():
 @admin_required
 def event_attendees(event_id):
     event = Event.query.get_or_404(event_id)
-    attendees = (
-        db.session.query(User)
-        .join(Attendance, Attendance.user_id == User.id)
+    attendance_records = (
+        db.session.query(Attendance, User)
+        .join(User, Attendance.user_id == User.id)
         .filter(Attendance.event_id == event_id)
         .order_by(User.name)
         .all()
     )
+    attended_user_ids = {a.user_id for a, _ in attendance_records}
+    all_users = User.query.filter_by(is_admin=False).order_by(User.name).all()
+    non_attendees = [u for u in all_users if u.id not in attended_user_ids]
     return jsonify({
         "event": event.title,
-        "attendees": [{"name": u.name, "email": u.email} for u in attendees]
+        "attendees": [
+            {"attendance_id": a.id, "name": u.name, "email": u.email}
+            for a, u in attendance_records
+        ],
+        "non_attendees": [{"id": u.id, "name": u.name} for u in non_attendees],
     })
+
+
+@admin_bp.route("/events/<int:event_id>/attendance/add", methods=["POST"])
+@admin_required
+def add_attendance(event_id):
+    Event.query.get_or_404(event_id)
+    user_id = request.form.get("user_id", "").strip()
+    if not user_id:
+        return jsonify({"error": "user_id required"}), 400
+    existing = Attendance.query.filter_by(user_id=int(user_id), event_id=event_id).first()
+    if existing:
+        return jsonify({"error": "Already marked as attended"}), 409
+    record = Attendance(user_id=int(user_id), event_id=event_id)
+    db.session.add(record)
+    db.session.commit()
+    user = User.query.get(int(user_id))
+    return jsonify({"attendance_id": record.id, "name": user.name, "email": user.email})
+
+
+@admin_bp.route("/events/attendance/<int:attendance_id>/remove", methods=["POST"])
+@admin_required
+def remove_attendance(attendance_id):
+    record = Attendance.query.get_or_404(attendance_id)
+    db.session.delete(record)
+    db.session.commit()
+    return jsonify({"ok": True})
 
 
 @admin_bp.route("/events/<int:event_id>/edit", methods=["POST"])

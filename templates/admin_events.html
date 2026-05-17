@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>if(localStorage.getItem('adminDarkMode')==='true')document.documentElement.classList.add('admin-dark');</script>
     <style>.pre-dark body,.pre-dark .admin-body{background:#0d1b2a!important}</style>
 </head>
@@ -318,35 +319,86 @@
         }
     });
 
+    let _currentEventId = null;
+
+    function loadAttendees(eventId) {
+        const body = document.getElementById('attendeesModalBody');
+        body.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>';
+        fetch(`/admin/events/${eventId}/attendees`)
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('attendeesModalLabel').textContent = data.event;
+                const attendeeRows = data.attendees.map(a => `
+                    <li class="list-group-item d-flex align-items-center gap-2 px-0" id="att-${a.attendance_id}">
+                        <div class="admin-avatar flex-shrink-0" style="width:30px;height:30px;font-size:.65rem">${a.name.slice(0,2).toUpperCase()}</div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small">${a.name}</div>
+                            <div class="text-muted" style="font-size:.75rem">${a.email}</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger py-0" onclick="removeAttendance(${a.attendance_id}, ${eventId})">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </li>`).join('');
+
+                const nonAttendeeOptions = data.non_attendees.map(u =>
+                    `<option value="${u.id}">${u.name}</option>`).join('');
+
+                body.innerHTML = `
+                    <p class="text-muted small mb-2">${data.attendees.length} attendee${data.attendees.length !== 1 ? 's' : ''}</p>
+                    <ul class="list-group list-group-flush mb-3" id="attendeesList">
+                        ${attendeeRows || '<li class="list-group-item px-0 text-muted small">No attendees yet.</li>'}
+                    </ul>
+                    <hr class="my-2">
+                    <p class="fw-semibold small mb-2">Mark Attended</p>
+                    <div class="d-flex gap-2">
+                        <select class="form-select form-select-sm" id="markAttendUser">
+                            <option value="" disabled selected>Select user</option>
+                            ${nonAttendeeOptions || '<option disabled>All users already marked</option>'}
+                        </select>
+                        <button class="btn btn-sm btn-primary flex-shrink-0" onclick="addAttendance(${eventId})">
+                            <i class="bi bi-check2"></i> Mark
+                        </button>
+                    </div>`;
+            })
+            .catch(() => {
+                document.getElementById('attendeesModalBody').innerHTML =
+                    '<p class="text-danger text-center py-3">Failed to load attendees.</p>';
+            });
+    }
+
+    function addAttendance(eventId) {
+        const select = document.getElementById('markAttendUser');
+        const userId = select.value;
+        if (!userId) return;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
+            document.querySelector('meta[name="csrf-token"]').content : '';
+        fetch(`/admin/events/${eventId}/attendance/add`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': csrfToken},
+            body: `user_id=${userId}&csrf_token=${csrfToken}`
+        })
+        .then(r => r.json())
+        .then(d => { if (!d.error) loadAttendees(eventId); })
+        .catch(() => {});
+    }
+
+    function removeAttendance(attendanceId, eventId) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]') ?
+            document.querySelector('meta[name="csrf-token"]').content : '';
+        fetch(`/admin/events/attendance/${attendanceId}/remove`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': csrfToken},
+            body: `csrf_token=${csrfToken}`
+        })
+        .then(r => r.json())
+        .then(d => { if (d.ok) loadAttendees(eventId); })
+        .catch(() => {});
+    }
+
     document.querySelectorAll('.js-view-attendees').forEach(btn => {
         btn.addEventListener('click', () => {
-            const eventId = btn.dataset.eventId;
-            const body = document.getElementById('attendeesModalBody');
-            body.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>';
-            fetch(`/admin/events/${eventId}/attendees`)
-                .then(r => r.json())
-                .then(data => {
-                    document.getElementById('attendeesModalLabel').textContent = data.event;
-                    if (data.attendees.length === 0) {
-                        body.innerHTML = '<p class="text-muted text-center py-3">No attendees yet.</p>';
-                        return;
-                    }
-                    body.innerHTML = `
-                        <p class="text-muted small mb-3">${data.attendees.length} attendee${data.attendees.length !== 1 ? 's' : ''}</p>
-                        <ul class="list-group list-group-flush">
-                            ${data.attendees.map(a => `
-                                <li class="list-group-item d-flex align-items-center gap-2 px-0">
-                                    <div class="admin-avatar flex-shrink-0" style="width:30px;height:30px;font-size:.65rem">${a.name.slice(0,2).toUpperCase()}</div>
-                                    <div>
-                                        <div class="fw-semibold small">${a.name}</div>
-                                        <div class="text-muted" style="font-size:.75rem">${a.email}</div>
-                                    </div>
-                                </li>`).join('')}
-                        </ul>`;
-                })
-                .catch(() => {
-                    body.innerHTML = '<p class="text-danger text-center py-3">Failed to load attendees.</p>';
-                });
+            _currentEventId = btn.dataset.eventId;
+            loadAttendees(_currentEventId);
         });
     });
 </script>
