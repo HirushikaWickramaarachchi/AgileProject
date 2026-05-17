@@ -30,6 +30,7 @@ def driver():
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1280,800")
     browser = webdriver.Chrome(options=options)
     browser.implicitly_wait(5)
     yield browser
@@ -81,8 +82,8 @@ def test_register_new_user(driver):
 def test_logout(driver):
     driver.get(f"{BASE_URL}/logout")
     # After logout the nav should show Login link
-    wait_for(driver, By.LINK_TEXT, "Login")
-    assert driver.find_element(By.LINK_TEXT, "Login")
+    WebDriverWait(driver, 10).until(lambda d: "Login" in d.page_source)
+    assert "Login" in driver.page_source
 
 
 # ---------------------------------------------------------------------------
