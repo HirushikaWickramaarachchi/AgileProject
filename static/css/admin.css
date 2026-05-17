@@ -1005,3 +1005,170 @@ html.admin-dark .rank-plain { background: rgba(255,255,255,0.1); color: #7eb3d0;
 @media (max-width: 575px) {
     .admin-metric-value { font-size: 1.7rem; }
 }
+
+/* ── Welcome banner floating shapes ──────────────────────── */
+.wb-float {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+.wb-float-1 {
+    width: 160px; height: 160px;
+    background: rgba(255, 200, 30, 0.12);
+    top: -40px; right: 60px;
+    animation: wbFloat1 6s ease-in-out infinite;
+}
+.wb-float-2 {
+    width: 100px; height: 100px;
+    background: rgba(115, 165, 202, 0.15);
+    bottom: -30px; right: 200px;
+    animation: wbFloat2 8s ease-in-out infinite;
+}
+.wb-float-3 {
+    width: 70px; height: 70px;
+    background: rgba(232, 127, 36, 0.18);
+    top: 10px; left: 42%;
+    animation: wbFloat1 10s ease-in-out infinite reverse;
+}
+@keyframes wbFloat1 {
+    0%, 100% { transform: translateY(0)    scale(1);    }
+    50%       { transform: translateY(-14px) scale(1.06); }
+}
+@keyframes wbFloat2 {
+    0%, 100% { transform: translateY(0)    rotate(0deg);  }
+    50%       { transform: translateY(-10px) rotate(15deg); }
+}
+
+/* ── LIVE badge ───────────────────────────────────────────── */
+.live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+    font-size: .65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    user-select: none;
+}
+.live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+    animation: livePulse 1.4s ease-in-out infinite;
+}
+@keyframes livePulse {
+    0%, 100% { opacity: 1;  transform: scale(1);   }
+    50%       { opacity: .4; transform: scale(1.5); }
+}
+
+/* ── Welcome banner stat pills ────────────────────────────── */
+.wb-stat-pill {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 10px;
+    padding: 8px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, border-color 0.2s;
+    min-width: 68px;
+}
+.wb-stat-pill:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.45);
+    transform: translateY(-3px);
+}
+.wb-stat-pill--gold {
+    background: rgba(255, 200, 30, 0.15);
+    border-color: rgba(255, 200, 30, 0.35);
+}
+.wb-stat-pill--gold:hover {
+    background: rgba(255, 200, 30, 0.25);
+    border-color: rgba(255, 200, 30, 0.6);
+}
+
+/* ── Clickable metric cards ───────────────────────────────── */
+.mc-clickable { cursor: pointer; }
+.mc-clickable:active {
+    transform: translateY(-2px) scale(0.99);
+}
+
+/* ── Metric card custom progress bars ────────────────────── */
+.mc-progress {
+    height: 5px;
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+}
+.mc-progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.mc-progress-label {
+    font-size: .7rem;
+    color: var(--admin-text-muted);
+    margin-top: 4px;
+}
+
+/* ── Scroll-triggered entry animations ───────────────────── */
+/* JS adds .anim-ready before observing, so no-JS = always visible */
+#metricRow .col-6.anim-ready,
+#metricRow .col-xl-3.anim-ready,
+.admin-card.anim-ready {
+    opacity: 0;
+    transform: translateY(22px);
+}
+#metricRow .col-6.anim-in,
+#metricRow .col-xl-3.anim-in,
+.admin-card.anim-in {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* ── Event countdown badges ───────────────────────────────── */
+.event-countdown { font-size: .68rem !important; }
+.cd-past   { background: rgba(100, 116, 139, 0.15) !important; color: #64748b !important; }
+.cd-urgent { background: rgba(239,  68,  68, 0.15) !important; color: #ef4444 !important; }
+.cd-today  { background: rgba(249, 115,  22, 0.15) !important; color: #f97316 !important; }
+.cd-soon   { background: rgba( 34, 197,  94, 0.15) !important; color: #16a34a !important; }
+.cd-future { background: rgba(115, 165, 202, 0.15) !important; color: var(--cs-navy) !important; }
+
+/* ── Most Active Members — activity bars ─────────────────── */
+.member-bar-track {
+    height: 4px;
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+}
+.member-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Dark mode: new dashboard additions ──────────────────── */
+html.admin-dark .mc-progress        { background: rgba(255, 255, 255, 0.1); }
+html.admin-dark .mc-progress-label  { color: var(--admin-text-muted); }
+html.admin-dark .member-bar-track   { background: rgba(255, 255, 255, 0.1); }
+
+html.admin-dark .cd-past   { background: rgba(100, 116, 139, 0.25) !important; color: #94a3b8 !important; }
+html.admin-dark .cd-urgent { background: rgba(239,  68,  68, 0.22) !important; color: #f87171 !important; }
+html.admin-dark .cd-today  { background: rgba(249, 115,  22, 0.22) !important; color: #fb923c !important; }
+html.admin-dark .cd-soon   { background: rgba( 34, 197,  94, 0.2)  !important; color: #4ade80 !important; }
+html.admin-dark .cd-future { background: rgba(115, 165, 202, 0.2)  !important; color: var(--cs-blue) !important; }
+
+html.admin-dark #metricRow .col-6.anim-ready,
+html.admin-dark #metricRow .col-xl-3.anim-ready,
+html.admin-dark .admin-card.anim-ready { opacity: 0; transform: translateY(22px); }
+html.admin-dark #metricRow .col-6.anim-in,
+html.admin-dark #metricRow .col-xl-3.anim-in,
+html.admin-dark .admin-card.anim-in { opacity: 1 !important; transform: none !important; }
