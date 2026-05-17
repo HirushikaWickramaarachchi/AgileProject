@@ -23,6 +23,7 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -31,6 +32,10 @@
 
   <body>
     {% set active_page = 'about' %} {% include "_site_header.html" %}
+
+    <!-- DARK MODE BUTTON -->
+
+    <button id="darkModeToggle" class="dark-mode-toggle">🌙</button>
 
     <!-- HERO SECTION -->
 
@@ -154,10 +159,25 @@
       </div>
 
       <div class="gallery-grid">
-        <img src="{{ url_for('static', filename='images/gallery1.jpg') }}" />
-        <img src="{{ url_for('static', filename='images/gallery2.jpg') }}" />
-        <img src="{{ url_for('static', filename='images/gallery3.jpg') }}" />
-        <img src="{{ url_for('static', filename='images/gallery4.jpg') }}" />
+        <img
+          src="{{ url_for('static', filename='images/gallery1.jpg') }}"
+          alt="Gallery Image"
+        />
+
+        <img
+          src="{{ url_for('static', filename='images/gallery2.jpg') }}"
+          alt="Gallery Image"
+        />
+
+        <img
+          src="{{ url_for('static', filename='images/gallery3.jpg') }}"
+          alt="Gallery Image"
+        />
+
+        <img
+          src="{{ url_for('static', filename='images/gallery4.jpg') }}"
+          alt="Gallery Image"
+        />
       </div>
     </section>
 
@@ -174,9 +194,37 @@
 
         <a href="/clubs" class="cta-btn"> Explore Clubs </a>
       </div>
+
       <footer class="clubs-footer">
         <p>ClubSync | University Student Clubs Platform</p>
       </footer>
     </section>
+
+    <!-- DARK MODE SCRIPT -->
+
+    <script>
+      const toggleBtn = document.getElementById("darkModeToggle");
+
+      // LOAD SAVED THEME
+
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        toggleBtn.innerHTML = "☀️";
+      }
+
+      // TOGGLE THEME
+
+      toggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+
+        if (document.body.classList.contains("dark-mode")) {
+          localStorage.setItem("theme", "dark");
+          toggleBtn.innerHTML = "☀️";
+        } else {
+          localStorage.setItem("theme", "light");
+          toggleBtn.innerHTML = "🌙";
+        }
+      });
+    </script>
   </body>
 </html>

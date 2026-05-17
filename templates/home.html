@@ -3,16 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
   <title>ClubSync</title>
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
 </head>
+
 <body class="clubs-page">
   {% set active_page = 'home' %}
   {% include "_site_header.html" %}
   {% include "_flash_messages.html" %}
+
+  <!-- DARK MODE BUTTON -->
+  <button id="darkModeToggle" class="dark-mode-toggle">
+    🌙
+  </button>
 
   <section class="hero">
     <div class="hero-content">
@@ -46,12 +53,12 @@
   <section class="moment-section">
     <div class="overlay">
       <h2>Create Memories With Us</h2>
+
       <p>
         Meet new people, join exciting clubs, and enjoy campus life together.
       </p>
 
       <div class="slider-wrapper">
-
         <div class="image-track" id="imageTrack">
           <img src="{{ url_for('static', filename='images/gallery1.jpg') }}" class="moment-image" />
           <img src="{{ url_for('static', filename='images/gallery2.jpg') }}" class="moment-image" />
@@ -67,40 +74,68 @@
   </section>
 
   <section class="features">
-    <div class="feature-card" data-url="{{ url_for('clubs.clubs') }}" onclick="window.location.href=this.dataset.url;">
+    <div class="feature-card"
+      data-url="{{ url_for('clubs.clubs') }}"
+      onclick="window.location.href=this.dataset.url;">
       <h3>Join Clubs</h3>
       <p>Explore and become a member of clubs that match your interests.</p>
     </div>
 
-    <div class="feature-card" 
-     data-url="{{ url_for('profile.profile') }}" onclick="window.location.href=this.dataset.url;">
+    <div class="feature-card"
+      data-url="{{ url_for('clubs.myclubs') }}"
+      onclick="window.location.href=this.dataset.url;">
       <h3>My Clubs</h3>
       <p>View your joined clubs and the events you are currently attending.</p>
     </div>
 
-    <div class="feature-card" data-url="{{ url_for('profile.profile') }}" onclick="window.location.href=this.dataset.url;">
+    <div class="feature-card"
+      data-url="{{ url_for('profile.profile') }}"
+      onclick="window.location.href=this.dataset.url;">
       <h3>Track Activity</h3>
       <p>Monitor your participation and engagement across all clubs.</p>
     </div>
   </section>
 
   <section class="cta-section">
-      <div class="cta-content">
-        <h2>Join The ClubSync Community Today</h2>
+    <div class="cta-content">
+      <h2>Join The ClubSync Community Today</h2>
 
-        <p>
-          Discover clubs, attend events, and connect with students across your
-          campus.
-        </p>
+      <p>
+        Discover clubs, attend events, and connect with students across your
+        campus.
+      </p>
 
-        <a href="/clubs" class="cta-btn"> Explore Clubs </a>
-      </div>
-    </section>
+      <a href="/clubs" class="cta-btn">Explore Clubs</a>
+    </div>
+  </section>
 
-    <footer class="clubs-footer">
-      <p>ClubSync | University Student Clubs Platform</p>
-    </footer>
-  
+  <footer class="clubs-footer">
+    <p>ClubSync | University Student Clubs Platform</p>
+  </footer>
+
   <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+  <!-- DARK MODE SCRIPT -->
+  <script>
+    const toggleBtn = document.getElementById("darkModeToggle");
+
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-mode");
+      toggleBtn.innerHTML = "☀️";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+
+      if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        toggleBtn.innerHTML = "☀️";
+      } else {
+        localStorage.setItem("theme", "light");
+        toggleBtn.innerHTML = "🌙";
+      }
+    });
+  </script>
 </body>
 </html>
