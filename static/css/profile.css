@@ -37,22 +37,16 @@ body {
 .profile-avatar-large {
   width: 140px;
   height: 140px;
-
   border-radius: 50%;
   overflow: hidden;
-
   border: 5px solid white;
-
   background: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 60px;
   font-weight: 800;
-
-  color: #2563eb;
+  color: #e87f24;
 }
 
 .profile-avatar-large img {
@@ -74,13 +68,10 @@ body {
 }
 
 .student-badge {
-  background: #2563eb;
+  background: #e87f24;
   color: white;
-
   padding: 6px 12px;
-
   border-radius: 999px;
-
   font-size: 12px;
   font-weight: 700;
 }
@@ -152,20 +143,14 @@ body {
 .edit-profile-btn {
   width: 100%;
   height: 52px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: #0f4db8;
+  background: #e87f24;
   color: white;
-
   text-decoration: none;
-
   border-radius: 14px;
-
   margin-top: 20px;
-
   font-weight: 700;
 }
 
@@ -269,11 +254,8 @@ body {
 .club-icon {
   width: 60px;
   height: 60px;
-
   border-radius: 18px;
-
-  background: linear-gradient(135deg, #2563eb, #7c3aed);
-
+  background: linear-gradient(135deg, #e87f24, #ffc81e);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -294,11 +276,8 @@ body {
 
 .member-badge {
   display: inline-block;
-
   margin-top: 12px;
-
-  color: #2563eb;
-
+  color: #e87f24;
   font-size: 13px;
   font-weight: 700;
 }
@@ -324,10 +303,8 @@ body {
 .activity-dot {
   width: 12px;
   height: 12px;
-
   border-radius: 50%;
-
-  background: #2563eb;
+  background: #e87f24;
 }
 
 .activity-content {
@@ -390,13 +367,9 @@ body {
 .attendance-icon {
   width: 52px;
   height: 52px;
-
   border-radius: 16px;
-
-  background: #eef4ff;
-
-  color: #2563eb;
-
+  background: #fff3e8;
+  color: #e87f24;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -564,12 +537,10 @@ body {
 }
 
 .student-badge {
-  background: #2563eb;
+  background: #e87f24;
   color: white;
-
   padding: 6px 14px;
   border-radius: 999px;
-
   font-size: 13px;
   font-weight: 600;
 }
@@ -594,4 +565,24 @@ body {
     width: 110px;
     height: 110px;
   }
+}
+
+.club-icon {
+  width: 70px;
+  height: 70px;
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  background: #f1f5f9;
+}
+
+.club-icon img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
 }

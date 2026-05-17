@@ -13,19 +13,49 @@ body {
 /* HERO */
 
 .edit-hero {
+  position: relative;
   height: 320px;
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+  margin-bottom: 30px;
+}
 
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-    url("/static/images/uwa-bg.jpg");
+/* COVER IMAGE */
+
+.edit-cover-image {
+  position: absolute;
+  inset: 0;
+
+  background-image: url("../images/profile-cover.jpg");
 
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 
-  display: flex;
-  align-items: flex-end;
+  transform: scale(1.03);
+}
 
-  padding: 40px;
+/* DARK OVERLAY */
+
+.edit-cover-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.35)
+  );
+}
+
+/* CONTENT */
+
+.hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-content {
@@ -69,30 +99,23 @@ body {
 .avatar-letter {
   font-size: 60px;
   font-weight: 800;
-  color: #2563eb;
+  color: #e87f24;
 }
 
 /* EDIT ICON */
 
 .edit-avatar-icon {
   position: absolute;
-
   right: 6px;
   bottom: 6px;
-
   width: 38px;
   height: 38px;
-
   border-radius: 50%;
-
-  background: #2563eb;
-
+  background: #e87f24;
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 3px solid white;
-
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -116,13 +139,10 @@ body {
 }
 
 .student-badge {
-  background: #2563eb;
+  background: #e87f24;
   color: white;
-
   padding: 6px 12px;
-
   border-radius: 999px;
-
   font-size: 12px;
   font-weight: 700;
 }
@@ -169,48 +189,33 @@ body {
 
 .sidebar-btn {
   width: 100%;
-
   padding: 15px;
-
   border: none;
-
   border-radius: 14px;
-
   background: #f8fafc;
-
   margin-bottom: 12px;
-
   text-align: left;
-
   font-weight: 700;
-
   cursor: pointer;
-
   transition: 0.2s;
 }
 
 .sidebar-btn.active,
 .sidebar-btn:hover {
   background: #eef4ff;
-  color: #2563eb;
+  color: #e87f24;
 }
 
 .view-profile-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-
   height: 50px;
-
-  background: #0f4db8;
+  background: #e87f24;
   color: white;
-
   text-decoration: none;
-
   border-radius: 14px;
-
   margin-top: 20px;
-
   font-weight: 700;
 }
 
@@ -218,11 +223,8 @@ body {
 
 .edit-main-card {
   background: white;
-
   border-radius: 24px;
-
   padding: 34px;
-
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
@@ -274,17 +276,11 @@ body {
 .form-group textarea,
 .form-group select {
   width: 100%;
-
   padding: 16px;
-
   border-radius: 16px;
-
   border: 1px solid #dbe4f0;
-
   background: #f8fafc;
-
   font-size: 15px;
-
   transition: 0.2s;
 }
 
@@ -297,30 +293,22 @@ body {
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #2563eb;
-
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  border-color: #e87f24;
+  box-shadow: 0 0 0 4px rgba(232, 127, 36, 0.1);
 }
 
 /* BUTTON */
 
 .save-btn {
   margin-top: 10px;
-
   height: 54px;
-
   border: none;
-
   border-radius: 16px;
-
-  background: #0f4db8;
+  background: #e87f24;
   color: white;
-
   font-size: 15px;
   font-weight: 700;
-
   cursor: pointer;
-
   transition: 0.2s;
 }
 
@@ -380,13 +368,10 @@ body {
 }
 
 .interest-tag {
-  background: #eef4ff;
-  color: #2563eb;
-
+  background: #fff3e8;
+  color: #e87f24;
   padding: 8px 14px;
-
   border-radius: 999px;
-
   font-size: 13px;
   font-weight: 700;
 }
@@ -398,4 +383,19 @@ body {
   color: #334155;
 
   margin-top: 10px;
+}
+
+.club-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f1f5f9;
+}
+
+.club-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
