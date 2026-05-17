@@ -197,7 +197,33 @@ def members():
         .all()
     )
     total_users = User.query.count()
-    return render_template("admin_members.html", memberships=memberships, total_users=total_users)
+    all_users = User.query.filter_by(is_admin=False).order_by(User.name).all()
+    all_clubs = Club.query.order_by(Club.name).all()
+    return render_template(
+        "admin_members.html",
+        memberships=memberships,
+        total_users=total_users,
+        all_users=all_users,
+        all_clubs=all_clubs,
+    )
+
+
+@admin_bp.route("/members/add", methods=["POST"])
+@admin_required
+def add_member():
+    user_id = request.form.get("user_id", "").strip()
+    club_id = request.form.get("club_id", "").strip()
+    if not user_id or not club_id:
+        flash("User and club are required.", "danger")
+        return redirect(url_for("admin.members"))
+    existing = Membership.query.filter_by(user_id=int(user_id), club_id=int(club_id)).first()
+    if existing:
+        flash("That user is already a member of that club.", "warning")
+        return redirect(url_for("admin.members"))
+    db.session.add(Membership(user_id=int(user_id), club_id=int(club_id)))
+    db.session.commit()
+    flash("Member added successfully.", "success")
+    return redirect(url_for("admin.members"))
 
 
 @admin_bp.route("/members/<int:membership_id>/remove", methods=["POST"])

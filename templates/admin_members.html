@@ -88,10 +88,47 @@
         </div>
     </div>
 
-    <!-- Filter bar -->
-    <section class="card admin-card mb-3">
-        <div class="card-body py-3">
-            <div class="row g-2 align-items-end">
+    <!-- Add Member form -->
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-xl-4">
+            <section class="card admin-card">
+                <div class="card-header">
+                    <span><i class="bi bi-person-plus me-2 text-primary"></i>Add Member to Club</span>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('admin.add_member') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="mb-3">
+                            <label for="addMemberUser" class="form-label fw-semibold">User</label>
+                            <select class="form-select" id="addMemberUser" name="user_id" required>
+                                <option value="" selected disabled>Select user</option>
+                                {% for user in all_users %}
+                                <option value="{{ user.id }}">{{ user.name }} — {{ user.email }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addMemberClub" class="form-label fw-semibold">Club</label>
+                            <select class="form-select" id="addMemberClub" name="club_id" required>
+                                <option value="" selected disabled>Select club</option>
+                                {% for club in all_clubs %}
+                                <option value="{{ club.id }}">{{ club.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-person-plus me-1"></i>Add Member
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="col-12 col-xl-8">
+            <section class="card admin-card h-100">
+                <div class="card-body py-3">
+                    <div class="row g-2 align-items-end">
                 <div class="col-12 col-md-5">
                     <label for="memberSearch" class="form-label fw-semibold small mb-1">
                         <i class="bi bi-search me-1 text-primary"></i>Search Members
@@ -119,7 +156,9 @@
                 </div>
             </div>
         </div>
-    </section>
+            </section>
+        </div>
+    </div>
 
     <!-- Members table -->
     <section class="card admin-card">
