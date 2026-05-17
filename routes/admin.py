@@ -10,6 +10,7 @@ from models.club import Club
 from models.event import Event
 from models.membership import Membership
 from models.attendance import Attendance
+from models.profile_user import ProfileUser
 
 
 def _parse_event_date(date_str):
@@ -360,3 +361,25 @@ def reset_user_password(user_id):
     db.session.commit()
     flash(f'Password for "{user.name}" has been reset.', "success")
     return redirect(url_for("admin.users"))
+
+
+@admin_bp.route("/users/<int:user_id>/profile")
+@admin_required
+def user_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    profile = ProfileUser.query.filter_by(user_id=user_id).first()
+    club_count = Membership.query.filter_by(user_id=user_id).count()
+    event_count = Attendance.query.filter_by(user_id=user_id).count()
+    return jsonify({
+        "name": user.name,
+        "email": user.email,
+        "is_admin": user.is_admin,
+        "clubs_joined": club_count,
+        "events_attended": event_count,
+        "major": profile.major if profile else None,
+        "phone": profile.phone if profile else None,
+        "address": profile.address if profile else None,
+        "gender": profile.gender if profile else None,
+        "bio": profile.bio if profile else None,
+        "dob": profile.dob if profile else None,
+    })

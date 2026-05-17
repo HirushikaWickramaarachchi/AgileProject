@@ -146,6 +146,13 @@
                     <td class="d-none d-md-table-cell small text-muted">{{ user.email }}</td>
                     <td class="text-end">
                         <div class="btn-group btn-group-sm">
+                            <button class="btn btn-sm btn-outline-info js-view-profile"
+                                    data-user-id="{{ user.id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#userProfileModal"
+                                    title="View profile">
+                                <i class="bi bi-person-badge"></i>
+                            </button>
                             <button class="btn btn-sm btn-outline-warning"
                                     data-bs-toggle="modal"
                                     data-bs-target="#resetPasswordModal"
@@ -184,6 +191,21 @@
         </div>
     </section>
 </main>
+
+<!-- User Profile Modal -->
+<div class="modal fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="userProfileModalLabel">User Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="userProfileModalBody">
+                <div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Reset Password Modal -->
 <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
@@ -226,6 +248,58 @@
 <script>
     document.getElementById('mobileMenuToggle').addEventListener('click', () => {
         document.getElementById('mobileMenu').classList.toggle('open');
+    });
+
+    document.querySelectorAll('.js-view-profile').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const userId = btn.dataset.userId;
+            const body = document.getElementById('userProfileModalBody');
+            body.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</div>';
+            fetch(`/admin/users/${userId}/profile`)
+                .then(r => r.json())
+                .then(d => {
+                    const row = (label, val) => val
+                        ? `<tr><td class="text-muted small fw-semibold" style="width:40%">${label}</td><td class="small">${val}</td></tr>`
+                        : '';
+                    body.innerHTML = `
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="admin-avatar" style="width:48px;height:48px;font-size:1rem">${d.name.slice(0,2).toUpperCase()}</div>
+                            <div>
+                                <div class="fw-semibold">${d.name}${d.is_admin ? ' <span class="badge text-bg-warning ms-1" style="font-size:.65rem">Admin</span>' : ''}</div>
+                                <div class="text-muted small">${d.email}</div>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="admin-metric-card card p-2 text-center">
+                                    <div class="fw-bold">${d.clubs_joined}</div>
+                                    <div class="text-muted" style="font-size:.75rem">Clubs Joined</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="admin-metric-card card p-2 text-center">
+                                    <div class="fw-bold">${d.events_attended}</div>
+                                    <div class="text-muted" style="font-size:.75rem">Events Attended</div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                ${row('Major', d.major)}
+                                ${row('Date of Birth', d.dob)}
+                                ${row('Gender', d.gender)}
+                                ${row('Phone', d.phone)}
+                                ${row('Address', d.address)}
+                                ${row('Bio', d.bio)}
+                            </tbody>
+                        </table>
+                        ${!d.major && !d.phone && !d.bio ? '<p class="text-muted small text-center mt-2">No profile details added yet.</p>' : ''}
+                    `;
+                })
+                .catch(() => {
+                    body.innerHTML = '<p class="text-danger text-center py-3">Failed to load profile.</p>';
+                });
+        });
     });
 
     document.getElementById('resetPasswordModal').addEventListener('show.bs.modal', function(e) {
