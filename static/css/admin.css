@@ -5,8 +5,8 @@
     --cs-yellow:        #FFC81E;
     --cs-orange:        #E87F24;
 
-    /* Admin alter-ego tokens */
-    --admin-bg:           #e6f0f8;       /* cool professional version of the warm cream */
+    /* Admin alter-ego tokens — warm cream base matching user-facing pages */
+    --admin-bg:           #FEFDDF;       /* ClubSync cream — same as user pages */
     --admin-sidebar-from: #0c1d2e;       /* deeper version of ClubSync navy */
     --admin-sidebar-to:   #06111c;
     --admin-accent:       #184766;       /* ClubSync navy as primary action colour */
@@ -17,7 +17,7 @@
     --admin-card-shadow:  0 2px 14px rgba(12, 29, 46, 0.08);
     --admin-hover-shadow: 0 8px 28px rgba(12, 29, 46, 0.15);
     --admin-transition:   0.2s ease;
-    --admin-border:       #d9e5ef;
+    --admin-border:       #ddd9b8;       /* warm tan border to match cream background */
     --admin-text:         #132535;
     --admin-text-muted:   #5e7a8e;
 }
@@ -111,7 +111,7 @@
     --bs-primary-rgb:     24, 71, 102;
     --bs-link-color:      #184766;
     --bs-link-hover-color:#0d2e44;
-    background: linear-gradient(160deg, #deeaf5 0%, #e8f2f9 40%, #dfe9f4 100%);
+    background: var(--admin-bg);
     min-height: 100vh;
     color: var(--admin-text);
     font-family: Arial, Helvetica, sans-serif;
@@ -256,7 +256,7 @@
 
 .admin-menu-toggle {
     background: none;
-    border: 1.5px solid #cddce8;
+    border: 1.5px solid #ddd9b8;
     border-radius: 9px;
     padding: 0.38rem 0.6rem;
     color: var(--cs-navy);
@@ -266,7 +266,7 @@
     transition: background var(--admin-transition), border-color var(--admin-transition);
 }
 .admin-menu-toggle:hover {
-    background: #f0f7fb;
+    background: #faf8e0;
     border-color: var(--cs-blue);
 }
 
@@ -297,14 +297,14 @@
     margin-bottom: 1rem;
     flex-shrink: 0;
 }
-/* blue  → ClubSync navy/blue family */
+/* blue   → ClubSync blue family */
 .admin-metric-icon.blue   { background: #dceef8; color: var(--cs-navy); }
-/* green → keep emerald — contrasts well */
-.admin-metric-icon.green  { background: #dcf5e9; color: #166534; }
+/* green  → ClubSync navy (no green in palette) */
+.admin-metric-icon.green  { background: #dcf5e9; color: var(--cs-navy); }
 /* orange → ClubSync orange */
 .admin-metric-icon.orange { background: #fff0e0; color: var(--cs-orange); }
-/* purple → ClubSync yellow-amber family */
-.admin-metric-icon.purple { background: #fef3c7; color: #92600a; }
+/* purple → ClubSync yellow family */
+.admin-metric-icon.purple { background: #fef3c7; color: var(--cs-orange); }
 
 .admin-metric-value {
     font-size: 2rem;
@@ -353,7 +353,7 @@
 .admin-timeline-item {
     border: 1px solid var(--admin-border);
     border-radius: 10px;
-    background: #f7fbff;
+    background: #fdfbe8;
     padding: 0.85rem 1rem;
     display: flex;
     justify-content: space-between;
@@ -363,11 +363,11 @@
 }
 .admin-timeline-item:hover {
     border-color: var(--cs-blue);
-    background: #f0f7fc;
+    background: #faf8e0;
 }
 
 /* ── Progress bars ────────────────────────────────────────── */
-.progress { height: 7px; border-radius: 99px; background: #deeaf2; }
+.progress { height: 7px; border-radius: 99px; background: #e8e4c0; }
 .progress-bar { border-radius: 99px; transition: width 0.6s ease; }
 /* Override Bootstrap primary progress to ClubSync blue */
 .progress-bar.bg-primary { background-color: var(--cs-navy) !important; }
@@ -376,7 +376,7 @@
 
 /* ── Tables ───────────────────────────────────────────────── */
 .admin-table thead th {
-    background: #f4f8fb;
+    background: #fdfbe8;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -389,14 +389,14 @@
 .admin-table tbody td {
     padding: 0.85rem 1.1rem;
     vertical-align: middle;
-    border-color: #edf3f8;
+    border-color: #e8e4c0;
     font-size: 0.9rem;
 }
-.admin-table tbody tr:hover { background: #f4f9fc; }
+.admin-table tbody tr:hover { background: #faf8e0; }
 
 /* Polished table action buttons */
 .admin-table .btn-outline-primary {
-    background: #f0f7ff;
+    background: #fdfbe8;
     border-color: #b8d4ea;
     color: var(--cs-navy);
 }
@@ -406,12 +406,12 @@
     color: #fff;
 }
 .admin-table .btn-outline-secondary {
-    background: #f6f9fb;
+    background: #fdfbe8;
     border-color: #c8d8e4;
     color: var(--admin-text-muted);
 }
 .admin-table .btn-outline-secondary:hover {
-    background: #deeaf5;
+    background: #f5f2d0;
     border-color: var(--cs-blue);
     color: var(--cs-navy);
 }
@@ -428,8 +428,8 @@
 
 /* ── Preview card ─────────────────────────────────────────── */
 .preview-card {
-    background: linear-gradient(145deg, #f7fbff 0%, #edf4fa 100%);
-    border-color: #cde1ee !important;
+    background: linear-gradient(145deg, #fdfbe8 0%, #f5f2d0 100%);
+    border-color: #ddd9b8 !important;
     border-radius: 10px;
 }
 
@@ -485,7 +485,7 @@
 /* ── Dark mode toggle button ──────────────────────────────── */
 #darkModeToggle {
     background: none;
-    border: 1.5px solid #cddce8;
+    border: 1.5px solid #ddd9b8;
     border-radius: 9px;
     width: 36px;
     height: 36px;
@@ -500,7 +500,7 @@
     flex-shrink: 0;
 }
 #darkModeToggle:hover {
-    background: #f0f7fb;
+    background: #faf8e0;
     border-color: var(--cs-blue);
     transform: rotate(20deg);
 }
@@ -568,10 +568,10 @@ html.admin-dark .admin-metric-value { color: #e8f4ff; }
 html.admin-dark .admin-metric-label { color: var(--admin-text-muted); }
 
 /* Icon badges in dark mode */
-html.admin-dark .admin-metric-icon.blue   { background: rgba(24,71,102,0.35);  color: #73A5CA; }
-html.admin-dark .admin-metric-icon.green  { background: rgba(22,101,52,0.3);   color: #4ade80; }
-html.admin-dark .admin-metric-icon.orange { background: rgba(232,127,36,0.25); color: #E87F24; }
-html.admin-dark .admin-metric-icon.purple { background: rgba(255,200,30,0.18); color: #FFC81E; }
+html.admin-dark .admin-metric-icon.blue   { background: rgba(24,71,102,0.35);   color: var(--cs-blue); }
+html.admin-dark .admin-metric-icon.green  { background: rgba(115,165,202,0.2);  color: var(--cs-blue); }
+html.admin-dark .admin-metric-icon.orange { background: rgba(232,127,36,0.25);  color: var(--cs-orange); }
+html.admin-dark .admin-metric-icon.purple { background: rgba(255,200,30,0.18);  color: var(--cs-yellow); }
 
 /* Tables */
 html.admin-dark .admin-table {
