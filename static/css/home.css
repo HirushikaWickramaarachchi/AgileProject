@@ -170,16 +170,42 @@ body {
 }
 
 .slide-arrow {
-  background: white;
-  border: none;
-  color: #1f3d5a;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
   width: 50px;
   height: 50px;
+
+  background: #ffc81e;
+  border: none;
   border-radius: 50%;
-  font-size: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+
   cursor: pointer;
-  flex-shrink: 0;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: 0.3s ease;
+
+  z-index: 10;
+}
+.slide-arrow:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+.slide-arrow.left {
+  left: -70px;
+}
+
+.slide-arrow.right {
+  right: -70px;
 }
 
 /* FEATURES */
