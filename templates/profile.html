@@ -258,13 +258,13 @@
 
             {% if user.attendances|length == 0 %}
             
-            <div class="empty-box">
+            <div class="empty-attendance">
               <p>No event attendance history yet.</p>
             
-              <a href="/clubs" class="browse-clubs-btn">
+              <a href="{{ url_for('clubs.clubs') }}" class="browse-clubs-btn">
                 Browse Clubs
               </a>
-            </div>
+            </div>  
             
             {% else %}
 
