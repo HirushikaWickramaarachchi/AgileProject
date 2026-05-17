@@ -9,6 +9,7 @@ from models.user import User
 from models.club import Club
 from models.membership import Membership
 from models.profile_user import ProfileUser
+from models.event import Event
 
 
 profile_bp = Blueprint("profile", __name__)
@@ -24,6 +25,9 @@ def profile():
 
     user = User.query.get(user_id)
 
+    if not user:
+        return redirect(url_for("auth.login"))
+
     joined_clubs = (
         Club.query
         .join(Membership, Membership.club_id == Club.id)
@@ -32,13 +36,22 @@ def profile():
         .all()
     )
 
-    profile_data = ProfileUser.query.filter_by(user_id=user.id).first()
+    profile_data = ProfileUser.query.filter_by(user_id=user_id).first()
+    joined_club_ids = [
+    membership.club_id
+    for membership in user.memberships
+    ]
+
+    total_joined_club_events = Event.query.filter(
+        Event.club_id.in_(joined_club_ids)
+    ).count()
 
     return render_template(
         "profile.html",
         user=user,
         profile=profile_data,
-        club_history=joined_clubs
+        club_history=joined_clubs,
+        total_joined_club_events=total_joined_club_events
     )
 
 
