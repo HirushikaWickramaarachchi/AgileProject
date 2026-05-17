@@ -316,6 +316,48 @@ body {
   transform: translateY(-2px);
 }
 
+/* CONFIRM POPUP */
+
+.confirm-modal {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.35);
+
+  z-index: 999;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.confirm-box {
+  background: white;
+
+  width: 320px;
+
+  padding: 28px;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-actions {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 1000px) {
