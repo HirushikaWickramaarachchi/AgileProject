@@ -28,11 +28,19 @@ body.dark-mode {
   --footer-text: #cbd5e1;
 }
 
+/* FULL PAGE BACKGROUND FIX */
+
+html,
 body {
+  width: 100%;
+  min-height: 100%;
   background: var(--bg-color);
   overflow-x: hidden;
-  color: var(--text-color);
   transition: all 0.3s ease;
+}
+
+body {
+  color: var(--text-color);
 }
 
 /* HERO SECTION */
@@ -204,6 +212,7 @@ body {
   gap: 30px;
   padding: 60px 20px;
   flex-wrap: wrap;
+  background: var(--bg-color);
 }
 
 .feature-card {
@@ -300,11 +309,12 @@ body {
 /* FOOTER */
 
 .clubs-footer {
-  margin-top: 30px;
+  margin-top: 0;
   text-align: center;
   color: var(--footer-text);
   font-size: 0.9rem;
   padding: 20px;
+  background: var(--bg-color);
   transition: all 0.3s ease;
 }
 
