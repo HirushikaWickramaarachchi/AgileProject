@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
-    <script>if(localStorage.getItem('adminDarkMode')==='true')document.documentElement.classList.add('admin-dark');</script>
+    <script>if(localStorage.getItem('adminDarkMode')==='true'||localStorage.getItem('darkMode')==='true')document.documentElement.classList.add('admin-dark');</script>
     <style>.pre-dark body,.pre-dark .admin-body{background:#0d1b2a!important}</style>
 </head>
 <body class="admin-body">

@@ -74,6 +74,10 @@
                         >
                     </form>
 
+                    <button class="navbar-dark-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+                        <i class="bi bi-moon-stars-fill"></i>
+                    </button>
+
                     <div class="navbar-actions" aria-label="Authentication">
                         {% if session.get('user_id') or session.get('admin_logged_in') %}
                             <a href="{{ url_for('auth.logout') }}">Logout</a>
@@ -120,3 +124,4 @@
         });
     })();
 </script>
+<script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>

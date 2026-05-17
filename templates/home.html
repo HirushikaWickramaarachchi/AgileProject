@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <script>if(localStorage.getItem("darkMode")==="true"||localStorage.getItem("adminDarkMode")==="true")document.documentElement.classList.add("dark-mode");</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=2">
@@ -9,17 +10,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
 </head>
 
 <body class="clubs-page">
   {% set active_page = 'home' %}
   {% include "_site_header.html" %}
   {% include "_flash_messages.html" %}
-
-  <!-- DARK MODE BUTTON -->
-  <button id="darkModeToggle" class="dark-mode-toggle">
-    🌙
-  </button>
 
   <section class="hero">
     <div class="hero-content">
@@ -115,27 +113,5 @@
 
   <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
-  <!-- DARK MODE SCRIPT -->
-  <script>
-    const toggleBtn = document.getElementById("darkModeToggle");
-
-    // Load saved theme
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.classList.add("dark-mode");
-      toggleBtn.innerHTML = "☀️";
-    }
-
-    toggleBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-
-      if (document.body.classList.contains("dark-mode")) {
-        localStorage.setItem("theme", "dark");
-        toggleBtn.innerHTML = "☀️";
-      } else {
-        localStorage.setItem("theme", "light");
-        toggleBtn.innerHTML = "🌙";
-      }
-    });
-  </script>
 </body>
 </html>
