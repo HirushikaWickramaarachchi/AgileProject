@@ -86,10 +86,8 @@ def login():
 
 @admin_bp.route("/logout")
 def logout():
-    session.pop("admin_logged_in", None)
-    session.pop("admin_user_id", None)
-    session.pop("admin_name", None)
-    return redirect(url_for("admin.login"))
+    session.clear()
+    return redirect(url_for("auth.login"))
 
 
 @admin_bp.route("/dashboard")

@@ -19,7 +19,7 @@
 <header class="admin-navbar">
     <div class="admin-navbar-inner">
         <a href="{{ url_for('admin.dashboard') }}" class="admin-navbar-brand">
-            <span class="admin-brand-icon"><i class="bi bi-shield-check"></i></span>
+            <img src="{{ url_for('static', filename='favicon.ico') }}" alt="UWA" class="admin-brand-icon" style="background:none;box-shadow:none;border-radius:6px;padding:0;width:32px;height:32px;object-fit:contain;">
             ClubSync Admin
         </a>
         <nav class="admin-navbar-nav">
@@ -60,28 +60,40 @@
 
     {% include "_flash_messages.html" %}
 
+    {# Progress bar percentages (capped at 100) #}
+    {% set user_pct  = ([total_users,  50]  | min / 50  * 100) | int %}
+    {% set event_pct = ([total_events, 30]  | min / 30  * 100) | int %}
+    {% set memb_pct  = ([total_memberships, 100] | min / 100 * 100) | int %}
+    {% set rsvp_pct  = ([total_attendance,  60]  | min / 60  * 100) | int %}
+    {% set max_activity = most_active_users[0][1] if most_active_users else 1 %}
+
     <!-- Welcome banner -->
     <div class="admin-welcome-banner px-4 py-4 mb-4">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div class="wb-float wb-float-1"></div>
+        <div class="wb-float wb-float-2"></div>
+        <div class="wb-float wb-float-3"></div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3" style="position:relative;z-index:1">
             <div>
-                <p class="mb-1 small fw-semibold text-white opacity-75" style="letter-spacing:.06em;text-transform:uppercase">ClubSync Admin</p>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <p class="mb-0 small fw-semibold text-white opacity-75" style="letter-spacing:.06em;text-transform:uppercase">ClubSync Admin</p>
+                </div>
                 <h2 class="h4 fw-bold text-white mb-1">Welcome back, {{ session.get('admin_name', 'Admin') }}</h2>
                 <p class="mb-0 small text-white opacity-75">Here's everything happening across ClubSync today.</p>
             </div>
             <div class="d-flex gap-2 flex-wrap">
-                <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
+                <div class="wb-stat-pill" onclick="window.location='{{ url_for('admin.clubs') }}'">
                     <div class="fw-bold text-white small">{{ total_clubs }}</div>
                     <div class="text-white opacity-75" style="font-size:.72rem">Clubs</div>
                 </div>
-                <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
+                <div class="wb-stat-pill" onclick="window.location='{{ url_for('admin.events') }}'">
                     <div class="fw-bold text-white small">{{ total_events }}</div>
                     <div class="text-white opacity-75" style="font-size:.72rem">Events</div>
                 </div>
-                <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,255,255,0.1)">
+                <div class="wb-stat-pill" onclick="window.location='{{ url_for('admin.members') }}'">
                     <div class="fw-bold text-white small">{{ total_attendance }}</div>
                     <div class="text-white opacity-75" style="font-size:.72rem">RSVPs</div>
                 </div>
-                <div class="px-3 py-2 rounded-3 text-center" style="background:rgba(255,200,30,0.18);border:1px solid rgba(255,200,30,0.3)">
+                <div class="wb-stat-pill wb-stat-pill--gold">
                     <div class="fw-bold small" style="color:#FFC81E">UWA Campus</div>
                     <div class="text-white opacity-75" style="font-size:.72rem"><span data-admin-clock>Loading...</span></div>
                 </div>
@@ -92,7 +104,7 @@
     <!-- Metric cards -->
     <div class="row g-3 mb-4" id="metricRow">
         <div class="col-6 col-xl-3">
-            <article class="card admin-metric-card mc-navy h-100">
+            <article class="card admin-metric-card mc-navy h-100 mc-clickable" onclick="window.location='{{ url_for('admin.users') }}'">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="admin-metric-icon blue"><i class="bi bi-people-fill"></i></div>
@@ -101,11 +113,15 @@
                     <p class="admin-metric-value mb-1" data-count-to="{{ total_users }}">0</p>
                     <p class="admin-metric-label mb-1">Registered Users</p>
                     <span class="admin-metric-trend" style="color:var(--cs-navy)"><i class="bi bi-person-check"></i> Student accounts</span>
+                    <div class="mc-progress mt-3">
+                        <div class="mc-progress-fill" data-fill="{{ user_pct }}" style="background:linear-gradient(90deg,#184766,#1e6b9e)"></div>
+                    </div>
+                    <div class="mc-progress-label">{{ user_pct }}% of target</div>
                 </div>
             </article>
         </div>
         <div class="col-6 col-xl-3">
-            <article class="card admin-metric-card mc-blue h-100">
+            <article class="card admin-metric-card mc-blue h-100 mc-clickable" onclick="window.location='{{ url_for('admin.events') }}'">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="admin-metric-icon green"><i class="bi bi-calendar-check-fill"></i></div>
@@ -114,11 +130,15 @@
                     <p class="admin-metric-value mb-1" data-count-to="{{ total_events }}">0</p>
                     <p class="admin-metric-label mb-1">Total Events</p>
                     <span class="admin-metric-trend" style="color:var(--cs-navy)"><i class="bi bi-calendar2-week"></i> Across {{ total_clubs }} clubs</span>
+                    <div class="mc-progress mt-3">
+                        <div class="mc-progress-fill" data-fill="{{ event_pct }}" style="background:linear-gradient(90deg,#1e6b9e,#73A5CA)"></div>
+                    </div>
+                    <div class="mc-progress-label">{{ event_pct }}% of target</div>
                 </div>
             </article>
         </div>
         <div class="col-6 col-xl-3">
-            <article class="card admin-metric-card mc-orange h-100">
+            <article class="card admin-metric-card mc-orange h-100 mc-clickable" onclick="window.location='{{ url_for('admin.members') }}'">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="admin-metric-icon orange"><i class="bi bi-diagram-3-fill"></i></div>
@@ -127,11 +147,15 @@
                     <p class="admin-metric-value mb-1" data-count-to="{{ total_memberships }}">0</p>
                     <p class="admin-metric-label mb-1">Club Memberships</p>
                     <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-bar-chart"></i> {{ avg_members }} avg per club</span>
+                    <div class="mc-progress mt-3">
+                        <div class="mc-progress-fill" data-fill="{{ memb_pct }}" style="background:linear-gradient(90deg,#E87F24,#FFC81E)"></div>
+                    </div>
+                    <div class="mc-progress-label">{{ memb_pct }}% of target</div>
                 </div>
             </article>
         </div>
         <div class="col-6 col-xl-3">
-            <article class="card admin-metric-card mc-yellow h-100">
+            <article class="card admin-metric-card mc-yellow h-100 mc-clickable" onclick="window.location='{{ url_for('admin.events') }}'">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="admin-metric-icon purple"><i class="bi bi-ticket-perforated-fill"></i></div>
@@ -140,6 +164,10 @@
                     <p class="admin-metric-value mb-1" data-count-to="{{ total_attendance }}">0</p>
                     <p class="admin-metric-label mb-1">Event RSVPs</p>
                     <span class="admin-metric-trend" style="color:var(--cs-orange)"><i class="bi bi-activity"></i> Total attendance records</span>
+                    <div class="mc-progress mt-3">
+                        <div class="mc-progress-fill" data-fill="{{ rsvp_pct }}" style="background:linear-gradient(90deg,#FFC81E,#E87F24)"></div>
+                    </div>
+                    <div class="mc-progress-label">{{ rsvp_pct }}% of target</div>
                 </div>
             </article>
         </div>
@@ -161,7 +189,10 @@
                             <div class="flex-grow-1 min-width-0">
                                 <h3 class="h6 mb-1">{{ event.title }}</h3>
                                 <p class="mb-1 small" style="color:var(--admin-text-muted)">{{ event.description[:80] ~ '…' if event.description and event.description|length > 80 else (event.description or 'No description.') }}</p>
-                                <small class="text-secondary">{{ club.name }} &middot; {{ event.date }}</small>
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <small class="text-secondary">{{ club.name }} &middot; {{ event.date }}</small>
+                                    <span class="event-countdown badge cd-soon" data-date="{{ event.date }}">...</span>
+                                </div>
                             </div>
                             <div class="d-flex flex-column align-items-end gap-1 flex-shrink-0">
                                 <span class="badge text-bg-success">Scheduled</span>
@@ -212,7 +243,7 @@
             <section class="card admin-card">
                 <div class="card-header">
                     <span><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Top Clubs by Members</span>
-                    <span class="text-muted small">Top {{ clubs_with_counts|length }}</span>
+                    <span class="text-muted small">click a bar to manage &rarr;</span>
                 </div>
                 <div class="card-body">
                     <canvas id="clubsChart" height="{% if clubs_with_counts|length <= 3 %}130{% elif clubs_with_counts|length == 4 %}160{% else %}200{% endif %}"></canvas>
@@ -228,6 +259,7 @@
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
                         {% for user, event_count in most_active_users %}
+                        {% set member_pct = (event_count / max_activity * 100) | int %}
                         <li class="list-group-item px-4 py-3 border-0" style="border-bottom:1px solid var(--admin-border) !important">
                             <div class="d-flex gap-3 align-items-center">
                                 <div class="admin-rank-badge flex-shrink-0
@@ -241,6 +273,10 @@
                                 <div class="flex-grow-1 min-width-0">
                                     <p class="mb-0 small fw-semibold text-truncate">{{ user.name }}</p>
                                     <span class="text-muted" style="font-size:.75rem">{{ user.email }}</span>
+                                    <div class="member-bar-track mt-1">
+                                        <div class="member-bar-fill" data-pct="{{ member_pct }}"
+                                             style="{% if loop.index == 1 %}background:linear-gradient(90deg,#FFC81E,#E87F24){% elif loop.index == 2 %}background:linear-gradient(90deg,#73A5CA,#184766){% elif loop.index == 3 %}background:linear-gradient(90deg,#E87F24,#d4630f){% else %}background:linear-gradient(90deg,#184766,#1e6b9e){% endif %}"></div>
+                                    </div>
                                 </div>
                                 <div class="text-end flex-shrink-0">
                                     <span class="fw-bold small" style="color:var(--cs-navy)">{{ event_count }}</span>
@@ -280,11 +316,11 @@ const _clubValues = [{% for club, count in clubs_with_counts %}{{ count }}{% if 
 </script>
 
 <script>
-// ── Count-up animation ──────────────────────────────────────────
+// ── Count-up ────────────────────────────────────────────────────
 function countUp(el, target) {
-    const duration = 1200;
+    const duration = 1400;
     const start = performance.now();
-    const update = (now) => {
+    const update = now => {
         const t = Math.min((now - start) / duration, 1);
         const ease = 1 - Math.pow(1 - t, 3);
         el.textContent = Math.round(ease * target).toLocaleString();
@@ -292,40 +328,74 @@ function countUp(el, target) {
     };
     requestAnimationFrame(update);
 }
-document.querySelectorAll('[data-count-to]').forEach(el => {
-    countUp(el, parseInt(el.dataset.countTo, 10));
+
+// ── Intersection Observer — scroll-triggered animations ─────────
+const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('anim-in');
+        el.querySelectorAll('[data-count-to]').forEach(n => countUp(n, parseInt(n.dataset.countTo, 10)));
+        el.querySelectorAll('.mc-progress-fill').forEach(bar => {
+            setTimeout(() => { bar.style.width = bar.dataset.fill + '%'; }, 200);
+        });
+        el.querySelectorAll('.member-bar-fill').forEach((bar, i) => {
+            setTimeout(() => { bar.style.width = bar.dataset.pct + '%'; }, 120 + i * 80);
+        });
+        io.unobserve(el);
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('#metricRow .col-6, #metricRow .col-xl-3, .admin-card').forEach((el, i) => {
+    el.style.transition = `opacity 0.48s ease ${i * 55}ms, transform 0.48s ease ${i * 55}ms`;
+    el.classList.add('anim-ready');
+    io.observe(el);
 });
 
-// ── Stagger fade-in for metric cards ───────────────────────────
-document.querySelectorAll('#metricRow .col-6, #metricRow .col-xl-3').forEach((col, i) => {
-    col.style.opacity = '0';
-    col.style.transform = 'translateY(18px)';
-    col.style.transition = `opacity 0.45s ease ${i * 90}ms, transform 0.45s ease ${i * 90}ms`;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-        col.style.opacity = '1';
-        col.style.transform = 'translateY(0)';
-    }));
-});
+// ── Event countdown timers ──────────────────────────────────────
+function parseEventDate(str) {
+    const clean = str.split('|')[0].trim();
+    const d = new Date(clean);
+    if (!isNaN(d)) return d;
+    const parts = clean.split(',');
+    if (parts.length >= 2) {
+        const d2 = new Date(parts.slice(1).join(',').trim());
+        if (!isNaN(d2)) return d2;
+    }
+    return null;
+}
 
-// ── Stagger fade-in for admin-card sections ────────────────────
-document.querySelectorAll('.admin-card').forEach((card, i) => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(14px)';
-    card.style.transition = `opacity 0.4s ease ${80 + i * 60}ms, transform 0.4s ease ${80 + i * 60}ms`;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-    }));
-});
+function formatCountdown(ms) {
+    if (ms < 0)          return { text: 'Past',          cls: 'cd-past'   };
+    const mins  = Math.floor(ms / 60000);
+    const hours = Math.floor(ms / 3600000);
+    const days  = Math.floor(ms / 86400000);
+    if (mins < 60)       return { text: `${mins}m`,        cls: 'cd-urgent' };
+    if (hours < 24)      return { text: `${hours}h ${Math.floor((ms % 3600000) / 60000)}m`, cls: 'cd-today'  };
+    if (days < 7)        return { text: `${days}d ${Math.floor((ms % 86400000) / 3600000)}h`, cls: 'cd-soon' };
+    return { text: `${days}d`, cls: 'cd-future' };
+}
 
-// ── Chart.js: Top Clubs by Members ─────────────────────────────
+function updateCountdowns() {
+    document.querySelectorAll('.event-countdown[data-date]').forEach(el => {
+        const d = parseEventDate(el.dataset.date);
+        if (!d) return;
+        const { text, cls } = formatCountdown(d - Date.now());
+        el.textContent = text;
+        el.className = `event-countdown badge ${cls}`;
+    });
+}
+updateCountdowns();
+setInterval(updateCountdowns, 30000);
+
+// ── Chart.js: Top Clubs (clickable bars) ───────────────────────
 const clubsChartEl = document.getElementById('clubsChart');
 if (clubsChartEl && _clubLabels.length > 0) {
-    const isDark = document.documentElement.classList.contains('admin-dark');
-    const gridColor  = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
-    const tickColor  = isDark ? '#7eb3d0' : '#5e7a8e';
-    const barColors  = ['#184766','#73A5CA','#E87F24','#FFC81E','#1e6b9e'];
-    const hoverColors= ['#0d2e44','#5a90b8','#c96c18','#d4a900','#155a8a'];
+    const isDark      = document.documentElement.classList.contains('admin-dark');
+    const gridColor   = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+    const tickColor   = isDark ? '#7eb3d0' : '#5e7a8e';
+    const barColors   = ['#184766','#73A5CA','#E87F24','#FFC81E','#1e6b9e'];
+    const hoverColors = ['#0d2e44','#5a90b8','#c96c18','#d4a900','#155a8a'];
 
     new Chart(clubsChartEl.getContext('2d'), {
         type: 'bar',
@@ -343,7 +413,10 @@ if (clubsChartEl && _clubLabels.length > 0) {
         options: {
             indexAxis: 'y',
             responsive: true,
-            animation: { duration: 900, easing: 'easeOutQuart' },
+            animation: { duration: 1000, easing: 'easeOutQuart' },
+            onClick: (_, elements) => {
+                if (elements.length > 0) window.location.href = "{{ url_for('admin.clubs') }}";
+            },
             plugins: {
                 legend: { display: false },
                 tooltip: {
@@ -353,7 +426,7 @@ if (clubsChartEl && _clubLabels.length > 0) {
                     padding: 10,
                     cornerRadius: 8,
                     callbacks: {
-                        label: ctx => `  ${ctx.parsed.x} member${ctx.parsed.x !== 1 ? 's' : ''}`
+                        label: ctx => `  ${ctx.parsed.x} member${ctx.parsed.x !== 1 ? 's' : ''}  ·  click to manage`
                     }
                 }
             },
@@ -371,11 +444,12 @@ if (clubsChartEl && _clubLabels.length > 0) {
             }
         }
     });
+    clubsChartEl.style.cursor = 'pointer';
 } else if (clubsChartEl) {
     clubsChartEl.closest('.card-body').innerHTML = '<p class="text-muted small mb-0">No clubs yet.</p>';
 }
 
-// ── Mobile menu toggle ─────────────────────────────────────────
+// ── Mobile menu ─────────────────────────────────────────────────
 document.getElementById('mobileMenuToggle').addEventListener('click', () => {
     document.getElementById('mobileMenu').classList.toggle('open');
 });
