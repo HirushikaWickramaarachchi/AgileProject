@@ -73,7 +73,7 @@
                 <input type="checkbox" name="remember">
                 Keep me signed in
             </label>
-            <a href="#" class="alc-forgot">Forgot password?</a>
+            <a href="{{ url_for('auth.forgot_password') }}" class="alc-forgot">Forgot password?</a>
         </div>
 
         <button type="submit" class="alc-btn">
