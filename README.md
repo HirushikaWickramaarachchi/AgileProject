@@ -14,6 +14,7 @@ Users can sign up, browse and join clubs, view events, and track their attendanc
 - View events and mark attendance
 - Track personal attendance history
 - Admin panel: manage clubs, events, members, and user accounts
+- Unified login — admin users are automatically redirected to the admin dashboard from the standard login page
 - AJAX-powered event attendee viewer (admin panel)
 - CSRF protection on all state-changing forms
 
@@ -97,6 +98,8 @@ On first run, the database is created and populated automatically with demo club
 | Regular user | alice.demo@clubsync.local | DemoPass123! |
 | Admin | admin@clubsync.edu | admin123 |
 
+> Admin users can log in via either `/login` (redirected automatically to the admin dashboard) or directly via `/admin/login`.
+
 ---
 
 ## How to Run the Tests
@@ -132,5 +135,6 @@ pytest tests/test_selenium.py -v
 - SQLite via SQLAlchemy ORM
 - Flask-WTF (CSRF protection)
 - python-dotenv (environment variable management)
+- Flask-Migrate / Alembic (database schema migrations)
 - pytest + Selenium WebDriver (testing)
 - AJAX via `fetch()` for dynamic data loading (admin event attendees)

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>Sign Up</title>
 
     <link
@@ -50,7 +51,7 @@
               type="password"
               name="password"
               placeholder="Enter password"
-              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
               title="Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character."
               required
             />

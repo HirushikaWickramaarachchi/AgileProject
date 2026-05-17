@@ -24,7 +24,7 @@ def register():
 
         # STRONG PASSWORD VALIDATION
         password_pattern = (
-            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
         )
 
         if not re.match(password_pattern, password):
@@ -82,6 +82,13 @@ def login():
             session["user_id"] = user.id
             session["user_name"] = user.name
 
+            if user.is_admin:
+                session["admin_logged_in"] = True
+                session["admin_user_id"] = user.id
+                session["admin_name"] = user.name
+                flash("Login successful.", "success")
+                return redirect(url_for("admin.dashboard"))
+
             flash("Login successful.", "success")
             return redirect(url_for("dashboard.home"))
 
@@ -108,7 +115,7 @@ def forgot_password():
 
         # STRONG PASSWORD VALIDATION
         password_pattern = (
-            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+            r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$"
         )
 
         if not re.match(password_pattern, password):
