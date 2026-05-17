@@ -23,7 +23,6 @@
 
     <div class="profile-container">
       <!-- HERO -->
-      <!-- HERO -->
       <section class="profile-hero">
         <!-- COVER IMAGE -->
         <div class="profile-cover-image"></div>
@@ -114,34 +113,6 @@
               </p>
             </div>
 
-            <!-- INTERESTS -->
-            <div class="info-item">
-              <span>Interests</span>
-
-              <div class="tag-list">
-                {% if profile and profile.interests %} {% for interest in
-                profile.interests.split(',') %}
-
-                <span class="interest-tag"> {{ interest.strip() }} </span>
-
-                {% endfor %} {% else %}
-
-                <p>No interests added</p>
-
-                {% endif %}
-              </div>
-            </div>
-
-            <!-- EXPERIENCE -->
-            <div class="info-item">
-              <span>Experience</span>
-
-              <p class="experience-text">
-                {% if profile and profile.experience %} {{ profile.experience }}
-                {% else %} No experience added {% endif %}
-              </p>
-            </div>
-
             <!-- EDIT BUTTON -->
             <a
               href="{{ url_for('profile.profile_edit') }}"
@@ -201,8 +172,21 @@
                 class="club-card"
               >
                 <div class="club-icon">
-                  {% if 'AI' in membership.club.name %} ✦ {% elif 'Music' in
-                  membership.club.name %} ♪ {% else %} ✿ {% endif %}
+                  {% if membership.club.image_path %}
+
+                  <img
+                    src="{{ url_for('static', filename=membership.club.image_path) }}"
+                    alt="{{ membership.club.name }}"
+                  />
+
+                  {% else %}
+
+                  <img
+                    src="{{ url_for('static', filename='images/default-club.png') }}"
+                    alt="Default Club"
+                  />
+
+                  {% endif %}
                 </div>
 
                 <div class="club-content">
