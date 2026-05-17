@@ -75,9 +75,10 @@
       <p>Explore and become a member of clubs that match your interests.</p>
     </div>
 
-    <div class="feature-card" data-url="{{ url_for('clubs.events') }}" onclick="window.location.href=this.dataset.url;">
-      <h3>Attend Events</h3>
-      <p>Stay updated with upcoming events and track your attendance.</p>
+    <div class="feature-card" 
+     data-url="{{ url_for('profile.profile') }}" onclick="window.location.href=this.dataset.url;">
+      <h3>My Clubs</h3>
+      <p>View your joined clubs and the events you are currently attending.</p>
     </div>
 
     <div class="feature-card" data-url="{{ url_for('profile.profile') }}" onclick="window.location.href=this.dataset.url;">
@@ -86,10 +87,23 @@
     </div>
   </section>
 
-  <footer class="clubs-footer">
-    <p>ClubSync | University Student Clubs Platform</p>
-  </footer>
+  <section class="cta-section">
+      <div class="cta-content">
+        <h2>Join The ClubSync Community Today</h2>
 
+        <p>
+          Discover clubs, attend events, and connect with students across your
+          campus.
+        </p>
+
+        <a href="/clubs" class="cta-btn"> Explore Clubs </a>
+      </div>
+    </section>
+
+    <footer class="clubs-footer">
+      <p>ClubSync | University Student Clubs Platform</p>
+    </footer>
+  
   <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>
